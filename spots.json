@@ -1,0 +1,278 @@
+[
+  {
+    "name": "基隆嶼旁礁石",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1384,
+    "lng": 121.7278,
+    "max_wave_height": 1.2,
+    "note": "需搭船前往，浪大危險",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ]
+  },
+  {
+    "name": "外木山漁港",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.1521,
+    "lng": 121.6892,
+    "max_wave_height": 99,
+    "note": "港內作釣，浪高不限制，適合初學者",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西",
+      "東南",
+      "北",
+      "東北",
+      "東",
+      "西北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "和平島公園",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1543,
+    "lng": 121.7812,
+    "max_wave_height": 1.0,
+    "note": "礁石地形，東北季風期間風浪大需注意",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "東北",
+      "北",
+      "東"
+    ]
+  },
+  {
+    "name": "八斗子漁港",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.1445,
+    "lng": 121.8012,
+    "max_wave_height": 99,
+    "note": "港區作釣，無浪高限制，魚種豐富",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西",
+      "東南",
+      "北",
+      "東北",
+      "東",
+      "西北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "鼻頭角",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1247,
+    "lng": 121.9241,
+    "max_wave_height": 1.2,
+    "note": "退潮後石礁外露，適合黑毛、白帶魚",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西",
+      "西北"
+    ],
+    "bad_wind_directions": [
+      "東北",
+      "東",
+      "北"
+    ]
+  },
+  {
+    "name": "龍洞灣",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1056,
+    "lng": 121.9312,
+    "max_wave_height": 1.0,
+    "note": "峭壁地形，浪稍大即危險，景色優美",
+    "good_wind_directions": [
+      "西",
+      "西南",
+      "南"
+    ],
+    "bad_wind_directions": [
+      "東北",
+      "東",
+      "北",
+      "東南"
+    ]
+  },
+  {
+    "name": "澳底漁港",
+    "type": "肉粽",
+    "area": "東北角區",
+    "lat": 25.0534,
+    "lng": 121.9087,
+    "max_wave_height": 99,
+    "note": "港內作釣安全，假日人多",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西",
+      "東南",
+      "北",
+      "東北",
+      "東",
+      "西北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "萊萊礁石",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.0312,
+    "lng": 121.8956,
+    "max_wave_height": 1.2,
+    "note": "開闊礁磯，適合竿釣，需注意浪況",
+    "good_wind_directions": [
+      "西",
+      "西南",
+      "南",
+      "西北"
+    ],
+    "bad_wind_directions": [
+      "東北",
+      "東",
+      "北"
+    ]
+  },
+  {
+    "name": "富貴角燈塔旁",
+    "type": "野場",
+    "area": "北海岸區",
+    "lat": 25.2981,
+    "lng": 121.5344,
+    "max_wave_height": 1.2,
+    "note": "東北季風強勁，冬季需謹慎",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "西北"
+    ]
+  },
+  {
+    "name": "麟山鼻",
+    "type": "野場",
+    "area": "北海岸區",
+    "lat": 25.2756,
+    "lng": 121.5123,
+    "max_wave_height": 1.2,
+    "note": "熔岩礁石地形，漲退潮落差大",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "西北"
+    ]
+  },
+  {
+    "name": "老梅石槽",
+    "type": "野場",
+    "area": "北海岸區",
+    "lat": 25.2867,
+    "lng": 121.5489,
+    "max_wave_height": 1.0,
+    "note": "石槽地形獨特，春季藻類美景，浪高限制嚴格",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "西北",
+      "東"
+    ]
+  },
+  {
+    "name": "石門漁港",
+    "type": "肉粽",
+    "area": "北海岸區",
+    "lat": 25.2934,
+    "lng": 121.5678,
+    "max_wave_height": 99,
+    "note": "港區作釣，無浪高限制，附近有停車場",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西",
+      "東南",
+      "北",
+      "東北",
+      "東",
+      "西北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "白沙灣旁礁岸",
+    "type": "野場",
+    "area": "北海岸區",
+    "lat": 25.2612,
+    "lng": 121.5234,
+    "max_wave_height": 1.2,
+    "note": "沙灘旁礁區，適合投釣",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "東南",
+      "西"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "淡水漁人碼頭",
+    "type": "肉粽",
+    "area": "北海岸區",
+    "lat": 25.1823,
+    "lng": 121.4234,
+    "max_wave_height": 99,
+    "note": "河口港區，無浪高限制，交通方便",
+    "good_wind_directions": [
+      "南",
+      "西南",
+      "西",
+      "東南",
+      "北",
+      "東北",
+      "東",
+      "西北"
+    ],
+    "bad_wind_directions": []
+  }
+]

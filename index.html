@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎣 北台灣海釣天氣助理</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a1628;
+    --bg2: #0f2040;
+    --card: #132545;
+    --card2: #1a3060;
+    --accent: #00b4d8;
+    --accent2: #0077b6;
+    --gold: #f4a261;
+    --green: #2ec4b6;
+    --red: #e63946;
+    --text: #e0f0ff;
+    --text2: #8ab4cc;
+    --border: #1e3a5f;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--bg2), var(--accent2));
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid var(--accent);
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; }
+  header h1 span { color: var(--accent); }
+  #hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+  /* LAYOUT */
+  .main-wrap { display: flex; max-width: 1300px; margin: 0 auto; }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 270px; min-width: 270px;
+    background: var(--bg2); border-right: 1px solid var(--border);
+    padding: 20px 16px; display: flex; flex-direction: column; gap: 20px;
+    min-height: calc(100vh - 60px);
+  }
+  .sidebar-section h3 {
+    font-size: 0.75rem; color: var(--accent); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 10px;
+    border-bottom: 1px solid var(--border); padding-bottom: 6px;
+  }
+  #fav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  #fav-list li {
+    background: var(--card); border-radius: 8px; padding: 8px 10px;
+    font-size: 0.82rem; display: flex; align-items: center;
+    justify-content: space-between; border: 1px solid var(--border);
+    cursor: pointer; transition: border-color .2s;
+  }
+  #fav-list li:hover { border-color: var(--accent); }
+  .fav-area { color: var(--text2); font-size: 0.72rem; margin-left: 4px; }
+  .fav-del { color: var(--red); background: none; border: none; cursor: pointer; font-size: 0.9rem; }
+  .fav-empty { color: var(--text2); font-size: 0.8rem; padding: 8px 0; }
+  .api-key-input {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); padding: 6px 10px;
+    font-size: 0.82rem; font-family: monospace; outline: none; width: 100%;
+  }
+  .api-key-input:focus { border-color: var(--accent); }
+
+  /* MAIN */
+  #main-content { flex: 1; padding: 20px; overflow: hidden; }
+
+  /* 篩選區 */
+  .filter-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 20px; margin-bottom: 24px;
+  }
+  .filter-box h2 { font-size: 0.9rem; color: var(--accent); margin-bottom: 14px; letter-spacing: 1px; }
+  .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .filter-group { display: flex; flex-direction: column; gap: 5px; }
+  .filter-group label { font-size: 0.78rem; color: var(--text2); }
+  .filter-group input, .filter-group select {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); padding: 8px 10px;
+    font-size: 0.85rem; font-family: inherit; outline: none; width: 100%;
+    transition: border-color .2s;
+  }
+  .filter-group input:focus, .filter-group select:focus { border-color: var(--accent); }
+  .filter-group select option { background: var(--card2); }
+  .filter-row-full { grid-column: 1 / -1; }
+  .chip {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 5px 12px; font-size: 0.78rem;
+    cursor: pointer; transition: all .2s; user-select: none;
+  }
+  .chip.active { background: var(--accent2); border-color: var(--accent); color: #fff; }
+  .chip:hover { border-color: var(--accent); }
+  .area-chips, .type-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .btn-search {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff; border: none; border-radius: 25px; padding: 10px 30px;
+    font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    transition: opacity .2s, transform .1s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-search:hover { opacity: .9; transform: translateY(-1px); }
+  .btn-mini {
+    background: none; border: 1px solid var(--border); color: var(--text2);
+    border-radius: 8px; padding: 5px 12px; font-size: 0.75rem;
+    cursor: pointer; transition: all .2s; font-family: inherit;
+  }
+  .btn-mini:hover { border-color: var(--accent); color: var(--text); }
+  .btn-mini.active { border-color: var(--gold); color: var(--gold); }
+
+  /* ══ 今日推薦區塊 ══ */
+  #recommend-section { margin-bottom: 28px; }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: 1rem; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .badge-new {
+    background: var(--gold); color: #1a1a2e;
+    font-size: 0.65rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 10px; letter-spacing: .5px;
+  }
+  .wave-alert {
+    background: rgba(230,57,70,.12); border: 1px solid rgba(230,57,70,.4);
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;
+    font-size: 0.82rem; color: #ff8fa3;
+    display: flex; align-items: center; gap: 8px;
+  }
+  #recommend-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+
+  /* 推薦卡片 */
+  .rec-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px;
+    position: relative; overflow: hidden;
+    transition: border-color .2s, transform .2s;
+    cursor: default;
+  }
+  .rec-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+  }
+  .rec-card.type-野場::before { background: linear-gradient(90deg, #c77b30, var(--gold)); }
+  .rec-card.type-肉粽::before { background: linear-gradient(90deg, #1d8a82, var(--green)); }
+  .rec-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .rec-rank {
+    position: absolute; top: 12px; right: 12px;
+    font-size: 1.4rem; opacity: .6;
+  }
+  .rec-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; padding-right: 30px; }
+  .rec-meta { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+  .badge {
+    font-size: 0.65rem; padding: 2px 7px; border-radius: 10px;
+    font-weight: 700; letter-spacing: .3px;
+  }
+  .badge-野場 { background: rgba(244,162,97,.2); color: var(--gold); border: 1px solid rgba(244,162,97,.4); }
+  .badge-肉粽 { background: rgba(46,196,182,.2); color: var(--green); border: 1px solid rgba(46,196,182,.4); }
+  .badge-area { background: rgba(0,180,216,.15); color: var(--accent); border: 1px solid rgba(0,180,216,.3); }
+  .rec-stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .rec-stat { font-size: 0.78rem; color: var(--text2); }
+  .rec-stat strong { color: var(--text); }
+  .rec-note { font-size: 0.72rem; color: var(--text2); margin-bottom: 10px; }
+  .score-bar {
+    height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 10px;
+  }
+  .score-bar-fill { height: 100%; border-radius: 2px; transition: width .6s ease; }
+  .rec-footer { display: flex; justify-content: space-between; align-items: center; }
+  .suitability { font-size: 0.72rem; padding: 3px 10px; border-radius: 10px; font-weight: 700; }
+  .suit-great { background: rgba(46,196,182,.2); color: var(--green); border: 1px solid rgba(46,196,182,.4); }
+  .suit-ok { background: rgba(244,162,97,.2); color: var(--gold); border: 1px solid rgba(244,162,97,.4); }
+  .suit-bad { background: rgba(230,57,70,.2); color: var(--red); border: 1px solid rgba(230,57,70,.4); }
+
+  /* ══ 查詢結果區 ══ */
+  #results-section { display: none; }
+  .results-divider {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+  }
+  .results-divider h2 { font-size: 0.95rem; font-weight: 700; white-space: nowrap; }
+  .results-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  #results-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
+  }
+  #results-count { font-size: 0.82rem; color: var(--text2); }
+  #sort-select {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px; padding: 5px 10px;
+    font-size: 0.78rem; font-family: inherit; outline: none;
+  }
+  #results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* 結果卡片 */
+  .spot-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+    transition: border-color .2s, transform .2s;
+    position: relative; overflow: hidden;
+  }
+  .spot-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%; background: var(--accent);
+  }
+  .spot-card.type-野場::before { background: var(--gold); }
+  .spot-card.type-肉粽::before { background: var(--green); }
+  .spot-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+  .card-title { font-size: 1rem; font-weight: 700; }
+  .card-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  .score-stars { font-size: 1.1rem; letter-spacing: -2px; }
+  .weather-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; margin: 10px 0;
+  }
+  .weather-item {
+    background: var(--card2); border-radius: 8px;
+    padding: 8px; text-align: center;
+  }
+  .wi-label { font-size: 0.65rem; color: var(--text2); margin-bottom: 3px; }
+  .wi-value { font-size: 0.88rem; font-weight: 700; }
+  .wi-icon { font-size: 0.95rem; }
+  .tide-row {
+    background: var(--card2); border-radius: 8px;
+    padding: 8px 10px; display: flex; gap: 10px;
+    flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .tide-item { font-size: 0.78rem; }
+  .tide-item span { color: var(--text2); }
+  .note-row { font-size: 0.75rem; color: var(--text2); margin-bottom: 8px; }
+  .wind-dir-row { font-size: 0.72rem; color: var(--text2); margin-bottom: 10px; }
+  .card-footer { display: flex; gap: 8px; justify-content: flex-end; }
+
+  /* 載入中 */
+  .loading-ph { text-align: center; color: var(--text2); padding: 50px 20px; grid-column: 1/-1; }
+  .loading-spinner {
+    display: inline-block; width: 26px; height: 26px;
+    border: 3px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin .8s linear infinite; margin: 12px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeInUp {
+    from { opacity:0; transform:translateY(14px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .animate-in { animation: fadeInUp .4s ease forwards; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    #hamburger { display: block; }
+    #sidebar {
+      position: fixed; left: -290px; top: 0; height: 100vh;
+      z-index: 150; transition: left .3s; padding-top: 70px;
+      width: 270px; min-width: 270px;
+    }
+    #sidebar.open { left: 0; }
+    #main-content { padding: 14px; }
+    .filter-grid { grid-template-columns: 1fr; }
+    .filter-row-full { grid-column: 1; }
+    #recommend-grid { grid-template-columns: 1fr; }
+    #results-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 1rem; }
+  }
+  @media (max-width: 480px) {
+    .weather-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="hamburger" onclick="toggleSidebar()">☰</button>
+  <h1>🎣 北台灣<span>海釣天氣</span>助理</h1>
+  <button class="btn-mini" onclick="toggleSidebar()" style="border-color:var(--gold);color:var(--gold)">⭐ 最愛</button>
+</header>
+
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
+
+<div class="main-wrap">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-section">
+      <h3>⭐ 我的最愛釣點</h3>
+      <ul id="fav-list"><li class="fav-empty">尚未收藏任何釣點</li></ul>
+      <div style="font-size:0.7rem;color:var(--text2);margin-top:8px;">最多收藏 10 個</div>
+    </div>
+    <div class="sidebar-section">
+      <h3>🔑 氣象署 API Key</h3>
+      <div style="font-size:0.72rem;color:var(--text2);margin-bottom:8px;">
+        前往 <a href="https://opendata.cwa.gov.tw" target="_blank" style="color:var(--accent)">opendata.cwa.gov.tw</a> 免費申請
+      </div>
+      <input type="text" class="api-key-input" id="api-key-input" placeholder="貼上你的 API Key">
+      <button class="btn-mini" style="margin-top:8px;width:100%;text-align:center" onclick="saveApiKey()">💾 儲存</button>
+      <div id="api-key-status" style="font-size:0.72rem;margin-top:6px;color:var(--green);display:none">✅ 已儲存</div>
+    </div>
+    <div class="sidebar-section">
+      <h3>📂 釣點資料庫</h3>
+      <input type="file" id="json-file-input" accept=".json" style="display:none" onchange="loadJsonFile(event)">
+      <button class="btn-mini" style="width:100%;text-align:center" onclick="document.getElementById('json-file-input').click()">📁 匯入 spots.json</button>
+      <div style="font-size:0.72rem;margin-top:6px;color:var(--text2)">已載入 <span id="spots-num">0</span> 個釣點</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main-content">
+
+    <!-- 篩選區 -->
+    <div class="filter-box">
+      <h2>🔍 篩選條件</h2>
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label>📅 出發日期</label>
+          <input type="date" id="input-date">
+        </div>
+        <div class="filter-group">
+          <label>⏱️ 作釣時段</label>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input type="time" id="input-time-start" value="06:00" style="flex:1">
+            <span style="color:var(--text2);font-size:0.8rem">～</span>
+            <input type="time" id="input-time-end" value="12:00" style="flex:1">
+          </div>
+        </div>
+        <div class="filter-group filter-row-full">
+          <label>📍 大區域（可多選）</label>
+          <div class="area-chips" id="area-chips">
+            <div class="chip active" data-area="all">全部北台灣</div>
+            <div class="chip" data-area="基隆區">基隆區</div>
+            <div class="chip" data-area="東北角區">東北角區</div>
+            <div class="chip" data-area="北海岸區">北海岸區</div>
+          </div>
+        </div>
+        <div class="filter-group filter-row-full">
+          <label>🎣 釣點類型</label>
+          <div class="type-chips">
+            <div class="chip active" data-type="all">全部</div>
+            <div class="chip" data-type="野場">🏔️ 野場</div>
+            <div class="chip" data-type="肉粽">⚓ 肉粽（港區）</div>
+          </div>
+        </div>
+        <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <button class="btn-search" onclick="searchSpots()">🔍 查詢天氣預報</button>
+          <label style="font-size:0.78rem;color:var(--text2);display:flex;align-items:center;gap:6px">
+            <input type="checkbox" id="fav-only" style="accent-color:var(--gold)"> 只看我的最愛
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 今日推薦 -->
+    <div id="recommend-section">
+      <div class="section-header">
+        <div class="section-title">
+          🎯 今日推薦釣點
+          <span class="badge-new">LIVE</span>
+        </div>
+        <button class="btn-mini" onclick="refreshRecommend()" style="font-size:0.72rem">🔄 換一批</button>
+      </div>
+      <div id="wave-alert" style="display:none" class="wave-alert">
+        🌊 <span id="wave-alert-msg"></span>
+      </div>
+      <div id="recommend-grid">
+        <div class="loading-ph" style="grid-column:1/-1">
+          <div class="loading-spinner"></div>
+          <div style="margin-top:8px;font-size:0.85rem">載入今日推薦中...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 查詢結果 -->
+    <div id="results-section">
+      <div class="results-divider">
+        <h2>📋 全部合適釣點</h2>
+      </div>
+      <div id="results-toolbar">
+        <div id="results-count"></div>
+        <select id="sort-select" onchange="sortResults()">
+          <option value="score">依適合度排序</option>
+          <option value="wave">依浪高排序</option>
+          <option value="name">依名稱排序</option>
+        </select>
+      </div>
+      <div id="results-grid"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ═══ 狀態 ═══
+let SPOTS = [];
+let FAV_SPOTS = JSON.parse(localStorage.getItem('favSpots') || '[]');
+let API_KEY = localStorage.getItem('cwaApiKey') || '';
+let currentResults = [];
+let todayWaveHigh = false; // 當日浪高是否超過 1.2m
+let recommendPool = []; // 推薦用的天氣資料快取
+
+// 預設今天
+document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+if (API_KEY) {
+  document.getElementById('api-key-input').value = API_KEY;
+  document.getElementById('api-key-status').style.display = 'block';
+}
+
+// ═══ 載入釣點 ═══
+async function loadDefaultSpots() {
+  try {
+    const res = await fetch('./spots.json');
+    SPOTS = await res.json();
+  } catch(e) {
+    console.warn('無法自動載入 spots.json');
+  }
+  document.getElementById('spots-num').textContent = SPOTS.length;
+  if (SPOTS.length > 0) initRecommend();
+}
+loadDefaultSpots();
+
+function loadJsonFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      SPOTS = JSON.parse(e.target.result);
+      document.getElementById('spots-num').textContent = SPOTS.length;
+      showToast('✅ 已載入 ' + SPOTS.length + ' 個釣點');
+      initRecommend();
+    } catch(err) { showToast('❌ JSON 格式錯誤', true); }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+// ═══ API Key ═══
+function saveApiKey() {
+  API_KEY = document.getElementById('api-key-input').value.trim();
+  localStorage.setItem('cwaApiKey', API_KEY);
+  document.getElementById('api-key-status').style.display = 'block';
+  showToast('✅ API Key 已儲存');
+  initRecommend();
+}
+
+// ═══ Chips ═══
+document.querySelectorAll('#area-chips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    if (chip.dataset.area === 'all') {
+      document.querySelectorAll('#area-chips .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    } else {
+      document.querySelector('#area-chips .chip[data-area="all"]').classList.remove('active');
+      chip.classList.toggle('active');
+      const any = [...document.querySelectorAll('#area-chips .chip:not([data-area="all"])')].some(c => c.classList.contains('active'));
+      if (!any) document.querySelector('#area-chips .chip[data-area="all"]').classList.add('active');
+    }
+  });
+});
+document.querySelectorAll('.type-chips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.type-chips .chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════
+//  今日推薦邏輯
+// ═══════════════════════════════════════════
+async function initRecommend() {
+  if (SPOTS.length === 0) return;
+  document.getElementById('recommend-grid').innerHTML = '<div class="loading-ph" style="grid-column:1/-1"><div class="loading-spinner"></div><div style="margin-top:8px;font-size:0.85rem">分析今日海況中...</div></div>';
+
+  const date = new Date().toISOString().split('T')[0];
+  // 取得所有釣點天氣（並行）
+  const all = await Promise.all(SPOTS.map(s => fetchWeatherForSpot(s, date, '08:00', '14:00')));
+  recommendPool = all;
+
+  // 判斷今日整體浪況
+  const avgWave = all.reduce((s, r) => s + parseFloat(r.waveHeight), 0) / all.length;
+  todayWaveHigh = avgWave > 1.2;
+
+  const alert = document.getElementById('wave-alert');
+  if (todayWaveHigh) {
+    alert.style.display = 'flex';
+    document.getElementById('wave-alert-msg').textContent = '今日平均浪高 ' + avgWave.toFixed(1) + ' m，超過 1.2m 安全標準，優先推薦港區釣點！';
+  } else {
+    alert.style.display = 'none';
+  }
+
+  renderRecommend(all);
+}
+
+function refreshRecommend() {
+  if (recommendPool.length === 0) return;
+  renderRecommend(recommendPool, true); // shuffle
+}
+
+function renderRecommend(all, shuffle = false) {
+  // 依浪況決定推薦策略
+  let pool;
+  if (todayWaveHigh) {
+    // 浪大：優先港區（肉粽），再補野場中分數最高
+    const ports = all.filter(r => r.spot.max_wave_height === 99);
+    const wilds = all.filter(r => r.spot.max_wave_height !== 99 && r.waveHeight <= r.spot.max_wave_height).sort((a,b) => b.score - a.score);
+    pool = [...ports, ...wilds];
+  } else {
+    // 浪小：取分數 >= 3 的所有釣點
+    pool = all.filter(r => r.score >= 3).sort((a,b) => b.score - a.score);
+    if (pool.length === 0) pool = [...all].sort((a,b) => b.score - a.score);
+  }
+
+  // shuffle 或取前三
+  if (shuffle) {
+    pool = pool.sort(() => Math.random() - 0.5);
+  }
+  const picks = pool.slice(0, 3);
+
+  const ranks = ['🥇','🥈','🥉'];
+  const grid = document.getElementById('recommend-grid');
+  grid.innerHTML = picks.map((r, i) => renderRecCard(r, ranks[i])).join('');
+
+  // 動畫
+  grid.querySelectorAll('.rec-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    setTimeout(() => { el.classList.add('animate-in'); }, i * 100);
+  });
+}
+
+function renderRecCard(r, rank) {
+  const { spot, waveHeight, windDir, windSpeed, temp, rain, tides, score } = r;
+  const isFav = FAV_SPOTS.find(f => f.name === spot.name);
+  const waveOk = waveHeight <= (spot.max_wave_height === 99 ? 99 : spot.max_wave_height);
+  const waveColor = !waveOk ? 'color:var(--red)' : (waveHeight > 1 ? 'color:var(--gold)' : 'color:var(--green)');
+  const barColor = score >= 4 ? 'var(--green)' : score >= 3 ? 'var(--gold)' : 'var(--red)';
+  const tideNext = tides[0];
+
+  return \`
+  <div class="rec-card type-\${spot.type}">
+    <div class="rec-rank">\${rank}</div>
+    <div class="rec-name">\${spot.name}</div>
+    <div class="rec-meta">
+      <span class="badge badge-\${spot.type}">\${spot.type}</span>
+      <span class="badge badge-area">📍 \${spot.area}</span>
+      \${scoreToLabel(score)}
+    </div>
+    <div class="score-bar"><div class="score-bar-fill" style="width:\${score*20}%;background:\${barColor}"></div></div>
+    <div class="rec-stats">
+      <div class="rec-stat">🌊 浪高 <strong style="\${waveColor}">\${waveHeight}m</strong></div>
+      <div class="rec-stat">🌬️ 風速 <strong>\${windSpeed}m/s</strong></div>
+      <div class="rec-stat">🧭 <strong>\${windDir}</strong></div>
+      <div class="rec-stat">🌡️ <strong>\${temp}°C</strong></div>
+      <div class="rec-stat">☔ <strong>\${rain}%</strong></div>
+      \${tideNext ? \`<div class="rec-stat">🌊 \${tideNext.type} <strong>\${tideNext.time}</strong></div>\` : ''}
+    </div>
+    <div class="rec-note">📝 \${spot.note}</div>
+    <div class="rec-footer">
+      <span style="font-size:0.72rem;color:var(--text2)">上限：\${spot.max_wave_height===99?'不限':spot.max_wave_height+'m'}</span>
+      <button class="btn-mini \${isFav?'active':''}" onclick="toggleFav('\${spot.name}',this)">
+        \${isFav?'⭐ 已收藏':'☆ 收藏'}
+      </button>
+    </div>
+  </div>\`;
+}
+
+// ═══════════════════════════════════════════
+//  查詢主函式（表單送出後顯示全部）
+// ═══════════════════════════════════════════
+async function searchSpots() {
+  const date = document.getElementById('input-date').value;
+  if (!date) { showToast('❌ 請選擇出發日期', true); return; }
+  if (SPOTS.length === 0) { showToast('❌ 尚未載入釣點資料', true); return; }
+
+  const selectedAreas = [...document.querySelectorAll('#area-chips .chip.active')].map(c => c.dataset.area);
+  const selectedType = document.querySelector('.type-chips .chip.active')?.dataset.type || 'all';
+  const favOnly = document.getElementById('fav-only').checked;
+
+  let filtered = SPOTS.filter(s => {
+    if (favOnly && !FAV_SPOTS.find(f => f.name === s.name)) return false;
+    if (!selectedAreas.includes('all') && !selectedAreas.includes(s.area)) return false;
+    if (selectedType !== 'all' && s.type !== selectedType) return false;
+    return true;
+  });
+
+  const sec = document.getElementById('results-section');
+  sec.style.display = 'block';
+  document.getElementById('results-grid').innerHTML = \`<div class="loading-ph" style="grid-column:1/-1"><div class="loading-spinner"></div><div style="margin-top:8px">查詢 \${filtered.length} 個釣點天氣中...</div></div>\`;
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const ts = document.getElementById('input-time-start').value;
+  const te = document.getElementById('input-time-end').value;
+  const results = await Promise.all(filtered.map(s => fetchWeatherForSpot(s, date, ts, te)));
+
+  // 過濾：浪高超過上限的釣點不顯示（港區除外）
+  const suitable = results.filter(r => r.waveHeight <= r.spot.max_wave_height);
+  currentResults = suitable.sort((a,b) => b.score - a.score);
+
+  renderResults(currentResults, date, ts, te, results.length);
+}
+
+function renderResults(results, date, ts, te, total) {
+  const isDemo = results[0]?.source === 'demo';
+  document.getElementById('results-count').innerHTML =
+    \`共 <strong>\${results.length}</strong> 個適合釣點（篩掉 \${total - results.length} 個浪況不佳）\${isDemo ? '　<span style="color:var(--gold);font-size:0.72rem">⚠️ 示範資料</span>' : ''}\`;
+
+  if (results.length === 0) {
+    document.getElementById('results-grid').innerHTML = '<div class="loading-ph"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>今日條件下無合適釣點<br><span style="font-size:0.78rem">建議選擇港區或調整時段</span></div></div>';
+    return;
+  }
+  document.getElementById('results-grid').innerHTML = results.map(r => renderSpotCard(r)).join('');
+}
+
+function renderSpotCard(r) {
+  const { spot, waveHeight, windDir, windSpeed, temp, rain, tides, score } = r;
+  const isFav = FAV_SPOTS.find(f => f.name === spot.name);
+  const waveColor = waveHeight > 1 ? 'color:var(--gold)' : 'color:var(--green)';
+  const tideHtml = tides.map(t => \`<div class="tide-item">\${t.type==='高潮'?'🌊':'⬇️'} <span>\${t.time}</span> \${t.type} \${t.height}m</div>\`).join('');
+  return \`
+  <div class="spot-card type-\${spot.type}">
+    <div class="card-header">
+      <div>
+        <div class="card-title">\${spot.name}</div>
+        <div class="card-meta">
+          <span class="badge badge-\${spot.type}">\${spot.type}</span>
+          <span class="badge badge-area">📍 \${spot.area}</span>
+          \${scoreToLabel(score)}
+        </div>
+      </div>
+      <div class="score-stars" title="適合度 \${score}/5">\${scoreToStars(score)}</div>
+    </div>
+    <div class="weather-grid">
+      <div class="weather-item"><div class="wi-icon">🌊</div><div class="wi-label">浪高</div><div class="wi-value" style="\${waveColor}">\${waveHeight}m</div></div>
+      <div class="weather-item"><div class="wi-icon">🌬️</div><div class="wi-label">風速</div><div class="wi-value">\${windSpeed}m/s</div></div>
+      <div class="weather-item"><div class="wi-icon">🧭</div><div class="wi-label">風向</div><div class="wi-value">\${windDir}</div></div>
+      <div class="weather-item"><div class="wi-icon">🌡️</div><div class="wi-label">氣溫</div><div class="wi-value">\${temp}°C</div></div>
+      <div class="weather-item"><div class="wi-icon">☔</div><div class="wi-label">降雨</div><div class="wi-value">\${rain}%</div></div>
+      <div class="weather-item"><div class="wi-icon">📏</div><div class="wi-label">浪高上限</div><div class="wi-value" style="font-size:0.75rem">\${spot.max_wave_height===99?'不限':spot.max_wave_height+'m'}</div></div>
+    </div>
+    <div class="tide-row">\${tideHtml}</div>
+    <div class="note-row">📝 \${spot.note}</div>
+    <div class="wind-dir-row">✅ 適合風向：\${spot.good_wind_directions?.join('、')||'無限制'}\${spot.bad_wind_directions?.length ? '　❌ 避免：'+spot.bad_wind_directions.join('、') : ''}</div>
+    <div class="card-footer">
+      <button class="btn-mini \${isFav?'active':''}" onclick="toggleFav('\${spot.name}',this)">\${isFav?'⭐ 已收藏':'☆ 加入最愛'}</button>
+      <button class="btn-mini" onclick="openMap(\${spot.lat},\${spot.lng})">🗺️ 地圖</button>
+    </div>
+  </div>\`;
+}
+
+// ═══ 排序 ═══
+function sortResults() {
+  const method = document.getElementById('sort-select').value;
+  let sorted = [...currentResults];
+  if (method === 'score') sorted.sort((a,b) => b.score - a.score);
+  if (method === 'wave') sorted.sort((a,b) => a.waveHeight - b.waveHeight);
+  if (method === 'name') sorted.sort((a,b) => a.spot.name.localeCompare(b.spot.name));
+  currentResults = sorted;
+  document.getElementById('results-grid').innerHTML = sorted.map(r => renderSpotCard(r)).join('');
+}
+
+// ═══ 天氣資料 ═══
+async function fetchWeatherForSpot(spot, date, ts, te) {
+  if (!API_KEY || API_KEY === 'YOUR_API_KEY') return getMockWeather(spot, date, ts, te);
+  try {
+    const marineRes = await fetch(
+      `https://marine-api.open-meteo.com/v1/marine?latitude=\${spot.lat}&longitude=\${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=\${date}&end_date=\${date}`
+    );
+    const marine = await marineRes.json();
+    const h = parseInt(ts.split(':')[0]);
+    const wh = marine.hourly?.wave_height?.[h] ?? 0.8;
+    const wd = marine.hourly?.wave_direction?.[h] ?? 0;
+    return {
+      spot, waveHeight: parseFloat(wh.toFixed(1)), waveDir: degToDir(wd),
+      windSpeed: '—', windDir: '—', temp: '—', rain: '—',
+      tides: getMockTides(), score: calcScore(spot, wh, null, null), source: 'api'
+    };
+  } catch(e) { return getMockWeather(spot, date, ts, te); }
+}
+
+function getMockWeather(spot, date, ts, te) {
+  const wave = parseFloat((Math.random() * 1.6 + 0.2).toFixed(1));
+  const ws = parseFloat((Math.random() * 9 + 0.5).toFixed(1));
+  const bf = msToBeaufort(ws);
+  const dirs = ['北','東北','東','東南','南','西南','西','西北'];
+  const wd = dirs[Math.floor(Math.random() * 8)];
+  const temp = Math.floor(Math.random() * 8 + 18);
+  const rain = Math.floor(Math.random() * 50);
+  return {
+    spot, waveHeight: wave, windSpeed: ws, windBeaufort: bf, windDir: wd,
+    temp, rain, tides: getMockTides(), score: calcScore(spot, wave, bf, wd), source: 'demo'
+  };
+}
+
+function getMockTides() {
+  return [
+    { time: '06:2' + Math.floor(Math.random()*9), type: '低潮', height: (Math.random()*.4+.2).toFixed(1) },
+    { time: '12:3' + Math.floor(Math.random()*9), type: '高潮', height: (Math.random()*.6+1.4).toFixed(1) },
+    { time: '18:5' + Math.floor(Math.random()*9), type: '低潮', height: (Math.random()*.4+.2).toFixed(1) },
+  ];
+}
+
+// ═══ 評分 ═══
+function calcScore(spot, wave, bf, wd) {
+  let s = 5;
+  const max = spot.max_wave_height === 99 ? 99 : spot.max_wave_height;
+  if (wave > max) s -= 3;
+  else if (wave > max * 0.8) s -= 1;
+  if (bf !== null) {
+    if (bf > 5) s -= 3;
+    else if (bf > 3) s -= 1;
+  }
+  if (wd && spot.bad_wind_directions?.includes(wd)) s -= 1;
+  if (wd && spot.good_wind_directions?.includes(wd)) s += 1;
+  return Math.max(1, Math.min(5, s));
+}
+function scoreToStars(s) { return '⭐'.repeat(s) + '☆'.repeat(5-s); }
+function scoreToLabel(s) {
+  if (s >= 4) return '<span class="suitability suit-great">✅ 適合出釣</span>';
+  if (s >= 3) return '<span class="suitability suit-ok">⚠️ 尚可</span>';
+  return '<span class="suitability suit-bad">❌ 不建議</span>';
+}
+
+// ═══ 最愛 ═══
+function toggleFav(name, btn) {
+  const idx = FAV_SPOTS.findIndex(f => f.name === name);
+  if (idx >= 0) {
+    FAV_SPOTS.splice(idx, 1);
+    btn.textContent = '☆ 加入最愛'; btn.classList.remove('active');
+    showToast('已移除最愛');
+  } else {
+    if (FAV_SPOTS.length >= 10) { showToast('❌ 最多收藏 10 個', true); return; }
+    const spot = SPOTS.find(s => s.name === name);
+    if (spot) FAV_SPOTS.push(spot);
+    btn.textContent = '⭐ 已收藏'; btn.classList.add('active');
+    showToast('已加入最愛 ⭐');
+  }
+  localStorage.setItem('favSpots', JSON.stringify(FAV_SPOTS));
+  renderFavList();
+}
+function renderFavList() {
+  const ul = document.getElementById('fav-list');
+  if (FAV_SPOTS.length === 0) { ul.innerHTML = '<li class="fav-empty">尚未收藏任何釣點</li>'; return; }
+  ul.innerHTML = FAV_SPOTS.map(s => \`<li><span style="flex:1">\${s.name}</span><span class="fav-area">\${s.area}</span><button class="fav-del" onclick="removeFav('\${s.name}')">✕</button></li>\`).join('');
+}
+renderFavList();
+function removeFav(name) {
+  FAV_SPOTS = FAV_SPOTS.filter(f => f.name !== name);
+  localStorage.setItem('favSpots', JSON.stringify(FAV_SPOTS));
+  renderFavList();
+}
+
+// ═══ 工具 ═══
+function openMap(lat, lng) { window.open(`https://www.google.com/maps?q=\${lat},\${lng}`, '_blank'); }
+function degToDir(d) { return ['北','東北','東','東南','南','西南','西','西北'][Math.round(d/45)%8]; }
+function msToBeaufort(ms) {
+  const t = [0.3,1.6,3.4,5.5,8,10.8,13.9,17.2];
+  return t.findIndex(v => ms < v) === -1 ? 8 : t.findIndex(v => ms < v);
+}
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  sb.classList.toggle('open');
+  ov.style.display = sb.classList.contains('open') ? 'block' : 'none';
+}
+function showToast(msg, isError=false) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:\${isError?'var(--red)':'var(--accent2)'};color:#fff;padding:10px 20px;border-radius:20px;font-size:0.85rem;z-index:999;animation:fadeInUp .3s ease`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2500);
+}
+</script>
+<style>
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateX(-50%) translateY(10px); }
+  to   { opacity:1; transform:translateX(-50%) translateY(0); }
+}
+</style>
+</body>
+</html>
