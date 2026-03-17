@@ -552,9 +552,34 @@
 </div>
 
 <script>
-// ═══ 常數 ═══
-const CWA_KEY = 'CWA-668A5759-9FC3-4C75-91A3-F84C27565A7A'; // 潮汐API
+// ═══ 狀態 ═══
+let SPOTS = [];
+let FAV_SPOTS = JSON.parse(localStorage.getItem('favSpots') || '[]');
+let API_KEY = 'CWA-668A5759-9FC3-4C75-91A3-F84C27565A7A'; // 潮汐API
+let currentResults = [];
+let todayWaveHigh = false; // 當日浪高是否超過 1.2m
+let recommendPool = []; // 推薦用的天氣資料快取
 
+// 預設今天
+function getTWToday(){var d=new Date(),tw=new Date(d.getTime()+8*60*60*1000);return tw.toISOString().split('T')[0];}const _today=getTWToday();
+document.getElementById('input-date').value = _today;
+  document.getElementById('input-date-end').value = _today;
+document.getElementById('input-date-end').value = _today;
+
+function syncEndDate() {
+  const startDate = document.getElementById('input-date').value;
+  const endDate = document.getElementById('input-date-end').value;
+  // 只有在結束日期 < 開始日期 或結束日期未設定時才同步
+  if (!endDate || endDate < startDate) {
+    document.getElementById('input-date-end').value = startDate;
+  }
+}
+if (API_KEY) {
+  document.getElementById('api-key-input').value = API_KEY;
+  document.getElementById('api-key-status').style.display = 'block';
+}
+
+// ═══ 載入釣點 ═══
 const DEFAULT_SPOTS = [
   {"name":"外木山漁港","type":"肉粽","area":"基隆區","lat":25.1521,"lng":121.6892,"max_wave_height":99,"note":"港內作釣，浪高不限制，適合初學者","good_wind_directions":["南","西南","西","東南","北","東北","東","西北"],"bad_wind_directions":[]},
   {"name":"八斗子漁港","type":"肉粽","area":"基隆區","lat":25.1445,"lng":121.8012,"max_wave_height":99,"note":"港區作釣，無浪高限制，魚種豐富","good_wind_directions":["南","西南","西","東南","北","東北","東","西北"],"bad_wind_directions":[]},
@@ -572,357 +597,359 @@ const DEFAULT_SPOTS = [
   {"name":"淡水漁人碼頭","type":"肉粽","area":"北海岸區","lat":25.1823,"lng":121.4234,"max_wave_height":99,"note":"河口港區，無浪高限制，交通方便","good_wind_directions":["南","西南","西","東南","北","東北","東","西北"],"bad_wind_directions":[]}
 ];
 
-// ═══ 狀態 ═══
-let SPOTS = [];
-let FAVS = JSON.parse(localStorage.getItem('favSpots') || '[]');
-let curResults = [];
-let recPool = [];
-let recPage = 0;
-const REC_PER_PAGE = 9;
-let highWave = false;
-
-// ═══ 台灣時區今天日期（UTC+8，避免跨日顯示錯誤）═══
-function getTWToday() {
-  const d = new Date();
-  const tw = new Date(d.getTime() + 8 * 60 * 60 * 1000);
-  return tw.toISOString().split('T')[0];
-}
-const TODAY = getTWToday();
-
-// ═══ 頁面初始化 ═══
-(function init() {
-  // 時間選單
-  ['h-start','h-end'].forEach((id, idx) => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    const def = idx === 0 ? 6 : 12;
-    for (let i = 0; i < 24; i++) {
-      const o = document.createElement('option');
-      o.value = String(i);
-      o.textContent = String(i).padStart(2,'0') + ':00';
-      if (i === def) o.selected = true;
-      sel.appendChild(o);
-    }
-  });
-
-  // 日期預設今天
-  const ds = document.getElementById('d-start');
-  const de = document.getElementById('d-end');
-  if (ds) ds.value = TODAY;
-  if (de) de.value = TODAY;
-})();
-
-function syncEndDate() {
-  const s = document.getElementById('d-start').value;
-  const e = document.getElementById('d-end').value;
-  if (!e || e < s) document.getElementById('d-end').value = s;
-}
-
-// ═══ Chips ═══
-document.querySelectorAll('#area-chips .chip').forEach(c => c.addEventListener('click', () => {
-  if (c.dataset.area === 'all') {
-    document.querySelectorAll('#area-chips .chip').forEach(x => x.classList.remove('active'));
-    c.classList.add('active');
-  } else {
-    document.querySelector('#area-chips .chip[data-area="all"]').classList.remove('active');
-    c.classList.toggle('active');
-    if (![...document.querySelectorAll('#area-chips .chip:not([data-area="all"])')].some(x => x.classList.contains('active')))
-      document.querySelector('#area-chips .chip[data-area="all"]').classList.add('active');
-  }
-}));
-document.querySelectorAll('#type-chips .chip').forEach(c => c.addEventListener('click', () => {
-  document.querySelectorAll('#type-chips .chip').forEach(x => x.classList.remove('active'));
-  c.classList.add('active');
-}));
-
-// ═══ 載入釣點 ═══
-async function loadSpots() {
+async function loadDefaultSpots() {
   try {
     const res = await fetch('./spots.json');
-    if (res.ok) SPOTS = await res.json();
-    else throw new Error('fetch fail');
+    if (res.ok) {
+      SPOTS = await res.json();
+    } else { throw new Error('not ok'); }
   } catch(e) {
+    console.warn('使用內建預設釣點資料');
     SPOTS = DEFAULT_SPOTS;
   }
   document.getElementById('spots-num').textContent = SPOTS.length;
-  initRec();
+  initRecommend();
 }
-loadSpots();
+loadDefaultSpots();
 
-// ═══ 今日推薦初始化 ═══
-async function initRec() {
-  if (!SPOTS.length) return;
-  document.getElementById('rec-grid').innerHTML =
-    '<div class="lph" style="grid-column:1/-1"><div class="spinner"></div><div style="margin-top:8px;font-size:.85rem">分析今日海況中...</div></div>';
-  const all = await Promise.all(SPOTS.map(s => getWeather(s, TODAY, 8, 14)));
-  recPool = all;
-  const avg = all.reduce((s, r) => s + r.wave, 0) / all.length;
-  highWave = avg > 1.2;
-  const al = document.getElementById('wave-alert');
-  if (highWave) {
-    al.style.display = 'flex';
-    document.getElementById('wave-msg').textContent = '今日平均浪高 ' + avg.toFixed(1) + ' m，超過 1.2m，優先推薦港區釣點！';
+function loadJsonFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      SPOTS = JSON.parse(e.target.result);
+      document.getElementById('spots-num').textContent = SPOTS.length;
+      showToast('✅ 已載入 ' + SPOTS.length + ' 個釣點');
+      initRecommend();
+    } catch(err) { showToast('❌ JSON 格式錯誤', true); }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+// ═══ API Key ═══
+function saveApiKey() {
+  API_KEY = document.getElementById('api-key-input').value.trim();
+  localStorage.setItem('cwaApiKey', API_KEY);
+  document.getElementById('api-key-status').style.display = 'block';
+  showToast('✅ API Key 已儲存');
+  initRecommend();
+}
+
+// ═══ Chips ═══
+document.querySelectorAll('#area-chips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    if (chip.dataset.area === 'all') {
+      document.querySelectorAll('#area-chips .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    } else {
+      document.querySelector('#area-chips .chip[data-area="all"]').classList.remove('active');
+      chip.classList.toggle('active');
+      const any = [...document.querySelectorAll('#area-chips .chip:not([data-area="all"])')].some(c => c.classList.contains('active'));
+      if (!any) document.querySelector('#area-chips .chip[data-area="all"]').classList.add('active');
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.type-chips .chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.type-chips .chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+    });
+  });
+});
+
+// ═══════════════════════════════════════════
+//  今日推薦邏輯
+// ═══════════════════════════════════════════
+async function initRecommend() {
+  if (SPOTS.length === 0) return;
+  document.getElementById('recommend-grid').innerHTML = '<div class="loading-ph" style="grid-column:1/-1"><div class="loading-spinner"></div><div style="margin-top:8px;font-size:0.85rem">分析今日海況中...</div></div>';
+
+  const date = new Date().toISOString().split('T')[0];
+  // 取得所有釣點天氣（並行）
+  const all = await Promise.all(SPOTS.map(s => fetchWeatherForSpot(s, date, '08', '14')));
+  recommendPool = all;
+
+  // 判斷今日整體浪況
+  const avgWave = all.reduce((s, r) => s + parseFloat(r.waveHeight), 0) / all.length;
+  todayWaveHigh = avgWave > 1.2;
+
+  const alert = document.getElementById('wave-alert');
+  if (todayWaveHigh) {
+    alert.style.display = 'flex';
+    document.getElementById('wave-alert-msg').textContent = '今日平均浪高 ' + avgWave.toFixed(1) + ' m，超過 1.2m 安全標準，優先推薦港區釣點！';
   } else {
-    al.style.display = 'none';
+    alert.style.display = 'none';
   }
-  recPage = 0;
-  renderRec(all);
+
+  renderRecommend(all);
 }
 
-function refreshRec() { if (recPool.length) renderRec(recPool, true); }
-
-function buildRecPool(all) {
-  let pool = highWave
-    ? [...all.filter(r => r.spot.max_wave_height === 99),
-       ...all.filter(r => r.spot.max_wave_height !== 99 && r.wave <= r.spot.max_wave_height).sort((a,b) => b.score - a.score)]
-    : all.filter(r => r.score >= 3).sort((a,b) => b.score - a.score);
-  if (!pool.length) pool = [...all].sort((a,b) => b.score - a.score);
-  return pool;
+function refreshRecommend() {
+  if (recommendPool.length === 0) return;
+  renderRecommend(recommendPool, true); // shuffle
 }
 
-function renderRec(all, shuffle = false) {
-  let pool = buildRecPool(all);
-  if (shuffle) { pool = pool.sort(() => Math.random() - .5); recPage = 0; }
-  renderRecPage(pool);
+function renderRecommend(all, shuffle = false) {
+  // 依浪況決定推薦策略
+  let pool;
+  if (todayWaveHigh) {
+    // 浪大：優先港區（肉粽），再補野場中分數最高
+    const ports = all.filter(r => r.spot.max_wave_height === 99);
+    const wilds = all.filter(r => r.spot.max_wave_height !== 99 && r.waveHeight <= r.spot.max_wave_height).sort((a,b) => b.score - a.score);
+    pool = [...ports, ...wilds];
+  } else {
+    // 浪小：取分數 >= 3 的所有釣點
+    pool = all.filter(r => r.score >= 3).sort((a,b) => b.score - a.score);
+    if (pool.length === 0) pool = [...all].sort((a,b) => b.score - a.score);
+  }
+
+  // shuffle 或取前三
+  if (shuffle) {
+    pool = pool.sort(() => Math.random() - 0.5);
+  }
+  const picks = pool.slice(0, 3);
+
+  const ranks = ['🥇','🥈','🥉'];
+  const grid = document.getElementById('recommend-grid');
+  grid.innerHTML = picks.map((r, i) => renderRecCard(r, ranks[i])).join('');
+
+  // 動畫
+  grid.querySelectorAll('.rec-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    setTimeout(() => { el.classList.add('animate-in'); }, i * 100);
+  });
 }
 
-function renderRecPage(pool) {
-  const total = pool.length;
-  const totalPages = Math.ceil(total / REC_PER_PAGE);
-  const picks = pool.slice(recPage * REC_PER_PAGE, (recPage + 1) * REC_PER_PAGE);
-  const ranks = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣'];
-  const g = document.getElementById('rec-grid');
-  const cards = picks.map((r, i) => recCard(r, ranks[i])).join('');
-  const pageCtrl = totalPages > 1
-    ? `<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px;padding-top:12px;border-top:1px solid var(--border)">
-        <button class="btn-mini" onclick="changeRecPage(-1)" ${recPage === 0 ? 'disabled style="opacity:.4;cursor:default"' : ''}>◀ 上一頁</button>
-        <span style="font-size:.8rem;color:var(--text2)">第 ${recPage+1} 頁 / 共 ${totalPages} 頁（${total} 個釣點）</span>
-        <button class="btn-mini" onclick="changeRecPage(1)" ${recPage >= totalPages-1 ? 'disabled style="opacity:.4;cursor:default"' : ''}>下一頁 ▶</button>
-      </div>`
-    : `<div style="grid-column:1/-1;text-align:center;font-size:.72rem;color:var(--text2);margin-top:6px">共 ${total} 個推薦釣點</div>`;
-  g.innerHTML = cards + pageCtrl;
-  g.querySelectorAll('.rec-card').forEach((el, i) => { el.style.opacity = '0'; setTimeout(() => el.classList.add('anim'), i * 60); });
-}
+function renderRecCard(r, rank) {
+  const { spot, waveHeight, windDir, windSpeed, temp, rain, tides, score } = r;
+  const isFav = FAV_SPOTS.find(f => f.name === spot.name);
+  const waveOk = waveHeight <= (spot.max_wave_height === 99 ? 99 : spot.max_wave_height);
+  const waveColor = !waveOk ? 'color:var(--red)' : (waveHeight > 1 ? 'color:var(--gold)' : 'color:var(--green)');
+  const barColor = score >= 4 ? 'var(--green)' : score >= 3 ? 'var(--gold)' : 'var(--red)';
+  const tideNext = tides[0];
 
-function changeRecPage(dir) {
-  const pool = buildRecPool(recPool);
-  const totalPages = Math.ceil(pool.length / REC_PER_PAGE);
-  recPage = Math.max(0, Math.min(totalPages - 1, recPage + dir));
-  renderRecPage(pool);
-  document.getElementById('rec-section').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function recCard(r, rank) {
-  const {spot, wave, ws, wd, temp, rain, tides, tideType, score} = r;
-  const isFav = FAVS.find(f => f.name === spot.name);
-  const wc = wave > (spot.max_wave_height === 99 ? 99 : spot.max_wave_height) ? 'color:var(--red)' : wave > 1 ? 'color:var(--gold)' : 'color:var(--green)';
-  const bc = score >= 4 ? 'var(--green)' : score >= 3 ? 'var(--gold)' : 'var(--red)';
-  const t0 = tides[0] || {};
-  return `<div class="rec-card t-${spot.type}">
-    <div class="rec-rank">${rank}</div>
-    <div class="rec-name">${spot.name}</div>
-    <div class="rec-meta"><span class="badge b-${spot.type}">${spot.type}</span><span class="badge b-area">📍 ${spot.area}</span>${suitLabel(score)}</div>
-    <div class="score-bar"><div class="score-bar-fill" style="width:${score*20}%;background:${bc}"></div></div>
+  return \`
+  <div class="rec-card type-\${spot.type}">
+    <div class="rec-rank">\${rank}</div>
+    <div class="rec-name">\${spot.name}</div>
+    <div class="rec-meta">
+      <span class="badge badge-\${spot.type}">\${spot.type}</span>
+      <span class="badge badge-area">📍 \${spot.area}</span>
+      \${scoreToLabel(score)}
+    </div>
+    <div class="score-bar"><div class="score-bar-fill" style="width:\${score*20}%;background:\${barColor}"></div></div>
     <div class="rec-stats">
-      ${tideType ? `<div class="rs">🌙 <strong>${tideType}</strong></div>` : ''}
-      <div class="rs">🌊 <strong style="${wc}">${wave}m</strong></div>
-      <div class="rs">🌬️ <strong>${ws}m/s</strong></div>
-      <div class="rs">🧭 <strong>${wd}</strong></div>
-      <div class="rs">🌡️ <strong>${temp}°C</strong></div>
-      <div class="rs">☔ <strong>${rain}%</strong></div>
-      ${t0.time ? `<div class="rs">${t0.type === '高潮' ? '🌊' : '⬇️'} <strong>${t0.time}</strong></div>` : ''}
+      <div class="rec-stat">🌊 浪高 <strong style="\${waveColor}">\${waveHeight}m</strong></div>
+      <div class="rec-stat">🌬️ 風速 <strong>\${windSpeed}m/s</strong></div>
+      <div class="rec-stat">🧭 <strong>\${windDir}</strong></div>
+      <div class="rec-stat">🌡️ <strong>\${temp}°C</strong></div>
+      <div class="rec-stat">☔ <strong>\${rain}%</strong></div>
+      \${tideNext ? \`<div class="rec-stat">🌊 \${tideNext.type} <strong>\${tideNext.time}</strong></div>\` : ''}
     </div>
-    <div class="rec-note">📝 ${spot.note}</div>
-    <div class="rec-foot">
-      <span style="font-size:.72rem;color:var(--text2)">上限：${spot.max_wave_height === 99 ? '不限' : spot.max_wave_height + 'm'}</span>
-      <button class="btn-mini ${isFav ? 'active' : ''}" onclick="toggleFav('${spot.name}',this)">${isFav ? '⭐ 已收藏' : '☆ 收藏'}</button>
+    <div class="rec-note">📝 \${spot.note}</div>
+    <div class="rec-footer">
+      <span style="font-size:0.72rem;color:var(--text2)">上限：\${spot.max_wave_height===99?'不限':spot.max_wave_height+'m'}</span>
+      <button class="btn-mini \${isFav?'active':''}" onclick="toggleFav('\${spot.name}',this)">
+        \${isFav?'⭐ 已收藏':'☆ 收藏'}
+      </button>
     </div>
-  </div>`;
+  </div>\`;
 }
 
-// ═══ 海釣點推薦（搜尋）═══
-async function doSearch() {
-  const date = document.getElementById('d-start').value;
-  if (!date) { toast('❌ 請選擇作釣日期', true); return; }
-  if (!SPOTS.length) { toast('❌ 尚未載入釣點資料', true); return; }
+// ═══════════════════════════════════════════
+//  查詢主函式（表單送出後顯示全部）
+// ═══════════════════════════════════════════
+async function searchSpots() {
+  const date = document.getElementById('input-date').value;
+  if (!date) { showToast('❌ 請選擇出發日期', true); return; }
+  if (SPOTS.length === 0) { showToast('❌ 尚未載入釣點資料', true); return; }
 
-  const hStart = parseInt(document.getElementById('h-start').value);
-  const hEnd   = parseInt(document.getElementById('h-end').value);
-  const dEnd   = document.getElementById('d-end').value || date;
-  const isOvernight = dEnd > date || hEnd < hStart;
-
-  const areas   = [...document.querySelectorAll('#area-chips .chip.active')].map(c => c.dataset.area);
-  const type    = document.querySelector('#type-chips .chip.active')?.dataset.type || 'all';
+  const selectedAreas = [...document.querySelectorAll('#area-chips .chip.active')].map(c => c.dataset.area);
+  const selectedType = document.querySelector('.type-chips .chip.active')?.dataset.type || 'all';
   const favOnly = document.getElementById('fav-only').checked;
 
   let filtered = SPOTS.filter(s => {
-    if (favOnly && !FAVS.find(f => f.name === s.name)) return false;
-    if (!areas.includes('all') && !areas.includes(s.area)) return false;
-    if (type !== 'all' && s.type !== type) return false;
+    if (favOnly && !FAV_SPOTS.find(f => f.name === s.name)) return false;
+    if (!selectedAreas.includes('all') && !selectedAreas.includes(s.area)) return false;
+    if (selectedType !== 'all' && s.type !== selectedType) return false;
     return true;
   });
 
-  const sec = document.getElementById('res-section');
+  const sec = document.getElementById('results-section');
   sec.style.display = 'block';
-  document.getElementById('res-grid').innerHTML =
-    `<div class="lph" style="grid-column:1/-1"><div class="spinner"></div><div style="margin-top:8px">查詢 ${filtered.length} 個釣點天氣中...${isOvernight ? ' 🌙 跨夜模式' : ''}</div></div>`;
-  sec.scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('results-grid').innerHTML = \`<div class="loading-ph" style="grid-column:1/-1"><div class="loading-spinner"></div><div style="margin-top:8px">查詢 \${filtered.length} 個釣點天氣中...</div></div>\`;
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const results = await Promise.all(filtered.map(s => getWeather(s, date, hStart, hEnd)));
-  // 港區不過濾浪高，野場才過濾
-  const suitable = results.filter(r => r.spot.max_wave_height === 99 || r.wave <= r.spot.max_wave_height);
-  curResults = suitable.sort((a, b) => b.score - a.score);
-  renderRes(curResults, results.length, isOvernight, date, hStart, dEnd, hEnd);
+  const tsHour = document.getElementById('input-time-start').value;
+  const teHour = document.getElementById('input-time-end').value;
+  const dateEnd = document.getElementById('input-date-end').value || date;
+  const ts = tsHour + ':00';
+  const te = teHour + ':00';
+
+  // 跨夜判斷
+  const isOvernight = dateEnd > date || parseInt(teHour) < parseInt(tsHour);
+  if (isOvernight) {
+    showToast('🌙 跨夜作釣模式：顯示' + date + ' ' + ts + ' ～ ' + dateEnd + ' ' + te);
+  }
+
+  const results = await Promise.all(filtered.map(s => fetchWeatherForSpot(s, date, tsHour, teHour)));
+
+  // 過濾：浪高超過上限的釣點不顯示（港區除外）
+  const suitable = results.filter(r => r.waveHeight <= r.spot.max_wave_height);
+  currentResults = suitable.sort((a,b) => b.score - a.score);
+
+  renderResults(currentResults, date, ts, te, results.length);
 }
 
-function renderRes(results, total, isOvernight, date, hStart, dEnd, hEnd) {
-  const hS = String(hStart).padStart(2,'0');
-  const hE = String(hEnd).padStart(2,'0');
-  const isDemo = results[0]?.source === 'demo';
-  document.getElementById('res-count').innerHTML =
-    `${date} ${hS}:00 ～ ${dEnd} ${hE}:00${isOvernight ? ' 🌙' : ''}　共 <strong>${results.length}</strong> 個適合釣點（篩掉 ${total - results.length} 個）${isDemo ? ' <span style="color:var(--gold);font-size:.72rem">⚠️ 示範資料</span>' : ''}`;
-  if (!results.length) {
-    document.getElementById('res-grid').innerHTML =
-      '<div class="lph"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>今日條件下無合適釣點<br><span style="font-size:.78rem">建議選擇港區或調整時段</span></div></div>';
+function renderResults(results, date, ts, te, total) {
+  const isDemo = results[0]?.source === 'demo' || !results[0]?.source;
+  document.getElementById('results-count').innerHTML =
+    \`共 <strong>\${results.length}</strong> 個適合釣點（篩掉 \${total - results.length} 個浪況不佳）\${isDemo ? '　<span style="color:var(--gold);font-size:0.72rem">⚠️ 示範資料</span>' : ''}\`;
+
+  if (results.length === 0) {
+    document.getElementById('results-grid').innerHTML = '<div class="loading-ph"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>今日條件下無合適釣點<br><span style="font-size:0.78rem">建議選擇港區或調整時段</span></div></div>';
     return;
   }
-  document.getElementById('res-grid').innerHTML = results.map(r => spotCard(r)).join('');
+  document.getElementById('results-grid').innerHTML = results.map(r => renderSpotCard(r)).join('');
 }
 
-function spotCard(r) {
-  const {spot, wave, ws, wd, temp, rain, tides, tideType, score} = r;
-  const isFav = FAVS.find(f => f.name === spot.name);
-  const wc = wave > 1 ? 'color:var(--gold)' : 'color:var(--green)';
-  const tHtml = tides.map(t =>
-    `<div class="ti">${t.type === '高潮' ? '🌊' : '⬇️'} <span>${t.time}</span> ${t.type} ${t.height}m</div>`
-  ).join('');
-  const tideTypeBadge = tideType
-    ? `<div style="margin-bottom:8px;display:flex;align-items:center;gap:8px">
-        <span style="font-size:.72rem;color:var(--text2)">今日潮型</span>
-        <span style="font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:10px;background:rgba(0,180,216,.15);color:var(--accent);border:1px solid rgba(0,180,216,.3)">${tideType}</span>
-        <span style="font-size:.68rem;color:var(--text2)">作釣時段潮汐：</span>
-      </div>` : '';
-  return `<div class="spot-card t-${spot.type}">
-    <div class="c-hdr">
+function renderSpotCard(r) {
+  const { spot, waveHeight, windDir, windSpeed, temp, rain, tides, score } = r;
+  const isFav = FAV_SPOTS.find(f => f.name === spot.name);
+  const waveColor = waveHeight > 1 ? 'color:var(--gold)' : 'color:var(--green)';
+  const tideHtml = tides.map(t => \`<div class="tide-item">\${t.type==='高潮'?'🌊':'⬇️'} <span>\${t.time}</span> \${t.type} \${t.height}m</div>\`).join('');
+  return \`
+  <div class="spot-card type-\${spot.type}">
+    <div class="card-header">
       <div>
-        <div class="c-title">${spot.name}</div>
-        <div class="c-meta"><span class="badge b-${spot.type}">${spot.type}</span><span class="badge b-area">📍 ${spot.area}</span>${suitLabel(score)}</div>
+        <div class="card-title">\${spot.name}</div>
+        <div class="card-meta">
+          <span class="badge badge-\${spot.type}">\${spot.type}</span>
+          <span class="badge badge-area">📍 \${spot.area}</span>
+          \${scoreToLabel(score)}
+        </div>
       </div>
-      <div class="stars" title="${score}/5">${'⭐'.repeat(score)}${'☆'.repeat(5 - score)}</div>
+      <div class="score-stars" title="適合度 \${score}/5">\${scoreToStars(score)}</div>
     </div>
-    <div class="w-grid">
-      <div class="wi"><div class="wi-i">🌊</div><div class="wi-l">浪高</div><div class="wi-v" style="${wc}">${wave}m</div></div>
-      <div class="wi"><div class="wi-i">🌬️</div><div class="wi-l">風速</div><div class="wi-v">${ws}m/s</div></div>
-      <div class="wi"><div class="wi-i">🧭</div><div class="wi-l">風向</div><div class="wi-v">${wd}</div></div>
-      <div class="wi"><div class="wi-i">🌡️</div><div class="wi-l">氣溫</div><div class="wi-v">${temp}°C</div></div>
-      <div class="wi"><div class="wi-i">☔</div><div class="wi-l">降雨</div><div class="wi-v">${rain}%</div></div>
-      <div class="wi"><div class="wi-i">📏</div><div class="wi-l">浪高上限</div><div class="wi-v" style="font-size:.75rem">${spot.max_wave_height === 99 ? '不限' : spot.max_wave_height + 'm'}</div></div>
+    <div class="weather-grid">
+      <div class="weather-item"><div class="wi-icon">🌊</div><div class="wi-label">浪高</div><div class="wi-value" style="\${waveColor}">\${waveHeight}m</div></div>
+      <div class="weather-item"><div class="wi-icon">🌬️</div><div class="wi-label">風速</div><div class="wi-value">\${windSpeed}m/s</div></div>
+      <div class="weather-item"><div class="wi-icon">🧭</div><div class="wi-label">風向</div><div class="wi-value">\${windDir}</div></div>
+      <div class="weather-item"><div class="wi-icon">🌡️</div><div class="wi-label">氣溫</div><div class="wi-value">\${temp}°C</div></div>
+      <div class="weather-item"><div class="wi-icon">☔</div><div class="wi-label">降雨</div><div class="wi-value">\${rain}%</div></div>
+      <div class="weather-item"><div class="wi-icon">📏</div><div class="wi-label">浪高上限</div><div class="wi-value" style="font-size:0.75rem">\${spot.max_wave_height===99?'不限':spot.max_wave_height+'m'}</div></div>
     </div>
-    ${tideTypeBadge}
-    <div class="tide-row">${tHtml}</div>
-    <div class="note-r">📝 ${spot.note}</div>
-    <div class="wind-r">✅ 適合：${spot.good_wind_directions?.join('、') || '無限制'}${spot.bad_wind_directions?.length ? '　❌ 避免：' + spot.bad_wind_directions.join('、') : ''}</div>
-    <div class="c-foot">
-      <button class="btn-mini ${isFav ? 'active' : ''}" onclick="toggleFav('${spot.name}',this)">${isFav ? '⭐ 已收藏' : '☆ 加入最愛'}</button>
-      <button class="btn-mini" onclick="openMap(${spot.lat},${spot.lng})">🗺️ 地圖</button>
+    <div class="tide-row">\${tideHtml}</div>
+    <div class="note-row">📝 \${spot.note}</div>
+    <div class="wind-dir-row">✅ 適合風向：\${spot.good_wind_directions?.join('、')||'無限制'}\${spot.bad_wind_directions?.length ? '　❌ 避免：'+spot.bad_wind_directions.join('、') : ''}</div>
+    <div class="card-footer">
+      <button class="btn-mini \${isFav?'active':''}" onclick="toggleFav('\${spot.name}',this)">\${isFav?'⭐ 已收藏':'☆ 加入最愛'}</button>
+      <button class="btn-mini" onclick="openMap(\${spot.lat},\${spot.lng})">🗺️ 地圖</button>
     </div>
-  </div>`;
+  </div>\`;
 }
 
 // ═══ 排序 ═══
-function doSort() {
-  const m = document.getElementById('sort-sel').value;
-  let s = [...curResults];
-  if (m === 'score') s.sort((a,b) => b.score - a.score);
-  if (m === 'wave')  s.sort((a,b) => a.wave - b.wave);
-  if (m === 'name')  s.sort((a,b) => a.spot.name.localeCompare(b.spot.name));
-  curResults = s;
-  document.getElementById('res-grid').innerHTML = s.map(r => spotCard(r)).join('');
+function sortResults() {
+  const method = document.getElementById('sort-select').value;
+  let sorted = [...currentResults];
+  if (method === 'score') sorted.sort((a,b) => b.score - a.score);
+  if (method === 'wave') sorted.sort((a,b) => a.waveHeight - b.waveHeight);
+  if (method === 'name') sorted.sort((a,b) => a.spot.name.localeCompare(b.spot.name));
+  currentResults = sorted;
+  document.getElementById('results-grid').innerHTML = sorted.map(r => renderSpotCard(r)).join('');
 }
 
-// ═══ 天氣 API ═══
-async function getWeather(spot, date, hStart, hEnd) {
+// ═══ 天氣資料 ═══
+async function fetchWeatherForSpot(spot, date, ts, te) {
   try {
-    const [mr, wr] = await Promise.all([
-      fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`),
-      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`)
-    ]);
-    const m = await mr.json();
-    const w = await wr.json();
-    const h     = hStart;
-    const wave  = parseFloat((m.hourly?.wave_height?.[h] ?? 0.8).toFixed(1));
-    const wsKmh = w.hourly?.windspeed_10m?.[h] ?? 0;
-    const wsMs  = parseFloat((wsKmh / 3.6).toFixed(1));
-    const wdDeg = w.hourly?.winddirection_10m?.[h] ?? 0;
-    const temp  = Math.round(w.hourly?.temperature_2m?.[h] ?? 22);
-    const rain  = Math.round(w.hourly?.precipitation_probability?.[h] ?? 0);
-    const bf    = msToB(wsMs);
-    const wd    = deg2dir(wdDeg);
+    const h = parseInt(ts); // ts 現在直接是小時數字字串如 '06'
 
-    // 潮汐：取作釣前後3小時內的漲退轉換點（最多3個）
-    let tides = mockTides();
-    let tideType = '';
+    // ① Open-Meteo：浪高、浪向、風速、風向、氣溫、降雨（免費無需Key）
+    const [marineRes, weatherRes] = await Promise.all([
+      fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=\${spot.lat}&longitude=\${spot.lng}&hourly=wave_height,wave_direction,wave_period&timezone=Asia%2FTaipei&start_date=\${date}&end_date=\${date}`),
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=\${spot.lat}&longitude=\${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m&timezone=Asia%2FTaipei&start_date=\${date}&end_date=\${date}`)
+    ]);
+    const marine = await marineRes.json();
+    const weather = await weatherRes.json();
+
+    const wh = marine.hourly?.wave_height?.[h] ?? 0.8;
+    const wdDeg = marine.hourly?.wave_direction?.[h] ?? 0;
+    const ws = weather.hourly?.windspeed_10m?.[h] ?? 0;
+    const wdirDeg = weather.hourly?.winddirection_10m?.[h] ?? 0;
+    const temp = weather.hourly?.temperature_2m?.[h] ?? 22;
+    const rain = weather.hourly?.precipitation_probability?.[h] ?? 0;
+    const bf = msToBeaufort(ws / 3.6); // km/h → m/s
+    const windDirStr = degToDir(wdirDeg);
+
+    // ② CWA 潮汐API（中央氣象署）
+    let tides = getMockTides();
     try {
-      const tr = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=${CWA_KEY}&format=JSON&Date=${date}`);
-      const td = await tr.json();
-      const recs = td?.records?.TideForecasts;
-      if (recs?.length) {
-        const daily = recs[0]?.Location?.TimePeriods?.Daily?.find(d => d.Date === date);
-        if (daily?.TideType) tideType = daily.TideType;
+      const tideRes = await fetch(
+        `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=\${API_KEY}&format=JSON&Date=\${date}`
+      );
+      const tideData = await tideRes.json();
+      const records = tideData?.records?.TideForecasts;
+      if (records && records.length > 0) {
+        // 找最近的測站
+        const station = records[0];
+        const daily = station?.Location?.TimePeriods?.Daily?.find(d => d.Date === date);
         if (daily?.HourlyTides) {
-          const winS = Math.max(0, hStart - 3);
-          const winE = Math.min(23, hEnd + 3);
-          const allT = daily.HourlyTides;
-          const turning = [];
-          for (let i = 1; i < allT.length; i++) {
-            const th = parseInt(allT[i].DateTime.split('T')[1]);
-            if (allT[i].TideType !== allT[i-1].TideType && th >= winS && th <= winE) {
-              turning.push({
-                time:   allT[i].DateTime.split('T')[1].substring(0, 5),
-                type:   allT[i].TideType === 'H' ? '高潮' : '低潮',
-                height: parseFloat(allT[i].TideHeights?.AboveChartDatum ?? 0).toFixed(1)
-              });
-            }
-          }
-          if (turning.length) tides = turning.slice(0, 3);
-          else {
-            const t2 = allT
-              .filter(t => { const th = parseInt(t.DateTime.split('T')[1]); return th >= winS && th <= winE; })
-              .slice(0, 3)
-              .map(t => ({
-                time:   t.DateTime.split('T')[1].substring(0, 5),
-                type:   t.TideType === 'H' ? '高潮' : '低潮',
-                height: parseFloat(t.TideHeights?.AboveChartDatum ?? 0).toFixed(1)
-              }));
-            if (t2.length) tides = t2;
-          }
+          tides = daily.HourlyTides
+            .filter(t => {
+              const tHour = parseInt(t.DateTime.split('T')[1].split(':')[0]);
+              return tHour >= parseInt(ts) && tHour <= parseInt(te.split(':')[0]) + 2;
+            })
+            .slice(0, 3)
+            .map(t => ({
+              time: t.DateTime.split('T')[1].substring(0,5),
+              type: t.TideType === 'H' ? '高潮' : '低潮',
+              height: parseFloat(t.TideHeights?.AboveChartDatum ?? 0).toFixed(1)
+            }));
+          if (tides.length === 0) tides = getMockTides();
         }
       }
-    } catch(e) {}
+    } catch(e) { /* 潮汐失敗用mock */ }
 
-    return { spot, wave, ws: wsMs, wd, temp, rain, tides, tideType, score: calcScore(spot, wave, bf, wd), source: 'live' };
+    return {
+      spot,
+      waveHeight: parseFloat(wh.toFixed(1)),
+      windSpeed: (ws / 3.6).toFixed(1),
+      windBeaufort: bf,
+      windDir: windDirStr,
+      temp: Math.round(temp),
+      rain: Math.round(rain),
+      tides,
+      score: calcScore(spot, wh, bf, windDirStr),
+      source: 'live'
+    };
   } catch(e) {
-    return mockWeather(spot);
+    console.warn('API 失敗，使用示範資料:', e);
+    return getMockWeather(spot, date, ts, te);
   }
 }
 
-function mockWeather(spot) {
-  const wave = parseFloat((Math.random() * 1.4 + 0.2).toFixed(1));
-  const ws   = parseFloat((Math.random() * 7 + 0.5).toFixed(1));
+function getMockWeather(spot, date, ts, te) {
+  const wave = parseFloat((Math.random() * 1.6 + 0.2).toFixed(1));
+  const ws = parseFloat((Math.random() * 9 + 0.5).toFixed(1));
+  const bf = msToBeaufort(ws);
   const dirs = ['北','東北','東','東南','南','西南','西','西北'];
-  const wd   = dirs[Math.floor(Math.random() * 8)];
+  const wd = dirs[Math.floor(Math.random() * 8)];
   const temp = Math.floor(Math.random() * 8 + 18);
-  const rain = Math.floor(Math.random() * 40);
-  const ttypes = ['大潮','中潮','小潮','長潮'];
-  const tideType = ttypes[Math.floor(Math.random() * 4)];
-  return { spot, wave, ws, wd, temp, rain, tides: mockTides(), tideType, score: calcScore(spot, wave, msToB(ws), wd), source: 'demo' };
+  const rain = Math.floor(Math.random() * 50);
+  return {
+    spot, waveHeight: wave, windSpeed: ws, windBeaufort: bf, windDir: wd,
+    temp, rain, tides: getMockTides(), score: calcScore(spot, wave, bf, wd), source: 'demo'
+  };
 }
 
-function mockTides() {
+function getMockTides() {
   return [
-    {time: '06:' + String(Math.floor(Math.random()*59)).padStart(2,'0'), type:'低潮', height: (Math.random()*.4+.2).toFixed(1)},
-    {time: '12:' + String(Math.floor(Math.random()*59)).padStart(2,'0'), type:'高潮', height: (Math.random()*.6+1.4).toFixed(1)},
-    {time: '18:' + String(Math.floor(Math.random()*59)).padStart(2,'0'), type:'低潮', height: (Math.random()*.4+.2).toFixed(1)}
+    { time: '06:2' + Math.floor(Math.random()*9), type: '低潮', height: (Math.random()*.4+.2).toFixed(1) },
+    { time: '12:3' + Math.floor(Math.random()*9), type: '高潮', height: (Math.random()*.6+1.4).toFixed(1) },
+    { time: '18:5' + Math.floor(Math.random()*9), type: '低潮', height: (Math.random()*.4+.2).toFixed(1) },
   ];
 }
 
@@ -930,54 +957,73 @@ function mockTides() {
 function calcScore(spot, wave, bf, wd) {
   let s = 5;
   const max = spot.max_wave_height === 99 ? 99 : spot.max_wave_height;
-  if (wave > max) s -= 3; else if (wave > max * .8) s -= 1;
-  if (bf > 5) s -= 3; else if (bf > 3) s -= 1;
+  if (wave > max) s -= 3;
+  else if (wave > max * 0.8) s -= 1;
+  if (bf !== null) {
+    if (bf > 5) s -= 3;
+    else if (bf > 3) s -= 1;
+  }
   if (wd && spot.bad_wind_directions?.includes(wd)) s -= 1;
   if (wd && spot.good_wind_directions?.includes(wd)) s += 1;
   return Math.max(1, Math.min(5, s));
 }
-function suitLabel(s) {
-  if (s >= 4) return '<span class="suit suit-g">✅ 適合出釣</span>';
-  if (s >= 3) return '<span class="suit suit-o">⚠️ 尚可</span>';
-  return '<span class="suit suit-b">❌ 不建議</span>';
+function scoreToStars(s) { return '⭐'.repeat(s) + '☆'.repeat(5-s); }
+function scoreToLabel(s) {
+  if (s >= 4) return '<span class="suitability suit-great">✅ 適合出釣</span>';
+  if (s >= 3) return '<span class="suitability suit-ok">⚠️ 尚可</span>';
+  return '<span class="suitability suit-bad">❌ 不建議</span>';
 }
 
 // ═══ 最愛 ═══
 function toggleFav(name, btn) {
-  const idx = FAVS.findIndex(f => f.name === name);
-  if (idx >= 0) { FAVS.splice(idx, 1); btn.textContent = '☆ 加入最愛'; btn.classList.remove('active'); toast('已移除最愛'); }
-  else {
-    if (FAVS.length >= 10) { toast('❌ 最多收藏 10 個', true); return; }
-    const sp = SPOTS.find(s => s.name === name);
-    if (sp) FAVS.push(sp);
-    btn.textContent = '⭐ 已收藏'; btn.classList.add('active'); toast('已加入最愛 ⭐');
+  const idx = FAV_SPOTS.findIndex(f => f.name === name);
+  if (idx >= 0) {
+    FAV_SPOTS.splice(idx, 1);
+    btn.textContent = '☆ 加入最愛'; btn.classList.remove('active');
+    showToast('已移除最愛');
+  } else {
+    if (FAV_SPOTS.length >= 10) { showToast('❌ 最多收藏 10 個', true); return; }
+    const spot = SPOTS.find(s => s.name === name);
+    if (spot) FAV_SPOTS.push(spot);
+    btn.textContent = '⭐ 已收藏'; btn.classList.add('active');
+    showToast('已加入最愛 ⭐');
   }
-  localStorage.setItem('favSpots', JSON.stringify(FAVS));
+  localStorage.setItem('favSpots', JSON.stringify(FAV_SPOTS));
   renderFavList();
 }
 function renderFavList() {
   const ul = document.getElementById('fav-list');
-  if (!FAVS.length) { ul.innerHTML = '<li class="fav-empty">尚未收藏任何釣點</li>'; return; }
-  ul.innerHTML = FAVS.map(s =>
-    `<li><span style="flex:1">${s.name}</span><span class="fav-area">${s.area}</span><button class="fav-del" onclick="removeFav('${s.name}')">✕</button></li>`
-  ).join('');
+  if (FAV_SPOTS.length === 0) { ul.innerHTML = '<li class="fav-empty">尚未收藏任何釣點</li>'; return; }
+  ul.innerHTML = FAV_SPOTS.map(s => \`<li><span style="flex:1">\${s.name}</span><span class="fav-area">\${s.area}</span><button class="fav-del" onclick="removeFav('\${s.name}')">✕</button></li>\`).join('');
 }
 renderFavList();
-function removeFav(name) { FAVS = FAVS.filter(f => f.name !== name); localStorage.setItem('favSpots', JSON.stringify(FAVS)); renderFavList(); }
+function removeFav(name) {
+  FAV_SPOTS = FAV_SPOTS.filter(f => f.name !== name);
+  localStorage.setItem('favSpots', JSON.stringify(FAV_SPOTS));
+  renderFavList();
+}
 
-// ═══ 工具函式 ═══
-function openMap(lat, lng) { window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank'); }
-function deg2dir(d) { return ['北','東北','東','東南','南','西南','西','西北'][Math.round(d / 45) % 8]; }
-function msToB(ms) { const t = [.3,1.6,3.4,5.5,8,10.8,13.9,17.2]; const i = t.findIndex(v => ms < v); return i === -1 ? 8 : i; }
-function toggleSB() { const sb = document.getElementById('sidebar'), ov = document.getElementById('sb-overlay'); sb.classList.toggle('open'); ov.style.display = sb.classList.contains('open') ? 'block' : 'none'; }
-function toast(msg, err = false) {
+// ═══ 工具 ═══
+function openMap(lat, lng) { window.open(`https://www.google.com/maps?q=\${lat},\${lng}`, '_blank'); }
+function degToDir(d) { return ['北','東北','東','東南','南','西南','西','西北'][Math.round(d/45)%8]; }
+function msToBeaufort(ms) {
+  const t = [0.3,1.6,3.4,5.5,8,10.8,13.9,17.2];
+  return t.findIndex(v => ms < v) === -1 ? 8 : t.findIndex(v => ms < v);
+}
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  sb.classList.toggle('open');
+  ov.style.display = sb.classList.contains('open') ? 'block' : 'none';
+}
+function showToast(msg, isError=false) {
   const t = document.createElement('div');
   t.textContent = msg;
-  t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:${err ? 'var(--red)' : 'var(--accent2)'};color:#fff;padding:10px 20px;border-radius:20px;font-size:.85rem;z-index:999;animation:fadeUp .3s ease`;
-  document.body.appendChild(t); setTimeout(() => t.remove(), 2500);
+  t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:\${isError?'var(--red)':'var(--accent2)'};color:#fff;padding:10px 20px;border-radius:20px;font-size:0.85rem;z-index:999;animation:fadeInUp .3s ease`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2500);
 }
 </script>
-
 <style>
 @keyframes fadeInUp {
   from { opacity:0; transform:translateX(-50%) translateY(10px); }
@@ -1000,7 +1046,7 @@ function toast(msg, err = false) {
   &nbsp;｜&nbsp;
   <span style="color:var(--text)">北台灣海釣天氣助理</span>
   &nbsp;｜&nbsp;
-  <span style="color:var(--text2)">版本 V0.2.1</span>
+  <span style="color:var(--text2)">版本 V0.2.2</span>
 </footer>
 
 </body>
