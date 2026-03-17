@@ -341,7 +341,7 @@
       <ul id="fav-list"><li class="fav-empty">尚未收藏任何釣點</li></ul>
       <div style="font-size:0.7rem;color:var(--text2);margin-top:8px;">最多收藏 10 個</div>
     </div>
-    <div class="sidebar-section">
+    <div class="sidebar-section" style="display:none">
       <h3>🔑 氣象署 API Key</h3>
       <div style="font-size:0.72rem;color:var(--text2);margin-bottom:8px;">
         前往 <a href="https://opendata.cwa.gov.tw" target="_blank" style="color:var(--accent)">opendata.cwa.gov.tw</a> 免費申請
@@ -350,7 +350,7 @@
       <button class="btn-mini" style="margin-top:8px;width:100%;text-align:center" onclick="saveApiKey()">💾 儲存</button>
       <div id="api-key-status" style="font-size:0.72rem;margin-top:6px;color:var(--green);display:none">✅ 已儲存</div>
     </div>
-    <div class="sidebar-section">
+    <div class="sidebar-section" style="display:none">
       <h3>📂 釣點資料庫</h3>
       <input type="file" id="json-file-input" accept=".json" style="display:none" onchange="loadJsonFile(event)">
       <button class="btn-mini" style="width:100%;text-align:center" onclick="document.getElementById('json-file-input').click()">📁 匯入 spots.json</button>
@@ -365,17 +365,50 @@
     <div class="filter-box">
       <h2>🔍 篩選條件</h2>
       <div class="filter-grid">
+        <!-- 作釣日期 + 開始時間 -->
         <div class="filter-group">
-          <label>📅 出發日期</label>
-          <input type="date" id="input-date">
+          <label>📅 作釣日期</label>
+          <input type="date" id="input-date" onchange="syncEndDate()">
         </div>
         <div class="filter-group">
-          <label>⏱️ 作釣時段</label>
-          <div style="display:flex;gap:6px;align-items:center">
-            <input type="time" id="input-time-start" value="06:00" style="flex:1">
-            <span style="color:var(--text2);font-size:0.8rem">～</span>
-            <input type="time" id="input-time-end" value="12:00" style="flex:1">
-          </div>
+          <label>🕐 作釣開始時間（24小時制）</label>
+          <select id="input-time-start" style="background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:0.9rem;font-family:inherit;outline:none;width:100%">
+            <option value="00">00:00</option><option value="01">01:00</option>
+            <option value="02">02:00</option><option value="03">03:00</option>
+            <option value="04">04:00</option><option value="05">05:00</option>
+            <option value="06" selected>06:00</option><option value="07">07:00</option>
+            <option value="08">08:00</option><option value="09">09:00</option>
+            <option value="10">10:00</option><option value="11">11:00</option>
+            <option value="12">12:00</option><option value="13">13:00</option>
+            <option value="14">14:00</option><option value="15">15:00</option>
+            <option value="16">16:00</option><option value="17">17:00</option>
+            <option value="18">18:00</option><option value="19">19:00</option>
+            <option value="20">20:00</option><option value="21">21:00</option>
+            <option value="22">22:00</option><option value="23">23:00</option>
+          </select>
+        </div>
+
+        <!-- 結束日期 + 結束時間 -->
+        <div class="filter-group">
+          <label>📅 結束日期 <span style="font-size:0.7rem;color:var(--text2)">（跨夜可修改）</span></label>
+          <input type="date" id="input-date-end">
+        </div>
+        <div class="filter-group">
+          <label>🕛 預計結束時間（24小時制）</label>
+          <select id="input-time-end" style="background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:0.9rem;font-family:inherit;outline:none;width:100%">
+            <option value="00">00:00</option><option value="01">01:00</option>
+            <option value="02">02:00</option><option value="03">03:00</option>
+            <option value="04">04:00</option><option value="05">05:00</option>
+            <option value="06">06:00</option><option value="07">07:00</option>
+            <option value="08">08:00</option><option value="09">09:00</option>
+            <option value="10">10:00</option><option value="11">11:00</option>
+            <option value="12" selected>12:00</option><option value="13">13:00</option>
+            <option value="14">14:00</option><option value="15">15:00</option>
+            <option value="16">16:00</option><option value="17">17:00</option>
+            <option value="18">18:00</option><option value="19">19:00</option>
+            <option value="20">20:00</option><option value="21">21:00</option>
+            <option value="22">22:00</option><option value="23">23:00</option>
+          </select>
         </div>
         <div class="filter-group filter-row-full">
           <label>📍 大區域（可多選）</label>
@@ -395,7 +428,7 @@
           </div>
         </div>
         <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-          <button class="btn-search" onclick="searchSpots()">🔍 查詢天氣預報</button>
+          <button class="btn-search" onclick="searchSpots()">🎣 海釣點推薦</button>
           <label style="font-size:0.82rem;color:var(--text2);display:flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap">
             <input type="checkbox" id="fav-only" style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer"> 只看我的最愛
           </label>
@@ -522,13 +555,24 @@
 // ═══ 狀態 ═══
 let SPOTS = [];
 let FAV_SPOTS = JSON.parse(localStorage.getItem('favSpots') || '[]');
-let API_KEY = localStorage.getItem('cwaApiKey') || '';
+let API_KEY = 'CWA-668A5759-9FC3-4C75-91A3-F84C27565A7A'; // 潮汐API
 let currentResults = [];
 let todayWaveHigh = false; // 當日浪高是否超過 1.2m
 let recommendPool = []; // 推薦用的天氣資料快取
 
 // 預設今天
-document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+const _today = new Date().toISOString().split('T')[0];
+document.getElementById('input-date').value = _today;
+document.getElementById('input-date-end').value = _today;
+
+function syncEndDate() {
+  const startDate = document.getElementById('input-date').value;
+  const endDate = document.getElementById('input-date-end').value;
+  // 只有在結束日期 < 開始日期 或結束日期未設定時才同步
+  if (!endDate || endDate < startDate) {
+    document.getElementById('input-date-end').value = startDate;
+  }
+}
 if (API_KEY) {
   document.getElementById('api-key-input').value = API_KEY;
   document.getElementById('api-key-status').style.display = 'block';
@@ -621,7 +665,7 @@ async function initRecommend() {
 
   const date = new Date().toISOString().split('T')[0];
   // 取得所有釣點天氣（並行）
-  const all = await Promise.all(SPOTS.map(s => fetchWeatherForSpot(s, date, '08:00', '14:00')));
+  const all = await Promise.all(SPOTS.map(s => fetchWeatherForSpot(s, date, '08', '14')));
   recommendPool = all;
 
   // 判斷今日整體浪況
@@ -735,9 +779,19 @@ async function searchSpots() {
   document.getElementById('results-grid').innerHTML = \`<div class="loading-ph" style="grid-column:1/-1"><div class="loading-spinner"></div><div style="margin-top:8px">查詢 \${filtered.length} 個釣點天氣中...</div></div>\`;
   sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const ts = document.getElementById('input-time-start').value;
-  const te = document.getElementById('input-time-end').value;
-  const results = await Promise.all(filtered.map(s => fetchWeatherForSpot(s, date, ts, te)));
+  const tsHour = document.getElementById('input-time-start').value;
+  const teHour = document.getElementById('input-time-end').value;
+  const dateEnd = document.getElementById('input-date-end').value || date;
+  const ts = tsHour + ':00';
+  const te = teHour + ':00';
+
+  // 跨夜判斷
+  const isOvernight = dateEnd > date || parseInt(teHour) < parseInt(tsHour);
+  if (isOvernight) {
+    showToast('🌙 跨夜作釣模式：顯示' + date + ' ' + ts + ' ～ ' + dateEnd + ' ' + te);
+  }
+
+  const results = await Promise.all(filtered.map(s => fetchWeatherForSpot(s, date, tsHour, teHour)));
 
   // 過濾：浪高超過上限的釣點不顯示（港區除外）
   const suitable = results.filter(r => r.waveHeight <= r.spot.max_wave_height);
@@ -747,7 +801,7 @@ async function searchSpots() {
 }
 
 function renderResults(results, date, ts, te, total) {
-  const isDemo = results[0]?.source === 'demo';
+  const isDemo = results[0]?.source === 'demo' || !results[0]?.source;
   document.getElementById('results-count').innerHTML =
     \`共 <strong>\${results.length}</strong> 個適合釣點（篩掉 \${total - results.length} 個浪況不佳）\${isDemo ? '　<span style="color:var(--gold);font-size:0.72rem">⚠️ 示範資料</span>' : ''}\`;
 
@@ -807,21 +861,71 @@ function sortResults() {
 
 // ═══ 天氣資料 ═══
 async function fetchWeatherForSpot(spot, date, ts, te) {
-  if (!API_KEY || API_KEY === 'YOUR_API_KEY') return getMockWeather(spot, date, ts, te);
   try {
-    const marineRes = await fetch(
-      `https://marine-api.open-meteo.com/v1/marine?latitude=\${spot.lat}&longitude=\${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=\${date}&end_date=\${date}`
-    );
+    const h = parseInt(ts); // ts 現在直接是小時數字字串如 '06'
+
+    // ① Open-Meteo：浪高、浪向、風速、風向、氣溫、降雨（免費無需Key）
+    const [marineRes, weatherRes] = await Promise.all([
+      fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=\${spot.lat}&longitude=\${spot.lng}&hourly=wave_height,wave_direction,wave_period&timezone=Asia%2FTaipei&start_date=\${date}&end_date=\${date}`),
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=\${spot.lat}&longitude=\${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m&timezone=Asia%2FTaipei&start_date=\${date}&end_date=\${date}`)
+    ]);
     const marine = await marineRes.json();
-    const h = parseInt(ts.split(':')[0]);
+    const weather = await weatherRes.json();
+
     const wh = marine.hourly?.wave_height?.[h] ?? 0.8;
-    const wd = marine.hourly?.wave_direction?.[h] ?? 0;
+    const wdDeg = marine.hourly?.wave_direction?.[h] ?? 0;
+    const ws = weather.hourly?.windspeed_10m?.[h] ?? 0;
+    const wdirDeg = weather.hourly?.winddirection_10m?.[h] ?? 0;
+    const temp = weather.hourly?.temperature_2m?.[h] ?? 22;
+    const rain = weather.hourly?.precipitation_probability?.[h] ?? 0;
+    const bf = msToBeaufort(ws / 3.6); // km/h → m/s
+    const windDirStr = degToDir(wdirDeg);
+
+    // ② CWA 潮汐API（中央氣象署）
+    let tides = getMockTides();
+    try {
+      const tideRes = await fetch(
+        `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=\${API_KEY}&format=JSON&Date=\${date}`
+      );
+      const tideData = await tideRes.json();
+      const records = tideData?.records?.TideForecasts;
+      if (records && records.length > 0) {
+        // 找最近的測站
+        const station = records[0];
+        const daily = station?.Location?.TimePeriods?.Daily?.find(d => d.Date === date);
+        if (daily?.HourlyTides) {
+          tides = daily.HourlyTides
+            .filter(t => {
+              const tHour = parseInt(t.DateTime.split('T')[1].split(':')[0]);
+              return tHour >= parseInt(ts) && tHour <= parseInt(te.split(':')[0]) + 2;
+            })
+            .slice(0, 3)
+            .map(t => ({
+              time: t.DateTime.split('T')[1].substring(0,5),
+              type: t.TideType === 'H' ? '高潮' : '低潮',
+              height: parseFloat(t.TideHeights?.AboveChartDatum ?? 0).toFixed(1)
+            }));
+          if (tides.length === 0) tides = getMockTides();
+        }
+      }
+    } catch(e) { /* 潮汐失敗用mock */ }
+
     return {
-      spot, waveHeight: parseFloat(wh.toFixed(1)), waveDir: degToDir(wd),
-      windSpeed: '—', windDir: '—', temp: '—', rain: '—',
-      tides: getMockTides(), score: calcScore(spot, wh, null, null), source: 'api'
+      spot,
+      waveHeight: parseFloat(wh.toFixed(1)),
+      windSpeed: (ws / 3.6).toFixed(1),
+      windBeaufort: bf,
+      windDir: windDirStr,
+      temp: Math.round(temp),
+      rain: Math.round(rain),
+      tides,
+      score: calcScore(spot, wh, bf, windDirStr),
+      source: 'live'
     };
-  } catch(e) { return getMockWeather(spot, date, ts, te); }
+  } catch(e) {
+    console.warn('API 失敗，使用示範資料:', e);
+    return getMockWeather(spot, date, ts, te);
+  }
 }
 
 function getMockWeather(spot, date, ts, te) {
@@ -939,7 +1043,7 @@ function showToast(msg, isError=false) {
   &nbsp;｜&nbsp;
   <span style="color:var(--text)">北台灣海釣天氣助理</span>
   &nbsp;｜&nbsp;
-  <span style="color:var(--text2)">版本 V0.1</span>
+  <span style="color:var(--text2)">版本 V0.2</span>
 </footer>
 
 </body>
