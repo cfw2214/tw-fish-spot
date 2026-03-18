@@ -325,10 +325,10 @@
 </head>
 <body>
 
-<header>
+<header style="position:relative">
   <button id="hamburger" onclick="toggleSidebar()">☰</button>
-  <h1>🎣 北台灣<span>海釣天氣</span>助理 <span style="font-size:0.65rem;font-weight:400;color:var(--text2);letter-spacing:0">by 我是黑叔</span></h1>
-  <button class="btn-mini" onclick="addFavoritePrompt()" style="border-color:var(--gold);color:var(--gold)">⭐ 加入最愛</button>
+  <h1 style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center">🎣 北台灣<span>海釣天氣</span>助理 <span style="font-size:0.65rem;font-weight:400;color:var(--text2);letter-spacing:0">by 我是黑叔</span></h1>
+  <button class="btn-mini" onclick="toggleSidebar()" style="border-color:var(--gold);color:var(--gold)">⭐ 最愛</button>
 </header>
 
 <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
@@ -510,59 +510,13 @@
 
     </div>
 
-  <!-- ══ 廣告贊助區（永遠顯示）══ -->
-  <div id="ad-section" style="margin-top:36px;padding-bottom:20px;">
-    <div style="font-size:0.72rem;color:var(--text2);text-align:center;margin-bottom:14px;letter-spacing:2px;">
-      ── 贊助廠商 ──
-    </div>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-
-      <div class="ad-slot" data-slot="1">
-        <div class="ad-placeholder">
-          <span class="ad-icon">🎣</span>
-          <span class="ad-text">歡迎贊助廣告廠商 贊助</span>
-          <span class="ad-sub">聯繫我們・刊登廣告</span>
-        </div>
-        <img class="ad-banner" src="" alt="">
-      </div>
-
-      <div class="ad-slot" data-slot="2">
-        <div class="ad-placeholder">
-          <span class="ad-icon">🌊</span>
-          <span class="ad-text">歡迎贊助廣告廠商 贊助</span>
-          <span class="ad-sub">聯繫我們・刊登廣告</span>
-        </div>
-        <img class="ad-banner" src="" alt="">
-      </div>
-
-      <div class="ad-slot" data-slot="3">
-        <div class="ad-placeholder">
-          <span class="ad-icon">⚓</span>
-          <span class="ad-text">歡迎贊助廣告廠商 贊助</span>
-          <span class="ad-sub">聯繫我們・刊登廣告</span>
-        </div>
-        <img class="ad-banner" src="" alt="">
-      </div>
-
-    </div>
-  </div>
+  
 
 
   </main>
 </div>
 
 <script>
-// ===== 台灣時區日期 =====
-function getTWDateString(){
-  var now=new Date();
-  return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-}
-// ===== 加入最愛提示 =====
-function addFavoritePrompt(){
-  if(/Mac|iPhone|iPad|iPod/i.test(navigator.userAgent)) showToast('請按 Command + D 加入最愛');
-  else showToast('請按 Ctrl + D 加入最愛');
-}
-
 // ═══ 狀態 ═══
 let SPOTS = [];
 let FAV_SPOTS = JSON.parse(localStorage.getItem('favSpots') || '[]');
@@ -572,6 +526,26 @@ let todayWaveHigh = false; // 當日浪高是否超過 1.2m
 let recommendPool = []; // 推薦用的天氣資料快取
 
 
+// ===== 加入最愛提示 =====
+function addFavoritePrompt() {
+  if (/Mac|iPhone|iPad|iPod/i.test(navigator.userAgent)) showToast('請按 Command + D 加入最愛');
+  else showToast('請按 Ctrl + D 加入最愛');
+}
+
+// ===== 台灣時區日期 =====
+function getTWDateString() {
+  const now = new Date();
+  return now.getFullYear() + '-'
+    + String(now.getMonth() + 1).padStart(2, '0') + '-'
+    + String(now.getDate()).padStart(2, '0');
+}
+document.addEventListener('DOMContentLoaded', function() {
+  const today = getTWDateString();
+  const d1 = document.getElementById('input-date');
+  const d2 = document.getElementById('input-date-end');
+  if (d1) d1.value = today;
+  if (d2) d2.value = today;
+});
 
 function syncEndDate() {
   const startDate = document.getElementById('input-date').value;
@@ -581,12 +555,10 @@ function syncEndDate() {
     document.getElementById('input-date-end').value = startDate;
   }
 }
-document.addEventListener('DOMContentLoaded',function(){
-  if (API_KEY) {
+if (API_KEY) {
   document.getElementById('api-key-input').value = API_KEY;
   document.getElementById('api-key-status').style.display = 'block';
 }
-});
 
 // ═══ 載入釣點 ═══
 const DEFAULT_SPOTS = [
@@ -1030,15 +1002,6 @@ function showToast(msg, isError=false) {
   document.body.appendChild(t);
   setTimeout(()=>t.remove(), 2500);
 }
-
-// ===== 頁面載入後設定當日日期 =====
-document.addEventListener('DOMContentLoaded', function(){
-  var today = getTWDateString();
-  var d1 = document.getElementById('input-date');
-  var d2 = document.getElementById('input-date-end');
-  if(d1 && !d1.value) d1.value = today;
-  if(d2 && !d2.value) d2.value = today;
-});
 </script>
 <style>
 @keyframes fadeInUp {
@@ -1062,7 +1025,7 @@ document.addEventListener('DOMContentLoaded', function(){
   &nbsp;｜&nbsp;
   <span style="color:var(--text)">北台灣海釣天氣助理</span>
   &nbsp;｜&nbsp;
-  <span style="color:var(--text2)">版本 V0.2.6</span>
+  <span style="color:var(--text2)">版本 V0.2.7</span>
 </footer>
 
 </body>
