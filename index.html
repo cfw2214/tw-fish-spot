@@ -325,10 +325,10 @@
 </head>
 <body>
 
-<header style="position:relative">
+<header>
   <button id="hamburger" onclick="toggleSidebar()">☰</button>
-  <h1 style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center">🎣 北台灣<span>海釣天氣</span>助理 <span style="font-size:0.65rem;font-weight:400;color:var(--text2);letter-spacing:0">by 我是黑叔</span></h1>
-  <button class="btn-mini" onclick="addFavoritePrompt()" style="border-color:var(--gold);color:var(--gold);margin-left:auto">⭐ 加入最愛</button>
+  <h1 style="text-align:center;flex:1;white-space:nowrap">🎣 北台灣<span>海釣天氣</span>助理 <span style="font-size:0.65rem;font-weight:400;color:var(--text2);letter-spacing:0">by 我是黑叔</span></h1>
+  <button class="btn-mini" onclick="addFavoritePrompt()" style="border-color:var(--gold);color:var(--gold);white-space:nowrap;flex-shrink:0">⭐ 加入最愛</button>
 </header>
 
 <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
