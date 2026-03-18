@@ -328,7 +328,7 @@
 <header style="position:relative">
   <button id="hamburger" onclick="toggleSidebar()">☰</button>
   <h1 style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center">🎣 北台灣<span>海釣天氣</span>助理 <span style="font-size:0.65rem;font-weight:400;color:var(--text2);letter-spacing:0">by 我是黑叔</span></h1>
-  <button class="btn-mini" onclick="toggleSidebar()" style="border-color:var(--gold);color:var(--gold)">⭐ 最愛</button>
+  <button class="btn-mini" onclick="addFavoritePrompt()" style="border-color:var(--gold);color:var(--gold);margin-left:auto">⭐ 加入最愛</button>
 </header>
 
 <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
@@ -539,13 +539,7 @@ function getTWDateString() {
     + String(now.getMonth() + 1).padStart(2, '0') + '-'
     + String(now.getDate()).padStart(2, '0');
 }
-document.addEventListener('DOMContentLoaded', function() {
-  const today = getTWDateString();
-  const d1 = document.getElementById('input-date');
-  const d2 = document.getElementById('input-date-end');
-  if (d1) d1.value = today;
-  if (d2) d2.value = today;
-});
+
 
 function syncEndDate() {
   const startDate = document.getElementById('input-date').value;
@@ -591,7 +585,16 @@ async function loadDefaultSpots() {
   document.getElementById('spots-num').textContent = SPOTS.length;
   initRecommend();
 }
-loadDefaultSpots();
+document.addEventListener('DOMContentLoaded', function() {
+  // 設定當日日期
+  const today = getTWDateString();
+  const d1 = document.getElementById('input-date');
+  const d2 = document.getElementById('input-date-end');
+  if (d1) d1.value = today;
+  if (d2) d2.value = today;
+  // 載入釣點
+  loadDefaultSpots();
+});
 
 function loadJsonFile(event) {
   const file = event.target.files[0];
