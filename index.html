@@ -328,7 +328,7 @@
 <header>
   <button id="hamburger" onclick="toggleSidebar()">☰</button>
   <h1>🎣 北台灣<span>海釣天氣</span>助理 <span style="font-size:0.65rem;font-weight:400;color:var(--text2);letter-spacing:0">by 我是黑叔</span></h1>
-  <button class="btn-mini" onclick="toggleSidebar()" style="border-color:var(--gold);color:var(--gold)">⭐ 加入最愛</button>
+  <button class="btn-mini" onclick="addFavoritePrompt()" style="border-color:var(--gold);color:var(--gold)">⭐ 加入最愛</button>
 </header>
 
 <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
@@ -552,6 +552,17 @@
 </div>
 
 <script>
+// ===== 台灣時區日期 =====
+function getTWDateString(){
+  var now=new Date();
+  return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+}
+// ===== 加入最愛提示 =====
+function addFavoritePrompt(){
+  if(/Mac|iPhone|iPad|iPod/i.test(navigator.userAgent)) showToast('請按 Command + D 加入最愛');
+  else showToast('請按 Ctrl + D 加入最愛');
+}
+
 // ═══ 狀態 ═══
 let SPOTS = [];
 let FAV_SPOTS = JSON.parse(localStorage.getItem('favSpots') || '[]');
@@ -561,7 +572,7 @@ let todayWaveHigh = false; // 當日浪高是否超過 1.2m
 let recommendPool = []; // 推薦用的天氣資料快取
 
 // 預設今天
-const _today = new Date().toISOString().split('T')[0];
+const _today = getTWDateString();
 document.getElementById('input-date').value = _today;
 document.getElementById('input-date-end').value = _today;
 
@@ -663,7 +674,7 @@ async function initRecommend() {
   if (SPOTS.length === 0) return;
   document.getElementById('recommend-grid').innerHTML = '<div class="loading-ph" style="grid-column:1/-1"><div class="loading-spinner"></div><div style="margin-top:8px;font-size:0.85rem">分析今日海況中...</div></div>';
 
-  const date = new Date().toISOString().split('T')[0];
+  const date = getTWDateString();
   // 取得所有釣點天氣（並行）
   const all = await Promise.all(SPOTS.map(s => fetchWeatherForSpot(s, date, '08', '14')));
   recommendPool = all;
@@ -1043,7 +1054,7 @@ function showToast(msg, isError=false) {
   &nbsp;｜&nbsp;
   <span style="color:var(--text)">北台灣海釣天氣助理</span>
   &nbsp;｜&nbsp;
-  <span style="color:var(--text2)">版本 V0.2</span>
+  <span style="color:var(--text2)">版本 V0.2.6</span>
 </footer>
 
 </body>
