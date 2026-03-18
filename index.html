@@ -571,10 +571,7 @@ let currentResults = [];
 let todayWaveHigh = false; // 當日浪高是否超過 1.2m
 let recommendPool = []; // 推薦用的天氣資料快取
 
-// 預設今天
-const _today = getTWDateString();
-document.getElementById('input-date').value = _today;
-document.getElementById('input-date-end').value = _today;
+
 
 function syncEndDate() {
   const startDate = document.getElementById('input-date').value;
@@ -584,10 +581,12 @@ function syncEndDate() {
     document.getElementById('input-date-end').value = startDate;
   }
 }
-if (API_KEY) {
+document.addEventListener('DOMContentLoaded',function(){
+  if (API_KEY) {
   document.getElementById('api-key-input').value = API_KEY;
   document.getElementById('api-key-status').style.display = 'block';
 }
+});
 
 // ═══ 載入釣點 ═══
 const DEFAULT_SPOTS = [
@@ -1031,6 +1030,15 @@ function showToast(msg, isError=false) {
   document.body.appendChild(t);
   setTimeout(()=>t.remove(), 2500);
 }
+
+// ===== 頁面載入後設定當日日期 =====
+document.addEventListener('DOMContentLoaded', function(){
+  var today = getTWDateString();
+  var d1 = document.getElementById('input-date');
+  var d2 = document.getElementById('input-date-end');
+  if(d1 && !d1.value) d1.value = today;
+  if(d2 && !d2.value) d2.value = today;
+});
 </script>
 <style>
 @keyframes fadeInUp {
