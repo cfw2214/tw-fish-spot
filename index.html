@@ -40,10 +40,10 @@
     .rec-card.type-野場::before{background:linear-gradient(90deg,#c77b30,var(--gold))}.rec-card.type-肉粽::before{background:linear-gradient(90deg,#1d8a82,var(--green))}
     .rec-rank{position:absolute;top:12px;right:12px;font-size:1.4rem;opacity:.6}.rec-name{font-size:.95rem;font-weight:700;margin-bottom:6px;padding-right:30px}
     .rec-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}.badge{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:700}
-    .badge-野場{background:rgba(244,162,97,.2);color:var(--gold);border:1px solid rgba(244,162,97,.4)}.badge-肉粽{background:rgba(46,196,182,.2);color:var(--green);border:1px solid rgba(46,196,182,.4)}.badge-area{background:rgba(0,180,216,.15);color:var(--accent);border:1px solid rgba(0,180,216,.3)}
+    .badge-野場{background:rgba(244,162,97,.2);color:var(--gold);border:1px solid rgba(244,162,97,.4)}.badge-港區{background:rgba(230,57,70,.15);color:#ff8fa3;border:1px solid rgba(230,57,70,.3)}.badge-肉粽{background:rgba(46,196,182,.2);color:var(--green);border:1px solid rgba(46,196,182,.4)}.badge-area{background:rgba(0,180,216,.15);color:var(--accent);border:1px solid rgba(0,180,216,.3)}
     .suitability{font-size:.72rem;padding:3px 10px;border-radius:10px;font-weight:700}.suit-great{background:rgba(46,196,182,.2);color:var(--green);border:1px solid rgba(46,196,182,.4)}.suit-ok{background:rgba(244,162,97,.2);color:var(--gold);border:1px solid rgba(244,162,97,.4)}.suit-bad{background:rgba(230,57,70,.2);color:var(--red);border:1px solid rgba(230,57,70,.4)}
     .score-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:10px}.score-bar-fill{height:100%;border-radius:2px}
-    .rec-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:8px}.rec-stat{font-size:.78rem;color:var(--text2)}.rec-stat strong{color:var(--text)}
+    .rec-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:8px}.rec-stat{font-size:.78rem;color:var(--text)}.rec-stat strong{color:var(--text)}
     .tide-mini{background:var(--card2);border-radius:8px;padding:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:10px}
     .tide-mini div{font-size:.75rem;color:var(--text2)} .tide-mini strong{color:var(--text)}
     .rec-note{font-size:.72rem;color:var(--text2);margin-bottom:10px}.rec-footer{display:flex;justify-content:space-between;align-items:center}
@@ -236,10 +236,32 @@
     }
     function recommendationCard(r,rank){
       const isFav=FAVS.find(f=>f.name===r.spot.name);const max=r.spot.max_wave_height===99?999:r.spot.max_wave_height;
-      const waveColor=r.wave>max?'color:var(--red)':r.wave>1?'color:var(--gold)':'color:var(--green)';const barColor=r.score>=4?'var(--green)':r.score>=3?'var(--gold)':'var(--red)';
+      const barColor=r.score>=4?'var(--green)':r.score>=3?'var(--gold)':'var(--red)';
+
+      // 風力顏色：1-3級白色，4-5級橘色，7級以上紅色（6級也橘色）
+      const beaufort=msToBeaufort(r.ws);
+      const windColor=beaufort>=7?'var(--red)':beaufort>=4?'var(--gold)':'var(--text)';
+
+      // 風向一律白色
+      const windDirColor='var(--text)';
+
+      // 潮差顏色：大紅色、中橘色、小深藍
+      let tideRangeColor='var(--text)';
+      if(r.tideType){
+        if(r.tideType.includes('大')) tideRangeColor='var(--red)';
+        else if(r.tideType.includes('中')) tideRangeColor='var(--gold)';
+        else if(r.tideType.includes('小')) tideRangeColor='var(--accent)';
+      }
+
+      // 浪高顏色：1.0m以下白色，1.1-1.3米橘色，1.4m以上紅色
+      const waveColor=r.wave>=1.4?'var(--red)':r.wave>=1.1?'var(--gold)':'var(--text)';
+
+      // 除錯：輸出顏色判斷結果
+      console.log(`${r.spot.name}: 風力${beaufort}級→${windColor}, 浪高${r.wave}m→${waveColor}, 潮差${r.tideType}→${tideRangeColor}`);
+
       const tideHtml=(r.tides||[]).slice(0,4).map(t=>`<div>${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'} <strong>${t.time}</strong></div>`).join('');
-      const typeLabel = r.spot.type === '港區' ? '港區' : r.spot.type;
-      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats"><div class="rec-stat">🌬️ <strong>${msToBeaufort(r.ws)}級風</strong></div><div class="rec-stat">💨 <strong>${r.wd}</strong></div><div class="rec-stat">🌙 <strong>${r.tideType||'潮汐'}</strong></div><div class="rec-stat">浪高🌊 <strong style="${waveColor}">${r.wave}m</strong></div></div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
+      const typeLabel = r.spot.type === '港區' ? '⚓️ 港區' : r.spot.type;
+      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats"><div class="rec-stat"><span style="color:var(--text2)">風力：</span><strong style="color:${windColor} !important">${beaufort}級</strong></div><div class="rec-stat"><span style="color:var(--text2)">風向：</span><strong style="color:${windDirColor} !important">${r.wd}</strong></div><div class="rec-stat"><span style="color:var(--text2)">潮差：</span><strong style="color:${tideRangeColor} !important">${r.tideType.replace(/^潮差：/, '')||'無資料'}</strong></div><div class="rec-stat"><span style="color:var(--text2)">浪高🌊 </span><strong style="color:${waveColor} !important">${r.wave}m</strong></div></div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     function renderRecommendationPage(pool){
       const total=pool.length,totalPages=Math.ceil(total/RECOMMEND_PER_PAGE),picks=pool.slice(recommendationPage*RECOMMEND_PER_PAGE,(recommendationPage+1)*RECOMMEND_PER_PAGE);
@@ -255,7 +277,12 @@
       const today=getTWDateString();
       document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div class="spinner"></div><div>分析今日海況中...</div></div>';
       const all=await Promise.all(SPOTS.map(s=>getWeather(s,today,8,14)));
-      const valid=all.filter(r=>r.score>=3||r.spot.max_wave_height===99);
+      const valid=all.filter(r=>{
+        // 港區（max_wave_height=99）都推薦
+        if(r.spot.max_wave_height===99) return true;
+        // 野場：分數>=3 且 浪高<=1.2m 才推薦
+        return r.score>=3 && r.wave<=1.2;
+      });
       recommendationPool=shuffleArray(valid).slice(0,3);
       recommendationPage=0;
       if(!recommendationPool.length){document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有推薦釣點</div>';return;}
