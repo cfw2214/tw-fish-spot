@@ -108,7 +108,7 @@
             <div class="type-chips">
               <div class="chip active" data-type="all">全部</div>
               <div class="chip" data-type="野場">🏔️ 野場</div>
-              <div class="chip" data-type="港區">⚓ 港區內</div>
+              <div class="chip" data-type="港區">⚓ 港區</div>
             </div>
           </div>
           <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
@@ -238,7 +238,7 @@
       const isFav=FAVS.find(f=>f.name===r.spot.name);const max=r.spot.max_wave_height===99?999:r.spot.max_wave_height;
       const waveColor=r.wave>max?'color:var(--red)':r.wave>1?'color:var(--gold)':'color:var(--green)';const barColor=r.score>=4?'var(--green)':r.score>=3?'var(--gold)':'var(--red)';
       const tideHtml=(r.tides||[]).slice(0,4).map(t=>`<div>${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'} <strong>${t.time}</strong></div>`).join('');
-      const typeLabel = r.spot.type === '港區' ? '港區內' : r.spot.type;
+      const typeLabel = r.spot.type === '港區' ? '港區' : r.spot.type;
       return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats"><div class="rec-stat">🌬️ <strong>${msToBeaufort(r.ws)}級風</strong></div><div class="rec-stat">💨 <strong>${r.wd}</strong></div><div class="rec-stat">🌙 <strong>${r.tideType||'潮汐'}</strong></div><div class="rec-stat">浪高🌊 <strong style="${waveColor}">${r.wave}m</strong></div></div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     function renderRecommendationPage(pool){
@@ -275,8 +275,25 @@
       }
       const selectedType=document.querySelector('.type-chips .chip.active')?.dataset.type||'all';
       const favOnly=document.getElementById('fav-only')?.checked;
-      const filtered=SPOTS.filter(s=>{if(favOnly&&!FAVS.find(f=>f.name===s.name))return false;if(!selectedAreas.includes('all')&&!selectedAreas.includes(s.area))return false;if(selectedType!=='all'&&s.type!==selectedType)return false;return true});
-      console.log('搜索條件→ 區域:',selectedAreas,'類型:',selectedType,'最愛only:',favOnly,'符合條件的釣點數:',filtered.length,'名單:',filtered.map(s=>s.name));
+      const filtered=SPOTS.filter(s=>{
+        if(favOnly&&!FAVS.find(f=>f.name===s.name)){
+          console.log(`  ✗ ${s.name}: 不在最愛清單`);
+          return false;
+        }
+        const areaMatch = selectedAreas.includes('all') || selectedAreas.includes(s.area);
+        if(!areaMatch){
+          console.log(`  ✗ ${s.name}: 區域不匹配 (${s.area} not in [${selectedAreas.join(',')}])`);
+          return false;
+        }
+        const typeMatch = selectedType==='all' || s.type===selectedType;
+        if(selectedType!=='all' && !typeMatch){
+          console.log(`  ✗ ${s.name}: 類型不匹配 (${s.type} !== ${selectedType})`);
+          return false;
+        }
+        console.log(`  ✓ ${s.name}: 通過`);
+        return true;
+      });
+      console.log('搜索條件→ 區域:',selectedAreas,'類型:',selectedType,'最愛only:',favOnly);
       document.getElementById('recommend-grid').innerHTML=`<div class="loading-placeholder"><div class="spinner"></div><div>查詢 ${filtered.length} 個釣點天氣中...</div></div>`;
       const results=await Promise.all(filtered.map(s=>getWeather(s,date,startHour,endHour)));
       recommendationPool=results.filter(r=>r.spot.max_wave_height===99||r.wave<=r.spot.max_wave_height).sort((a,b)=>b.score-a.score);
