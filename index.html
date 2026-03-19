@@ -267,10 +267,16 @@
       if(!SPOTS.length){showToast('❌ 尚未載入釣點資料',true);return}
       const startHour=parseInt(document.getElementById('input-time-start')?.value??'6',10);
       const endHour=parseInt(document.getElementById('input-time-end')?.value??'12',10);
-      const selectedAreas=[...document.querySelectorAll('#area-chips .chip.active')].map(c=>c.dataset.area);
+      let selectedAreas=[...document.querySelectorAll('#area-chips .chip.active')].map(c=>c.dataset.area);
+      // 防禦：如果未選擇任何區域，預設為全部
+      if(selectedAreas.length===0){
+        console.warn('searchSpots: 未檢測到區域選擇，預設為全部北台灣');
+        selectedAreas=['all'];
+      }
       const selectedType=document.querySelector('.type-chips .chip.active')?.dataset.type||'all';
       const favOnly=document.getElementById('fav-only')?.checked;
       const filtered=SPOTS.filter(s=>{if(favOnly&&!FAVS.find(f=>f.name===s.name))return false;if(!selectedAreas.includes('all')&&!selectedAreas.includes(s.area))return false;if(selectedType!=='all'&&s.type!==selectedType)return false;return true});
+      console.log('搜索條件→ 區域:',selectedAreas,'類型:',selectedType,'最愛only:',favOnly,'符合條件的釣點數:',filtered.length,'名單:',filtered.map(s=>s.name));
       document.getElementById('recommend-grid').innerHTML=`<div class="loading-placeholder"><div class="spinner"></div><div>查詢 ${filtered.length} 個釣點天氣中...</div></div>`;
       const results=await Promise.all(filtered.map(s=>getWeather(s,date,startHour,endHour)));
       recommendationPool=results.filter(r=>r.spot.max_wave_height===99||r.wave<=r.spot.max_wave_height).sort((a,b)=>b.score-a.score);
