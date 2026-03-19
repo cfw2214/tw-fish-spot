@@ -113,6 +113,7 @@
           </div>
           <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
             <button class="btn-search" onclick="searchSpots()">🎣 海釣點推薦</button>
+            <span style="font-size:.75rem;color:var(--text2);margin-left:10px;">當浪高超過1.2m就不顯示推薦野場，港區內做釣則不受浪高限制</span>
             <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:8px;cursor:pointer;">
               <input type="checkbox" id="fav-only" style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer;"> 只看我的最愛
             </label>
@@ -283,7 +284,7 @@
     function removeFav(name){FAVS=FAVS.filter(f=>f.name!==name);localStorage.setItem('favSpots',JSON.stringify(FAVS));renderFavList()}
     function renderFavList(){const ul=document.getElementById('fav-list');if(!ul)return;if(!FAVS.length){ul.innerHTML='<li class="fav-empty">尚未收藏任何釣點</li>';return}ul.innerHTML=FAVS.map(s=>`<li><span style="flex:1">${s.name}</span><span class="fav-area">${s.area}</span><button class="fav-del" onclick="removeFav('${s.name}')">✕</button></li>`).join('')}
     async function loadSpots(){try{const res=await fetch('./spots.json');if(!res.ok)throw new Error('spots.json 載入失敗');SPOTS=await res.json()}catch(e){console.error('讀取 spots.json 失敗:',e);SPOTS=DEFAULT_SPOTS;showToast('❌ spots.json 載入失敗',true)}const spotsNum=document.getElementById('spots-num');if(spotsNum)spotsNum.textContent=SPOTS.length;await initRecommendations()}
-    function initPage(){const today=getTWDateString();const dateStart=document.getElementById('input-date');const dateEnd=document.getElementById('input-date-end');if(dateStart)dateStart.value=today;if(dateEnd)dateEnd.value=today;fillHourOptions('input-time-start',6);fillHourOptions('input-time-end',12);initAreaChips();initTypeChips();renderFavList();loadSpots()}
+    function initPage(){const today=getTWDateString();const dateStart=document.getElementById('input-date');const dateEnd=document.getElementById('input-date-end');if(dateStart)dateStart.value=today;if(dateEnd)dateEnd.value=today;const twNow=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));const startHour=twNow.getHours();const endHour=(startHour+4)%24;fillHourOptions('input-time-start',startHour);fillHourOptions('input-time-end',endHour);initAreaChips();initTypeChips();renderFavList();loadSpots()}
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initPage);else initPage();
   </script>
 </body>
