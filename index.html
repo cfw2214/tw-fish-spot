@@ -211,9 +211,8 @@
             const daily=recs[0]?.Location?.TimePeriods?.Daily?.find(d=>d.Date===date);
             console.log('📅 日期匹配到的daily:', daily); // 除錯：查看daily物件
             if(daily?.TideRange){
-              const tideRangeMap = {'大':'大潮','中':'中潮','小':'小潮'};
-              tideType = tideRangeMap[daily.TideRange] || daily.TideRange;
-              console.log('🌊 轉换後tideType:', tideType, '(原始值:', daily.TideRange, ')');
+              tideType = '潮差：' + daily.TideRange;
+              console.log('🌊 潮差:', tideType, '(原始值:', daily.TideRange, ')');
             }else{
               console.log('⚠️ daily.TideRange 不存在');
             }
