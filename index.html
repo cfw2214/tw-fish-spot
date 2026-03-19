@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎣 北台灣海釣天氣助理</title>
+  <title>🎣 北台灣海釣天氣助理by我是黑叔｜版本 V0.2.8</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#0a1628;--bg2:#0f2040;--card:#132545;--card2:#1a3060;--accent:#00b4d8;--accent2:#0077b6;--gold:#f4a261;--green:#2ec4b6;--red:#e63946;--text:#e0f0ff;--text2:#8ab4cc;--border:#1e3a5f;--radius:12px}
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
     header{background:linear-gradient(135deg,var(--bg2),var(--accent2));padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100}
-    header h1{font-size:1.1rem;font-weight:700;letter-spacing:1px} header h1 span{color:var(--accent)}
-    .header-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    header h1{font-size:1.1rem;font-weight:700;letter-spacing:1px;position:absolute;left:50%;transform:translateX(-50%);margin:0;white-space:nowrap} header h1 span{color:var(--accent)}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
     #hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer}
     .main-wrap{display:flex;max-width:1300px;margin:0 auto}
     #sidebar{width:270px;min-width:270px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:20px;min-height:calc(100vh - 60px)}
@@ -50,16 +50,15 @@
     .loading-placeholder{text-align:center;color:var(--text2);padding:50px 20px;grid-column:1/-1}.spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:12px auto}
     .sponsor-bar{max-width:1300px;margin:20px auto 0;padding:0 20px}.sponsor-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}.sponsor-title{font-size:.82rem;color:var(--accent);letter-spacing:1px;margin-bottom:10px}.sponsor-banner{width:100%;background:linear-gradient(135deg,var(--card),var(--card2));border:1px dashed var(--accent);border-radius:12px;padding:18px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:120px;text-align:center}.sponsor-banner div{font-size:1rem;color:var(--text);letter-spacing:1px}.sponsor-banner div:nth-child(2){font-size:1.1rem;color:var(--gold);font-weight:700}
     @keyframes spin{to{transform:rotate(360deg)}}
-    @media(max-width:768px){#hamburger{display:block}.header-actions{display:none}#sidebar{position:fixed;left:-290px;top:0;height:100vh;z-index:150;transition:left .3s;padding-top:70px}#sidebar.open{left:0}.filter-grid{grid-template-columns:1fr}#recommend-grid{grid-template-columns:1fr}.sponsor-banner{min-height:108px;padding:16px 12px}.sponsor-banner div{font-size:.95rem}.sponsor-banner div:nth-child(2){font-size:1.02rem}}
+    @media(max-width:768px){#hamburger{display:block}.header-actions{display:none}#sidebar{position:fixed;left:-290px;top:0;height:100vh;z-index:150;transition:left .3s;padding-top:70px}#sidebar.open{left:0}.filter-grid{grid-template-columns:1fr}#recommend-grid{grid-template-columns:1fr}.sponsor-banner{min-height:108px;padding:16px 12px}.sponsor-banner div{font-size:.95rem}}
   </style>
 </head>
 <body>
   <header>
     <button id="hamburger" onclick="toggleSidebar()">☰</button>
-    <h1>🎣 北台灣<span>海釣天氣</span>助理</h1>
+    <h1>🎣 北台灣<span>海釣天氣</span>助理by我是黑叔</h1>
     <div class="header-actions">
       <button class="btn-mini" onclick="addFavoritePrompt()">⭐ 加入最愛</button>
-      <button class="btn-mini" id="install-btn" onclick="installApp()">📲 新增到桌面</button>
     </div>
   </header>
   <div id="sb-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
@@ -109,7 +108,7 @@
             <div class="type-chips">
               <div class="chip active" data-type="all">全部</div>
               <div class="chip" data-type="野場">🏔️ 野場</div>
-              <div class="chip" data-type="肉粽">⚓ 肉粽（港區）</div>
+              <div class="chip" data-type="港區">⚓ 港區內</div>
             </div>
           </div>
           <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
@@ -140,7 +139,7 @@
       </div>
     </div>
   </div>
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">北台灣海釣天氣助理｜版本 V0.2.5</footer>
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">北台灣海釣天氣助理by我是黑叔｜版本 V0.2.8</footer>
   <script>
     const CWA_KEY='CWA-668A5759-9FC3-4C75-91A3-F84C27565A7A';
     const DEFAULT_SPOTS=[];
@@ -206,9 +205,17 @@
         try{
           const tr=await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=${CWA_KEY}&format=JSON&Date=${date}`);
           const td=await tr.json(); const recs=td?.records?.TideForecasts;
+          console.log('🔍 潮汐API回應:', td); // 除錯：查看完整回应
           if(recs?.length){
             const daily=recs[0]?.Location?.TimePeriods?.Daily?.find(d=>d.Date===date);
-            if(daily?.TideType)tideType=daily.TideType;
+            console.log('📅 日期匹配到的daily:', daily); // 除錯：查看daily物件
+            if(daily?.TideRange){
+              const tideRangeMap = {'大':'大潮','中':'中潮','小':'小潮'};
+              tideType = tideRangeMap[daily.TideRange] || daily.TideRange;
+              console.log('🌊 轉换後tideType:', tideType, '(原始值:', daily.TideRange, ')');
+            }else{
+              console.log('⚠️ daily.TideRange 不存在');
+            }
             if(daily?.HourlyTides?.length){
               const list=[];
               for(let i=0;i<daily.HourlyTides.length;i++){
@@ -217,8 +224,10 @@
               }
               if(list.length)tides=list.slice(0,4);
             }
+          }else{
+            console.log('❌ recs 不存在或為空');
           }
-        }catch(e){}
+        }catch(e){console.error('潮汐API錯誤:',e)}
         const wd=degToDir(wdDeg);
         return {spot,wave,ws,wd,temp,rain,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live'};
       }catch(e){
@@ -228,8 +237,9 @@
     function recommendationCard(r,rank){
       const isFav=FAVS.find(f=>f.name===r.spot.name);const max=r.spot.max_wave_height===99?999:r.spot.max_wave_height;
       const waveColor=r.wave>max?'color:var(--red)':r.wave>1?'color:var(--gold)':'color:var(--green)';const barColor=r.score>=4?'var(--green)':r.score>=3?'var(--gold)':'var(--red)';
-      const tideHtml=(r.tides||[]).slice(0,4).map(t=>`<div>${t.type==='高潮'?'⬆️':'⬇️'} <strong>${t.time}</strong></div>`).join('');
-      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${r.spot.type}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats"><div class="rec-stat">🌙 <strong>${r.tideType||'潮汐'}</strong></div><div class="rec-stat">🌊 <strong style="${waveColor}">${r.wave}m</strong></div><div class="rec-stat">🌬️ <strong>${msToBeaufort(r.ws)}級風</strong></div><div class="rec-stat">🧭 <strong>${r.wd}</strong></div></div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
+      const tideHtml=(r.tides||[]).slice(0,4).map(t=>`<div>${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'} <strong>${t.time}</strong></div>`).join('');
+      const typeLabel = r.spot.type === '港區' ? '港區內' : r.spot.type;
+      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats"><div class="rec-stat">🌬️ <strong>${msToBeaufort(r.ws)}級風</strong></div><div class="rec-stat">💨 <strong>${r.wd}</strong></div><div class="rec-stat">🌙 <strong>${r.tideType||'潮汐'}</strong></div><div class="rec-stat">浪高🌊 <strong style="${waveColor}">${r.wave}m</strong></div></div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     function renderRecommendationPage(pool){
       const total=pool.length,totalPages=Math.ceil(total/RECOMMEND_PER_PAGE),picks=pool.slice(recommendationPage*RECOMMEND_PER_PAGE,(recommendationPage+1)*RECOMMEND_PER_PAGE);
