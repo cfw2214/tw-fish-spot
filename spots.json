@@ -3192,5 +3192,41 @@
       "南",
       "西南"
     ]
+  },
+  {
+    "name": "淡水漁人碼頭",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.183229,
+    "lng": 121.408267,
+    "max_wave_height": 99,
+    "note": "淡水河口港，水較濁，適合釣黑鯛 石斑 海鱸 滿頂前後比較好",
+    "allowed": true,
+    "good_wind_directions": [
+      "東"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "八里下罟子漁港",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.143532,
+    "lng": 121.379982,
+    "max_wave_height": 99,
+    "note": "港內禁釣但港嘴外的肉粽區可以釣，水底地形岩石多，適合釣黑鯛 紅曹 石斑等河口魚",
+    "allowed": true,
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
   }
 ]
