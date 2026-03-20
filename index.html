@@ -344,9 +344,12 @@
       recommendationPage=Math.max(0,Math.min(totalPages-1,recommendationPage+dir));
       renderRecommendationPage(recommendationPool);
 
-      // ✨ 手機版自動滾動到推薦區域
+      // ✨ 手機版自動滾動到推薦區域（保留 header 高度，讓標題完整顯示）
       if(shouldScroll && window.innerWidth <= 768){
-        document.getElementById('recommend-section').scrollIntoView({behavior:'smooth', block:'start'});
+        const section = document.getElementById('recommend-section');
+        const headerHeight = document.querySelector('header')?.offsetHeight || 60;
+        const sectionTop = section.offsetTop;
+        window.scrollTo({top: sectionTop - headerHeight - 10, behavior: 'smooth'});
       }
     }
     function refreshRecommendations(){if(recommendationPool.length){recommendationPool=shuffleArray(recommendationPool);recommendationPage=0;renderRecommendationPage(recommendationPool)}}
