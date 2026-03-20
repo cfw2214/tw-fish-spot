@@ -66,7 +66,7 @@
     <aside id="sidebar">
       <div class="sidebar-section">
         <h3>⭐ 我的最愛釣點</h3>
-        <button class="btn-mini" onclick="openMapByFavorites()" style="width:100%;margin-bottom:8px;">🗺️ 地圖</button>
+        <button class="btn-mini" onclick="searchFavorites()" style="width:100%;margin-bottom:8px;">🌤️ 查詢最愛釣點天氣</button>
         <ul id="fav-list"><li class="fav-empty">尚未收藏任何釣點</li></ul>
         <div style="font-size:.7rem;color:var(--text2);margin-top:8px">最多收藏 10 個</div>
       </div>
@@ -96,12 +96,13 @@
             <select id="input-time-end"></select>
           </div>
           <div class="filter-group filter-row-full">
-            <label>📍 大區域（可多選）</label>
+            <label>📍 區域（最多可選2個）</label>
             <div class="area-chips" id="area-chips">
-              <div class="chip active" data-area="all">全部北台灣</div>
-              <div class="chip" data-area="基隆區">基隆區</div>
+              <div class="chip active" data-area="基隆區">基隆區</div>
               <div class="chip" data-area="東北角區">東北角區</div>
-              <div class="chip" data-area="北海岸區">北海岸區</div>
+              <div class="chip" data-area="金山萬里">金山萬里</div>
+              <div class="chip" data-area="淡水三芝">淡水三芝</div>
+              <div class="chip" data-area="宜蘭東部">宜蘭東部</div>
             </div>
           </div>
           <div class="filter-group filter-row-full">
@@ -114,17 +115,29 @@
           </div>
           <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
             <button class="btn-search" onclick="searchSpots()">🎣 海釣點篩選</button>
-            <span style="font-size:.75rem;color:var(--text2);margin-left:10px;">當浪高超過1.2m就不顯示推薦野場，港區內做釣則不受浪高限制</span>
-            <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:8px;cursor:pointer;">
-              <input type="checkbox" id="fav-only" style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer;"> 只看我的最愛
-            </label>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+              <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer;">
+                <input type="checkbox" id="ignore-wind" style="accent-color:var(--accent);width:16px;height:16px;cursor:pointer;"> 忽略風力
+              </label>
+              <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer;">
+                <input type="checkbox" id="ignore-wave" style="accent-color:var(--accent);width:16px;height:16px;cursor:pointer;"> 忽略浪高
+              </label>
+              <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer;">
+                <input type="checkbox" id="force-wild" style="accent-color:var(--accent);width:16px;height:16px;cursor:pointer;"> 強制顯示野場
+              </label>
+              <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer;">
+                <input type="checkbox" id="show-forbidden" style="accent-color:var(--accent);width:16px;height:16px;cursor:pointer;"> 顯示禁釣區
+              </label>
+            </div>
+            <div style="font-size:.78rem;color:var(--text);margin-top:6px;">
+              當浪高超過1.2m就不顯示野場，港區內做釣則不受浪高限制，作釣建議著安全裝背
+            </div>
           </div>
         </div>
       </div>
       <section id="recommend-section">
         <div class="section-header">
           <div class="section-title">🎯 今日推薦釣點 <span class="badge-new">LIVE</span></div>
-          <button class="btn-mini" onclick="refreshRecommendations()">🔄 換一批</button>
         </div>
         <div id="wave-alert" class="wave-alert" style="display:none;">🌊 <span id="wave-message"></span></div>
         <div id="recommend-grid"><div class="loading-placeholder"><div class="spinner"></div><div>分析今日海況中...</div></div></div>
@@ -161,9 +174,15 @@
       return `${y}-${m}-${d}`;
     }
     function shuffleArray(array){const arr=[...array];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
-    function fillHourOptions(selectId,defaultHour){const el=document.getElementById(selectId);if(!el||el.options.length>0)return;for(let i=0;i<24;i++){const opt=document.createElement('option');opt.value=String(i).padStart(2,'0');opt.textContent=String(i).padStart(2,'0')+':00';if(i===defaultHour)opt.selected=true;el.appendChild(opt)}}
+    function fillHourOptions(selectId,defaultHour){const el=document.getElementById(selectId);console.log(`[DEBUG] fillHourOptions: selectId=${selectId}, el=${el? 'found' : 'NOT found'}, optionsCount=${el?.options.length || 0}`);if(!el||el.options.length>0)return;for(let i=0;i<24;i++){const opt=document.createElement('option');opt.value=String(i).padStart(2,'0');opt.textContent=String(i).padStart(2,'0')+':00';if(i===defaultHour)opt.selected=true;el.appendChild(opt)}console.log(`[DEBUG] filled ${selectId} with 24 options`)}
     function syncEndDate(){const start=document.getElementById('input-date');const end=document.getElementById('input-date-end');if(!start||!end)return;if(!end.value||end.value<start.value)end.value=start.value}
-    function initAreaChips(){const chips=document.querySelectorAll('#area-chips .chip');const allChip=document.querySelector('#area-chips .chip[data-area="all"]');chips.forEach(chip=>{chip.onclick=()=>{if(chip.dataset.area==='all'){chips.forEach(c=>c.classList.remove('active'));chip.classList.add('active')}else{if(allChip)allChip.classList.remove('active');chip.classList.toggle('active');const anyActive=[...document.querySelectorAll('#area-chips .chip:not([data-area="all"])')].some(c=>c.classList.contains('active'));if(!anyActive&&allChip)allChip.classList.add('active')}}})}
+    function initAreaChips(){const chips=document.querySelectorAll('#area-chips .chip');chips.forEach(chip=>{chip.onclick=()=>{const activeNonAll=[...document.querySelectorAll('#area-chips .chip.active')];if(chip.classList.contains('active')){// 取消選擇
+        chip.classList.remove('active');
+      }else{// 嘗試新增選擇
+        if(activeNonAll.length>=2){showToast('最多只能選擇2個區域',true);return;}
+        chip.classList.add('active');
+      }
+    }});}
     function initTypeChips(){const chips=document.querySelectorAll('.type-chips .chip');chips.forEach(chip=>{chip.onclick=()=>{chips.forEach(c=>c.classList.remove('active'));chip.classList.add('active')}})}
     function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sb-overlay');if(!sb||!ov)return;sb.classList.toggle('open');ov.style.display=sb.classList.contains('open')?'block':'none'}
     function openMap(lat,lng){window.open(`https://www.google.com/maps?q=${lat},${lng}`,'_blank')}
@@ -193,7 +212,10 @@
     function getSuitabilityLabel(score){if(score>=4)return '<span class="suitability suit-great">✅ 適合出釣</span>';if(score>=3)return '<span class="suitability suit-ok">⚠️ 尚可</span>';return '<span class="suitability suit-bad">❌ 不建議</span>'}
     function calcScore(spot,wave,beaufort,windDir){let s=5;const max=spot.max_wave_height===99?999:spot.max_wave_height;if(wave>max)s-=3;else if(wave>max*0.8)s-=1;if(beaufort>5)s-=3;else if(beaufort>3)s-=1;if(windDir&&spot.bad_wind_directions?.includes(windDir))s-=1;if(windDir&&spot.good_wind_directions?.includes(windDir))s+=1;return Math.max(1,Math.min(5,s))}
     function mockTides(){const r=()=>String(Math.floor(Math.random()*59)).padStart(2,'0');return[{time:`03:${r()}`,type:'低潮',height:(Math.random()*.4+.2).toFixed(1)},{time:`09:${r()}`,type:'高潮',height:(Math.random()*.6+1.4).toFixed(1)},{time:`15:${r()}`,type:'低潮',height:(Math.random()*.4+.2).toFixed(1)},{time:`21:${r()}`,type:'高潮',height:(Math.random()*.6+1.4).toFixed(1)}]}
-    async function getWeather(spot,date,startHour,endHour){
+    function toRad(deg){return deg*Math.PI/180}
+    function haversineDistance(lat1,lon1,lat2,lon2){if([lat1,lon1,lat2,lon2].some(isNaN)){console.warn('無效的座標資料，返回 Infinity');return Infinity}const R=6371;const dLat=toRad(lat2-lat1);const dLon=toRad(lon2-lon1);const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));return R*c}
+    async function getUserLocation(){return new Promise(resolve=>{if(!navigator.geolocation){console.log('❌ 瀏覽器不支援地理位置功能');resolve(null);return}const timeoutId=setTimeout(()=>{console.log('⏰ 地理位置請求超時（10秒）');resolve(null);},10000);navigator.geolocation.getCurrentPosition(pos=>{clearTimeout(timeoutId);console.log('✅ 成功獲取位置:',pos.coords.latitude,pos.coords.longitude);resolve({lat:pos.coords.latitude,lng:pos.coords.longitude})},err=>{clearTimeout(timeoutId);let errorMsg='未知錯誤';switch(err.code){case err.PERMISSION_DENIED:errorMsg='使用者拒絕分享位置';break;case err.POSITION_UNAVAILABLE:errorMsg='位置資訊無法取得';break;case err.TIMEOUT:errorMsg='地理位置請求超時';break;}console.log(`❌ 地理位置錯誤: ${errorMsg} (code: ${err.code})`);resolve(null);},{enableHighAccuracy:false,timeout:10000,maximumAge:60000})})}
+    async function getWeather(spot,date,startHour,endHour,userLocation=null){
       try{
         const [marineRes,weatherRes]=await Promise.all([
           fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`),
@@ -230,9 +252,26 @@
           }
         }catch(e){console.error('潮汐API錯誤:',e)}
         const wd=degToDir(wdDeg);
-        return {spot,wave,ws,wd,temp,rain,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live'};
+
+        // 計算距離（若有使用者位置）
+        let distance = Infinity;
+        if (userLocation) {
+          distance = parseFloat(haversineDistance(
+            userLocation.lat, userLocation.lng,
+            spot.lat, spot.lng
+          ).toFixed(1));
+        }
+
+        return {spot,wave,ws,wd,temp,rain,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live',distance};
       }catch(e){
-        return {spot,wave:0.8,ws:2.1,wd:'北',temp:22,rain:0,tides:mockTides(),tideType:'中潮',score:4,source:'demo'};
+        let distance = Infinity;
+        if (userLocation) {
+          distance = parseFloat(haversineDistance(
+            userLocation.lat, userLocation.lng,
+            spot.lat, spot.lng
+          ).toFixed(1));
+        }
+        return {spot,wave:0.8,ws:2.1,wd:'北',temp:22,rain:0,tides:mockTides(),tideType:'中潮',score:4,source:'demo',distance};
       }
     }
     function recommendationCard(r,rank){
@@ -265,8 +304,22 @@
       console.log(`${r.spot.name}: 風力${beaufort}級→${windColor}, 浪高${r.wave}m→${waveColor}, 潮差${r.tideType}→${tideRangeColor}`);
 
       const tideHtml=(r.tides||[]).slice(0,4).map(t=>`<div>${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'} <strong>${t.time}</strong></div>`).join('');
+
       const typeLabel = r.spot.type === '港區' ? '⚓️ 港區' : r.spot.type;
-      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats"><div class="rec-stat"><span style="color:var(--text2)">風力：</span><strong style="color:${windColor} !important">${beaufort}級</strong></div><div class="rec-stat"><span style="color:var(--text2)">風向：</span><strong style="color:${windDirColor} !important">${r.wd}</strong></div><div class="rec-stat"><span style="color:var(--text2)">降雨機率：</span><strong style="color:${rainColor} !important">${rain}%</strong></div><div class="rec-stat"><span style="color:var(--text2)">潮差：</span><strong style="color:${tideRangeColor} !important">${r.tideType.replace(/^潮差：/, '')||'無資料'}</strong></div><div class="rec-stat"><span style="color:var(--text2)">浪高🌊 </span><strong style="color:${waveColor} !important">${r.wave}m</strong></div></div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="openMap(${r.spot.lat}, ${r.spot.lng})" style="margin-right:8px;">🗺️ 地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
+      const forbiddenBadge = r.spot.allowed === false
+        ? `<span class="badge" style="background:rgba(230,57,70,.2);color:#ff8fa3;border:1px solid rgba(230,57,70,.4)">❌ 禁釣區</span>`
+        : '';
+      // 先組裝 rec-stats 內部結構
+      const statsHtml =
+        `<div class="rec-stat"><span style="color:var(--text2)">風力：</span><strong style="color:${windColor} !important">${beaufort}級</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">風向：</span><strong style="color:${windDirColor} !important">${r.wd}</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">降雨機率：</span><strong style="color:${rainColor} !important">${rain}%</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">浪高🌊 </span><strong style="color:${waveColor} !important">${r.wave}m</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">潮差：</span><strong style="color:${tideRangeColor} !important">${r.tideType.replace(/^潮差：/, '')||'無資料'}</strong></div>` +
+        (Number.isFinite(r.distance) ?
+          `<div class="rec-stat"><span style="color:var(--text2)">🚗 距離</span><strong style="color:${waveColor} !important">${Math.round(r.distance)} km</strong></div>` : '');
+
+      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="openMap(${r.spot.lat}, ${r.spot.lng})" style="margin-right:8px;">🗺️ 地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     function renderRecommendationPage(pool){
       const total=pool.length,totalPages=Math.ceil(total/RECOMMEND_PER_PAGE),picks=pool.slice(recommendationPage*RECOMMEND_PER_PAGE,(recommendationPage+1)*RECOMMEND_PER_PAGE);
@@ -280,19 +333,88 @@
     async function initRecommendations(){
       if(!SPOTS.length){document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有可用釣點資料</div>';return;}
       const today=getTWDateString();
-      document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div class="spinner"></div><div>分析今日海況中...</div></div>';
-      const all=await Promise.all(SPOTS.map(s=>getWeather(s,today,8,14)));
-      const valid=all.filter(r=>{
-        // 港區（max_wave_height=99）都推薦
-        if(r.spot.max_wave_height===99) return true;
-        // 野場：分數>=3 且 浪高<=1.2m 才推薦
-        return r.score>=3 && r.wave<=1.2;
-      });
-      recommendationPool=shuffleArray(valid).slice(0,3);
-      recommendationPage=0;
-      if(!recommendationPool.length){document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有推薦釣點</div>';return;}
-      renderRecommendationPage(recommendationPool);
+      document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div class="spinner"></div><div>預載釣點資料中...</div></div>';
+      // 先過濾掉禁釣的釣點
+      const allowedSpots = SPOTS.filter(s => s.allowed !== false);
+      if(!allowedSpots.length){
+        document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有可推薦的釣點（全部禁止垂釣）</div>';
+        return;
+      }
+      // ✨ 預先載入所有 allowed spots 的天氣資料（async），不進行推薦篩選
+      await Promise.all(allowedSpots.map(s=>getWeather(s,today,8,14)));
+      // ✨ 載入完成後顯示提示訊息，不推薦任何釣點
+      recommendationPool = [];
+      recommendationPage = 0;
+      document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div style="font-size:1.2rem;margin-bottom:8px">✅</div><div>釣點資料已載入，請使用篩選條件搜尋</div></div>';
     }
+    // 🌟 查詢收藏釣點的天氣（忽略所有篩選條件）
+    async function searchFavorites(){
+      if(!FAVS.length){
+        showToast('❌ 尚未收藏任何釣點',true);
+        return;
+      }
+      if(!SPOTS.length){showToast('❌ 尚未載入釣點資料',true);return}
+
+      const date = getTWDateString(); // 使用今天日期
+      const startHour = 8;  // 默認時段
+      const endHour = 14;
+
+      document.getElementById('recommend-grid').innerHTML = `<div class="loading-placeholder"><div class="spinner"></div><div>查詢 ${FAVS.length} 個最愛釣點天氣中...</div></div>`;
+
+      // 獲取使用者位置
+      let userLocation = null;
+      try {
+        userLocation = await getUserLocation();
+      } catch (e) {
+        console.error('地理位置請求異常:', e);
+      }
+
+      // 從 SPOTS 中找到收藏釣點的完整資料
+      const favoriteSpots = FAVS.map(fav => SPOTS.find(s => s.name === fav.name)).filter(s => s);
+
+      // 獲取天氣資料
+      const results = await Promise.all(
+        favoriteSpots.map(s => getWeather(s, date, startHour, endHour, userLocation))
+      );
+
+      // ✨ 查詢最愛：不加入任何篩選條件，直接顯示所有收藏釣點
+      let filteredResults = results;
+
+      // 但可選擇忽略風力對分數的影響（重新計算分數）
+      const ignoreWind = document.getElementById('ignore-wind')?.checked;
+      if(ignoreWind){
+        filteredResults.forEach(r => {
+          let newScore = 5;
+          const max = r.spot.max_wave_height===99?999:r.spot.max_wave_height;
+          if(r.wave>max) newScore -= 3;
+          else if(r.wave>max*0.8) newScore -= 1;
+          if(r.wd && r.spot.bad_wind_directions?.includes(r.wd)) newScore -= 1;
+          if(r.wd && r.spot.good_wind_directions?.includes(r.wd)) newScore += 1;
+          newScore = Math.max(1, Math.min(5, newScore));
+          r.score = newScore;
+        });
+      }
+
+      // 排序：分數優先，距離次之
+      filteredResults.sort((a, b) => {
+        if (a.score !== b.score) return b.score - a.score;
+        const distA = a.distance ?? Infinity;
+        const distB = b.distance ?? Infinity;
+        return distA - distB;
+      });
+
+      recommendationPool = filteredResults;
+      recommendationPage = 0;
+
+      if(!recommendationPool.length){
+        document.getElementById('recommend-grid').innerHTML = '<div class="loading-placeholder"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>收藏的釣點目前沒有符合條件的</div></div>';
+        return;
+      }
+      renderRecommendationPage(recommendationPool);
+      document.getElementById('recommend-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showToast(`✅ 已顯示 ${FAVS.length} 個最愛釣點`);
+    }
+
     async function searchSpots(){
       const date=document.getElementById('input-date')?.value;
       if(!date){showToast('❌ 請選擇出發日期',true);return}
@@ -300,19 +422,19 @@
       const startHour=parseInt(document.getElementById('input-time-start')?.value??'6',10);
       const endHour=parseInt(document.getElementById('input-time-end')?.value??'12',10);
       let selectedAreas=[...document.querySelectorAll('#area-chips .chip.active')].map(c=>c.dataset.area);
-      // 防禦：如果未選擇任何區域，預設為全部
-      if(selectedAreas.length===0){
-        console.warn('searchSpots: 未檢測到區域選擇，預設為全部北台灣');
-        selectedAreas=['all'];
-      }
       const selectedType=document.querySelector('.type-chips .chip.active')?.dataset.type||'all';
-      const favOnly=document.getElementById('fav-only')?.checked;
+      const ignoreWind = document.getElementById('ignore-wind')?.checked;
+      const ignoreWave = document.getElementById('ignore-wave')?.checked;
+      const forceWild = document.getElementById('force-wild')?.checked;
+      const showForbidden = document.getElementById('show-forbidden')?.checked;
       const filtered=SPOTS.filter(s=>{
-        if(favOnly&&!FAVS.find(f=>f.name===s.name)){
-          console.log(`  ✗ ${s.name}: 不在最愛清單`);
+        // 過濾禁釣的釣點（除非勾選顯示禁釣區）
+        if(s.allowed===false && !showForbidden){
+          console.log(`  ✗ ${s.name}: 禁止垂釣`);
           return false;
         }
-        const areaMatch = selectedAreas.includes('all') || selectedAreas.includes(s.area);
+        // 區域篩選：未選擇任何區域時顯示全部
+        const areaMatch = selectedAreas.length === 0 || selectedAreas.includes(s.area);
         if(!areaMatch){
           console.log(`  ✗ ${s.name}: 區域不匹配 (${s.area} not in [${selectedAreas.join(',')}])`);
           return false;
@@ -325,10 +447,78 @@
         console.log(`  ✓ ${s.name}: 通過`);
         return true;
       });
-      console.log('搜索條件→ 區域:',selectedAreas,'類型:',selectedType,'最愛only:',favOnly);
+      console.log('搜索條件→ 區域:',selectedAreas,'類型:',selectedType,'忽略風力:',ignoreWind,'強制野場:',forceWild,'顯示禁釣:',showForbidden);
       document.getElementById('recommend-grid').innerHTML=`<div class="loading-placeholder"><div class="spinner"></div><div>查詢 ${filtered.length} 個釣點天氣中...</div></div>`;
-      const results=await Promise.all(filtered.map(s=>getWeather(s,date,startHour,endHour)));
-      recommendationPool=results.filter(r=>r.spot.max_wave_height===99||r.wave<=r.spot.max_wave_height).sort((a,b)=>b.score-a.score);
+
+      // ✨ 步驟 1：獲取使用者位置（優先）
+      let userLocation = null;
+      try {
+        console.log('🔍 嘗試獲取使用者地理位置...');
+        userLocation = await getUserLocation();
+        if (userLocation) {
+          console.log(`📍 使用者位置: ${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`);
+        } else {
+          console.log('⚪ 未獲取到位置，將使用原始分數排序');
+        }
+      } catch (e) {
+        console.error('⚠️ 地理位置請求異常:', e);
+      }
+
+      // ✨ 步驟 2：獲取天氣資料（傳入位置）
+      const results=await Promise.all(filtered.map(s=>getWeather(s,date,startHour,endHour,userLocation)));
+      const filteredResults = results.filter(r=>{
+        // 港區（max_wave_height=99）都推薦
+        if(r.spot.max_wave_height===99) return true;
+        // 野場：分數>=3 且 浪高<=1.2m 才推薦（除非勾選強制顯示野場）
+        if(forceWild && r.spot.type === '野場') return true;
+        // 忽略浪高：如果勾選忽略浪高，則不檢查分數和浪高
+        if(!ignoreWave && (r.score<3 || r.wave>1.2)) return false;
+
+        // ✨ 风力分级筛选（除非忽略风级选项已勾选）
+        if(!ignoreWind){
+          const beaufort = msToBeaufort(r.ws);
+          if(beaufort>=1 && beaufort<=3){
+            // 0-3级：全部显示
+            return true;
+          }else if(beaufort===4){
+            // 4级：只显示符合适合风向的钓点
+            return r.wd && r.spot.good_wind_directions?.includes(r.wd);
+          }else if(beaufort>=5){
+            // 5级以上：不显示不符合适用风向的钓点
+            if(r.wd && r.spot.bad_wind_directions?.includes(r.wd)) return false;
+            return true;
+          }
+        }
+        return true;
+      });
+
+      // ✨ 若忽略風力，重新計算分數（不考慮風力影響）
+      if(ignoreWind){
+        filteredResults.forEach(r=>{
+          // 重新計算分數：只考慮浪高和風向（不考慮風力 beaufort）
+          // 參考 calcScore 邏輯，但移除風力扣分部分
+          let newScore = 5;
+          const max = r.spot.max_wave_height===99?999:r.spot.max_wave_height;
+          if(r.wave>max) newScore -= 3;
+          else if(r.wave>max*0.8) newScore -= 1;
+          // 風向影響保留
+          if(r.wd && r.spot.bad_wind_directions?.includes(r.wd)) newScore -= 1;
+          if(r.wd && r.spot.good_wind_directions?.includes(r.wd)) newScore += 1;
+          newScore = Math.max(1, Math.min(5, newScore));
+          r.score = newScore;
+        });
+      }
+
+      filteredResults.sort((a,b) => {
+        // 第一優先：分數
+        if (a.score !== b.score) return b.score - a.score;
+        // 第二優先：距離（無位置資訊的視為無限遠，排最後）
+        const distA = a.distance ?? Infinity;
+        const distB = b.distance ?? Infinity;
+        return distA - distB;
+      });
+
+      recommendationPool = filteredResults;
       recommendationPage=0;
       if(!recommendationPool.length){document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>目前條件下沒有合適釣點</div></div>';return}
       renderRecommendationPage(recommendationPool);
@@ -349,7 +539,24 @@
       console.log('開啟地圖中心座標:', query);
       window.open(`https://www.google.com/maps?q=${query}`, '_blank');
     }
-    async function loadSpots(){try{const res=await fetch('./spots.json');if(!res.ok)throw new Error('spots.json 載入失敗');SPOTS=await res.json()}catch(e){console.error('讀取 spots.json 失敗:',e);SPOTS=DEFAULT_SPOTS;showToast('❌ spots.json 載入失敗',true)}const spotsNum=document.getElementById('spots-num');if(spotsNum)spotsNum.textContent=SPOTS.length;await initRecommendations()}
+    async function loadSpots(){
+      try{
+        const res=await fetch('./spots.json');
+        if(!res.ok)throw new Error('spots.json 載入失敗');
+        SPOTS=await res.json();
+        // 為舊資料添加 allowed 預設值（向後相容）
+        SPOTS.forEach(s=>{
+          if(s.allowed===undefined) s.allowed=true;
+        });
+      }catch(e){
+        console.error('讀取 spots.json 失敗:',e);
+        SPOTS=DEFAULT_SPOTS;
+        showToast('❌ spots.json 載入失敗',true)
+      }
+      const spotsNum=document.getElementById('spots-num');
+      if(spotsNum)spotsNum.textContent=SPOTS.length;
+      await initRecommendations()
+    }
     function initPage(){const today=getTWDateString();const dateStart=document.getElementById('input-date');const dateEnd=document.getElementById('input-date-end');if(dateStart)dateStart.value=today;if(dateEnd)dateEnd.value=today;const twNow=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));const startHour=twNow.getHours();const endHour=(startHour+4)%24;fillHourOptions('input-time-start',startHour);fillHourOptions('input-time-end',endHour);initAreaChips();initTypeChips();renderFavList();loadSpots()}
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initPage);else initPage();
   </script>

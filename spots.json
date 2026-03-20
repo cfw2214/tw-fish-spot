@@ -7,6 +7,7 @@
     "lng": 121.698748,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -24,6 +25,7 @@
     "lng": 121.694755,
     "max_wave_height": 1.2,
     "note": "不深 容易掛蝦 需選高一點的礁石上做釣",
+    "allowed": false,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "北",
@@ -38,6 +40,7 @@
     "lng": 121.6930941,
     "max_wave_height": 1.2,
     "note": "不深 容易掛蝦有時可以攔截到一些過路流水絲",
+    "allowed": false,
     "good_wind_directions": [
       "東"
     ],
@@ -56,6 +59,7 @@
     "lng": 121.6910158,
     "max_wave_height": 1.2,
     "note": "有深度漲八分 較好",
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -75,6 +79,7 @@
     "lng": 121.701,
     "max_wave_height": 1.2,
     "note": "要走很遠的遠",
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -87,13 +92,14 @@
     ]
   },
   {
-    "name": "野柳公園 一斜坪",
+    "name": "野柳公園一斜坪",
     "type": "野場",
     "area": "金山萬里",
     "lat": 25.2076784,
     "lng": 121.6938722,
     "max_wave_height": 1.2,
     "note": "往對面的銅像丟  也可向外海丟",
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -113,6 +119,7 @@
     "lng": 121.69266,
     "max_wave_height": 1.2,
     "note": "海巡常來巡",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -130,6 +137,7 @@
     "lng": 121.688614,
     "max_wave_height": 1.2,
     "note": "淺場",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -148,6 +156,7 @@
     "lng": 121.6889794,
     "max_wave_height": 1.3,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -166,6 +175,7 @@
     "lng": 121.6870876,
     "max_wave_height": 99,
     "note": "春冬天有花枝 但海巡會來趕",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -185,6 +195,7 @@
     "lng": 121.6882262,
     "max_wave_height": 1.2,
     "note": "丟航道很深",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -204,6 +215,7 @@
     "lng": 121.687387,
     "max_wave_height": 1.3,
     "note": "釣漲退潮 流停住的時候 注意海浪 浪大請勿前往 禁釣區 被抓到會開罰單",
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -221,6 +233,7 @@
     "lng": 121.608022,
     "max_wave_height": 1.2,
     "note": "偏淺",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -239,6 +252,7 @@
     "lng": 121.6939898,
     "max_wave_height": 1.2,
     "note": "場很深 釣漲滿",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -256,6 +270,7 @@
     "lng": 121.650927,
     "max_wave_height": 1.2,
     "note": "港內沒啥貨 要站肉粽巷外釣",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -275,6 +290,7 @@
     "lng": 121.648159,
     "max_wave_height": 99,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -291,7 +307,8 @@
     "lat": 25.195801,
     "lng": 121.688717,
     "max_wave_height": 99,
-    "note": "沙地 <br>很觀光的安全點<br>春天拖底 會遇到花枝",
+    "note": "沙地 很觀光的安全點春天拖底 會遇到花枝",
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -310,6 +327,7 @@
     "lng": 121.6893941,
     "max_wave_height": 1.2,
     "note": "沙底 釣漲滿頂2小時",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -328,6 +346,7 @@
     "lng": 121.696027,
     "max_wave_height": 1.2,
     "note": "春天有時會靠花枝",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -347,6 +366,7 @@
     "lng": 121.709322,
     "max_wave_height": 1.2,
     "note": "肉粽大顆不太好跳",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -364,6 +384,7 @@
     "lng": 121.709644,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -382,6 +403,7 @@
     "lng": 121.7252271,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -399,6 +421,7 @@
     "lng": 121.7282022,
     "max_wave_height": 1.2,
     "note": "淺場 浪大會洗",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -416,6 +439,7 @@
     "lng": 121.73513,
     "max_wave_height": 3,
     "note": "朝外海釣，深場流強，白天可釣鐵板秋紅甘，春馬加，夏天晚上有白帶",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -434,6 +458,7 @@
     "lng": 121.734765,
     "max_wave_height": 99,
     "note": "有專屬座位可以座 但這邊丟到對面發電廠進水口很淺很容易掛蝦，航道中間較深",
+    "allowed": false,
     "good_wind_directions": [
       "西"
     ],
@@ -454,6 +479,7 @@
     "lng": 121.6072264,
     "max_wave_height": 1.2,
     "note": "聽別人說很多巨物",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -471,6 +497,7 @@
     "lng": 121.472697,
     "max_wave_height": 1.2,
     "note": "4-5月有時會靠軟絲 三月有花枝，不過只有 滿頂前後比較有貨，丟航道",
+    "allowed": true,
     "good_wind_directions": [
       "東"
     ],
@@ -489,6 +516,7 @@
     "lng": 121.422154,
     "max_wave_height": 1.2,
     "note": "只能釣漲滿1-2h  很淺 外面為沙地不太容易掛蝦  但肉粽大顆不好跳要小心",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -507,6 +535,7 @@
     "lng": 121.768829,
     "max_wave_height": 99,
     "note": "釣漲滿流停時 在橋上木蝦放到底  在朗上來 警察會開單",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -524,6 +553,7 @@
     "lng": 121.7678745,
     "max_wave_height": 99,
     "note": "航道流很強 一般來說釣漲潮比較好 底下垃圾很多 很會掛 春天花枝多",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -542,6 +572,7 @@
     "lng": 121.768985,
     "max_wave_height": 99,
     "note": "航道流很強 一般來說釣漲潮比較好 底下垃圾很多 很會掛",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -557,6 +588,7 @@
     "lng": 121.769173,
     "max_wave_height": 99,
     "note": "航道流強 航道中間很深 但旁邊又變淺 所以容易在朗回來的半路掛蝦",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -574,6 +606,7 @@
     "lng": 121.7656375,
     "max_wave_height": 99,
     "note": "場深  這邊算比較比不會掛蝦的點 春天花枝多",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -591,6 +624,7 @@
     "lng": 121.7643557,
     "max_wave_height": 99,
     "note": "航道場深流強 下面垃圾又很多 春天花枝多 白天可丟小鐵板",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -608,6 +642,7 @@
     "lng": 121.772901,
     "max_wave_height": 99,
     "note": "會開單",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -625,6 +660,7 @@
     "lng": 121.77362,
     "max_wave_height": 1.2,
     "note": "往航道丟深場 但流強 也比較容易掛 往右邊丟 比較淺 比較不易掛",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -644,6 +680,7 @@
     "lng": 121.803945,
     "max_wave_height": 1.2,
     "note": "已禁釣",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -662,6 +699,7 @@
     "lng": 121.80468,
     "max_wave_height": 1.2,
     "note": "一級危險釣場 浪大很危險  還要垂降肉粽下去",
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -681,6 +719,7 @@
     "lng": 121.823037,
     "max_wave_height": 99,
     "note": "場算深 春天算是花枝窟",
+    "allowed": true,
     "good_wind_directions": [
       "東北",
       "東"
@@ -697,6 +736,7 @@
     "lng": 121.8123182,
     "max_wave_height": 1.2,
     "note": "浪大要小心",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -714,6 +754,7 @@
     "lng": 121.8802723,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -731,6 +772,7 @@
     "lng": 121.835159,
     "max_wave_height": 1.2,
     "note": "釣左邊內灣處 漲往退時比較好",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -750,6 +792,7 @@
     "lng": 121.913341,
     "max_wave_height": 1.2,
     "note": "釣乾底反漲",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -767,6 +810,7 @@
     "lng": 121.9148834,
     "max_wave_height": 1.3,
     "note": "釣漲潮比較好<br>中間很深 但靠岸有斷層 要小心<br>打對面的肉粽 搜尋躲在肉粽下的軟絲",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -786,6 +830,7 @@
     "lng": 121.9150788,
     "max_wave_height": 99,
     "note": "拖鞋點 漲滿 前1小時比較好",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -805,6 +850,7 @@
     "lng": 121.8984494,
     "max_wave_height": 1.2,
     "note": "會被趕",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -822,6 +868,7 @@
     "lng": 121.801563,
     "max_wave_height": 1.2,
     "note": "只有夏天能來 但要從潮境公園進入",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -841,6 +888,7 @@
     "lng": 121.8881444,
     "max_wave_height": 1.2,
     "note": "大浪會洗",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南",
@@ -849,7 +897,8 @@
     ],
     "bad_wind_directions": [
       "北",
-      "東北"
+      "東北",
+      "東"
     ]
   },
   {
@@ -860,6 +909,7 @@
     "lng": 121.916182,
     "max_wave_height": 99,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -879,6 +929,7 @@
     "lng": 121.9160428,
     "max_wave_height": 1.5,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -897,6 +948,7 @@
     "lng": 121.834258,
     "max_wave_height": 1.2,
     "note": "活餌多",
+    "allowed": true,
     "good_wind_directions": [
       "東"
     ],
@@ -912,7 +964,8 @@
     "lat": 25.148121,
     "lng": 121.785175,
     "max_wave_height": 99,
-    "note": "這邊比較不會掛",
+    "note": "這邊比較不會掛 可能會被趕",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -931,7 +984,8 @@
     "lat": 25.151844,
     "lng": 121.778614,
     "max_wave_height": 1.2,
-    "note": "平浪才能釣 聽說正在退比較好",
+    "note": "提已斷 請勿前往",
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -951,6 +1005,7 @@
     "lng": 121.7346689,
     "max_wave_height": 99,
     "note": "裡面是沙地  春天花枝會靠 但春天活餌竿子也在比多支",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -965,6 +1020,7 @@
     "lng": 121.789048,
     "max_wave_height": 99,
     "note": "花軟區 超深場",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -979,14 +1035,15 @@
   {
     "name": "深奧漁港外停車場",
     "type": "肉粽",
-    "area": "其他",
+    "area": "東北角區",
     "lat": 25.13319,
     "lng": 121.822574,
     "max_wave_height": 1.5,
     "note": "很淺易掛 只適合滿頂釣",
+    "allowed": true,
     "good_wind_directions": [
-      "東北",
-      "東"
+      "北",
+      "東北"
     ],
     "bad_wind_directions": [
       "東南",
@@ -1002,6 +1059,7 @@
     "lng": 121.789809,
     "max_wave_height": 99,
     "note": "要爬肉粽，所以只去過一次就不想去了，聽朋友說很不錯。",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -1019,6 +1077,7 @@
     "lng": 121.788726,
     "max_wave_height": 99,
     "note": "離岸10-15米開始一堆肉粽，很會割。  釣漲潮。",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1038,6 +1097,7 @@
     "lng": 121.8311,
     "max_wave_height": 1.2,
     "note": "要爬肉粽 小肉粽好爬",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1056,6 +1116,7 @@
     "lng": 121.827435,
     "max_wave_height": 1.4,
     "note": "偏淺 又超會掛蝦",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -1069,8 +1130,9 @@
     "area": "基隆區",
     "lat": 25.147771,
     "lng": 121.791451,
-    "max_wave_height": 3,
+    "max_wave_height": 99,
     "note": "適合新手的大眾釣點",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1089,6 +1151,7 @@
     "lng": 121.791469,
     "max_wave_height": 3,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1106,6 +1169,7 @@
     "lng": 121.708421,
     "max_wave_height": 99,
     "note": "有些位置要站港內的肉粽，沙底水易濁",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1124,6 +1188,7 @@
     "lng": 121.647058,
     "max_wave_height": 1.3,
     "note": "全沙底地 夏天可能有透抽",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1143,23 +1208,7 @@
     "lng": 121.6486552,
     "max_wave_height": 1.2,
     "note": "山壁區附近 搜尋",
-    "good_wind_directions": [
-      "南",
-      "西南"
-    ],
-    "bad_wind_directions": [
-      "北",
-      "東北"
-    ]
-  },
-  {
-    "name": "野柳港 春天花枝區",
-    "type": "區域",
-    "area": "基隆區",
-    "lat": 25.205849,
-    "lng": 121.687462,
-    "max_wave_height": 1.2,
-    "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1177,6 +1226,7 @@
     "lng": 121.767038,
     "max_wave_height": 99,
     "note": "春天會有花枝 可巡的範圍大",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1195,7 +1245,9 @@
     "lng": 121.7737052,
     "max_wave_height": 1.2,
     "note": "會被趕",
+    "allowed": false,
     "good_wind_directions": [
+      "東南",
       "南",
       "西南"
     ],
@@ -1212,6 +1264,7 @@
     "lng": 121.763476,
     "max_wave_height": 99,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1229,6 +1282,7 @@
     "lng": 121.8609956,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1246,6 +1300,7 @@
     "lng": 121.4669933,
     "max_wave_height": 1.2,
     "note": "釣滿頂前後 沙底地 春天有軟絲",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1265,6 +1320,7 @@
     "lng": 121.7039344,
     "max_wave_height": 0.8,
     "note": "幾乎與海切齊 浪大不可去 容易洗",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1284,6 +1340,7 @@
     "lng": 121.6973502,
     "max_wave_height": 1.2,
     "note": "肉粽算好下",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1301,6 +1358,7 @@
     "lng": 121.696447,
     "max_wave_height": 1.5,
     "note": "外面都沙地",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1313,13 +1371,14 @@
     ]
   },
   {
-    "name": "章魚 游泳池 右側肉粽",
+    "name": "章魚游泳池左邊支",
     "type": "野場",
     "area": "基隆區",
     "lat": 25.171225,
     "lng": 121.709221,
     "max_wave_height": 1.2,
     "note": "活餌必佔去的點",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1338,6 +1397,7 @@
     "lng": 121.754338,
     "max_wave_height": 1.2,
     "note": "白天需報名才能進入，晚上為禁釣區",
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南"
@@ -1355,6 +1415,7 @@
     "lng": 121.7616039,
     "max_wave_height": 1.5,
     "note": "很淺",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1373,6 +1434,7 @@
     "lng": 121.7744421,
     "max_wave_height": 1.3,
     "note": "站肉粽向內拋",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1390,6 +1452,7 @@
     "lng": 121.7788838,
     "max_wave_height": 1.2,
     "note": "要走很遠",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1400,14 +1463,16 @@
     ]
   },
   {
-    "name": "基隆燈堂下",
+    "name": "基隆燈塔下",
     "type": "野場",
     "area": "基隆區",
     "lat": 25.1564796,
     "lng": 121.7475928,
     "max_wave_height": 1.2,
     "note": "商港區 禁釣",
+    "allowed": false,
     "good_wind_directions": [
+      "東南",
       "南",
       "西南"
     ],
@@ -1424,6 +1489,7 @@
     "lng": 121.7955907,
     "max_wave_height": 1.2,
     "note": "要涉水 跳水坑  有危險性",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1445,6 +1511,7 @@
     "lng": 121.8052084,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1455,14 +1522,16 @@
     ]
   },
   {
-    "name": "瑞濱岩礁1",
+    "name": "瑞濱62下岩礁1",
     "type": "野場",
     "area": "基隆區",
     "lat": 25.1253475,
     "lng": 121.8202344,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
+      "東南",
       "南",
       "西南"
     ],
@@ -1472,13 +1541,14 @@
     ]
   },
   {
-    "name": "瑞濱岩礁2",
+    "name": "瑞濱62下岩礁2",
     "type": "野場",
     "area": "基隆區",
     "lat": 25.1256681,
     "lng": 121.8193144,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1497,6 +1567,7 @@
     "lng": 121.8196041,
     "max_wave_height": 1.2,
     "note": "砂底  要下肉粽 但好下",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1509,14 +1580,16 @@
     ]
   },
   {
-    "name": "海園餐廳下面",
+    "name": "鼻頭海園餐廳",
     "type": "野場",
     "area": "東北角區",
     "lat": 25.1242946,
     "lng": 121.9125324,
     "max_wave_height": 1.2,
-    "note": "",
+    "note": "浪大回潑上來",
+    "allowed": true,
     "good_wind_directions": [
+      "東南",
       "南",
       "西南"
     ],
@@ -1533,6 +1606,7 @@
     "lng": 121.9087626,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1550,6 +1624,7 @@
     "lng": 121.9064571,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1567,6 +1642,7 @@
     "lng": 121.904333,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1584,6 +1660,7 @@
     "lng": 121.9028041,
     "max_wave_height": 1.2,
     "note": "也是可以釣軟絲",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1601,6 +1678,7 @@
     "lng": 121.8996259,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1618,6 +1696,7 @@
     "lng": 121.920076,
     "max_wave_height": 1.2,
     "note": "25.120200, 121.920076",
+    "allowed": true,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "北",
@@ -1632,6 +1711,7 @@
     "lng": 121.9163425,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1651,6 +1731,7 @@
     "lng": 121.9239492,
     "max_wave_height": 1.3,
     "note": "深場 但正期活餌多",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1668,6 +1749,7 @@
     "lng": 121.9297857,
     "max_wave_height": 1.2,
     "note": "算好下肉粽 但能站的位置少",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1687,6 +1769,7 @@
     "lng": 121.9308486,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1706,6 +1789,7 @@
     "lng": 121.8616788,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1724,6 +1808,7 @@
     "lng": 121.9228273,
     "max_wave_height": 1.2,
     "note": "下去很陡 少數能檔東北風的野場",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1742,6 +1827,7 @@
     "lng": 121.764169,
     "max_wave_height": 99,
     "note": "要站漁船上釣",
+    "allowed": true,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "南",
@@ -1749,15 +1835,17 @@
     ]
   },
   {
-    "name": "四行倉庫",
-    "type": "肉粽",
+    "name": "正濱四行倉庫",
+    "type": "港區",
     "area": "基隆區",
     "lat": 25.1562629,
     "lng": 121.7718568,
     "max_wave_height": 99,
     "note": "要從八尺門安檢所走過來",
+    "allowed": false,
     "good_wind_directions": [
-      "北"
+      "北",
+      "東北"
     ],
     "bad_wind_directions": []
   },
@@ -1769,6 +1857,7 @@
     "lng": 121.7641384,
     "max_wave_height": 99,
     "note": "淺場 小軟多 小黑鯛",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1781,14 +1870,17 @@
     ]
   },
   {
-    "name": "外木山港做左側肉粽區",
+    "name": "外木山港左側肉粽區",
     "type": "肉粽",
     "area": "基隆區",
     "lat": 25.1610024,
     "lng": 121.7339064,
     "max_wave_height": 1.2,
-    "note": "不太好下",
+    "note": "不太好下 有危險性",
+    "allowed": true,
     "good_wind_directions": [
+      "東",
+      "東南",
       "南",
       "西南"
     ],
@@ -1805,6 +1897,7 @@
     "lng": 121.7887635,
     "max_wave_height": 99,
     "note": "有點掛",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1819,6 +1912,7 @@
     "lng": 121.791667,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1836,6 +1930,7 @@
     "lng": 121.7339748,
     "max_wave_height": 99,
     "note": "拖鞋點  淺 貨少",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1853,6 +1948,7 @@
     "lng": 121.9792976,
     "max_wave_height": 1.2,
     "note": "要小涉水 請著防滑雨鞋 及救身衣",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -1872,6 +1968,7 @@
     "lng": 121.8411538,
     "max_wave_height": 99,
     "note": "沙底春天有花枝但量少",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1890,7 +1987,10 @@
     "lng": 121.8438905,
     "max_wave_height": 2,
     "note": "需烏石港搭船前往 春天花枝多",
+    "allowed": false,
     "good_wind_directions": [
+      "東",
+      "東南",
       "南",
       "西南"
     ],
@@ -1907,6 +2007,7 @@
     "lng": 121.6949319,
     "max_wave_height": 0.8,
     "note": "要涉水過去",
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1925,7 +2026,8 @@
     "lat": 24.4982727,
     "lng": 121.8423699,
     "max_wave_height": 99,
-    "note": "冬春天港內花枝多 釣港嘴",
+    "note": "冬春天港內花枝多 釣港嘴 海巡看到會趕",
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1943,6 +2045,7 @@
     "lng": 121.5966004,
     "max_wave_height": 1.2,
     "note": "夏天的白帶聖地 軟絲請向內靜水區釣",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1960,6 +2063,7 @@
     "lng": 121.681371,
     "max_wave_height": 1.1,
     "note": "超淺場 約1米多深  春天有大物 貼水浪大易洗",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1972,14 +2076,16 @@
     ]
   },
   {
-    "name": "相思亭",
+    "name": "相思燈",
     "type": "野場",
     "area": "金山萬里",
     "lat": 25.205432,
     "lng": 121.67746,
     "max_wave_height": 1.2,
     "note": "入口附近為墓地",
+    "allowed": true,
     "good_wind_directions": [
+      "東",
       "東南",
       "南",
       "西南"
@@ -1997,6 +2103,7 @@
     "lng": 121.872157,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2016,6 +2123,7 @@
     "lng": 121.87368,
     "max_wave_height": 1.1,
     "note": "很貼水 所以浪大不建議來",
+    "allowed": true,
     "good_wind_directions": [
       "東"
     ],
@@ -2032,6 +2140,7 @@
     "lng": 121.512499,
     "max_wave_height": 1.2,
     "note": "白天必須著救生裝備 不然會被開單",
+    "allowed": true,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "北",
@@ -2040,13 +2149,14 @@
     ]
   },
   {
-    "name": "麟山鼻 野場",
+    "name": "麟山鼻 野場2",
     "type": "野場",
-    "area": "基隆區",
+    "area": "淡水三芝",
     "lat": 25.2877928,
     "lng": 121.5123255,
     "max_wave_height": 1.2,
-    "note": "",
+    "note": "白天釣必須著救生裝備 不然會被開單",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2064,6 +2174,7 @@
     "lng": 121.7089888,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2082,8 +2193,11 @@
     "lat": 25.131659,
     "lng": 121.823021,
     "max_wave_height": 99,
-    "note": "需要付停車費",
+    "note": "需要付停車費 施工中白天禁止進入",
+    "allowed": true,
     "good_wind_directions": [
+      "北",
+      "東北",
       "東",
       "東南"
     ],
@@ -2100,6 +2214,7 @@
     "lng": 121.9033496,
     "max_wave_height": 99,
     "note": "禁釣中～重蝦 往外拋會有大砲管",
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北",
@@ -2117,6 +2232,7 @@
     "lng": 121.4485584,
     "max_wave_height": 1.3,
     "note": "釣漲滿前後 春天3-5月有軟",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南"
@@ -2131,13 +2247,14 @@
     ]
   },
   {
-    "name": "野柳港外提綠燈旁",
-    "type": "港區",
+    "name": "野柳港外提綠燈旁肉粽",
+    "type": "肉粽",
     "area": "金山萬里",
     "lat": 25.208374,
     "lng": 121.6887746,
     "max_wave_height": 1.3,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2156,6 +2273,7 @@
     "lng": 121.8033681,
     "max_wave_height": 99,
     "note": "有路燈 合法開放釣魚區 適合帶全家大小來 3月有花枝",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -2174,6 +2292,7 @@
     "lng": 121.9190204,
     "max_wave_height": 1.2,
     "note": "一般時段不開放進入  你懂的",
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2192,6 +2311,7 @@
     "lng": 121.762405,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": false,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2210,6 +2330,7 @@
     "lng": 121.7699197,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2227,6 +2348,7 @@
     "lng": 121.9144807,
     "max_wave_height": 1.2,
     "note": "高水位時 需花$200 過去<br>退潮可涉水走回來",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2237,13 +2359,14 @@
     ]
   },
   {
-    "name": "觀光坪 2點",
+    "name": "觀光坪點2",
     "type": "野場",
     "area": "東北角區",
     "lat": 25.0730239,
     "lng": 121.9214316,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2262,6 +2385,7 @@
     "lng": 121.9307833,
     "max_wave_height": 1.3,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2281,6 +2405,7 @@
     "lng": 121.8372822,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2299,6 +2424,7 @@
     "lng": 121.8413135,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2317,6 +2443,7 @@
     "lng": 121.8141349,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2336,6 +2463,7 @@
     "lng": 121.6859478,
     "max_wave_height": 1.2,
     "note": "肉粽大顆不太好爬",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2355,6 +2483,7 @@
     "lng": 121.696348,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": false,
     "good_wind_directions": [
       "西"
     ],
@@ -2371,6 +2500,7 @@
     "lng": 121.705652,
     "max_wave_height": 1.2,
     "note": "活餌聖地",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2389,6 +2519,7 @@
     "lng": 121.9143632,
     "max_wave_height": 1.3,
     "note": "車可停旁邊 但幾乎都是活餌在插",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2407,6 +2538,7 @@
     "lng": 121.7310575,
     "max_wave_height": 1.2,
     "note": "很淺 白天游泳的遊客很多，只能夜釣",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2424,6 +2556,7 @@
     "lng": 121.533442,
     "max_wave_height": 1.2,
     "note": "往外丟容易卡到魚網",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南"
@@ -2441,6 +2574,7 @@
     "lng": 121.9623101,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2459,6 +2593,7 @@
     "lng": 121.723311,
     "max_wave_height": 1,
     "note": "很貼水的野場，超過一米就會洗礁",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2478,6 +2613,7 @@
     "lng": 121.7321407,
     "max_wave_height": 1.2,
     "note": "這個點要注意掌退潮 退潮走的過來 漲太滿會走不過來",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2497,6 +2633,7 @@
     "lng": 121.9765706,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2513,7 +2650,8 @@
     "lat": 25.203586,
     "lng": 121.6733531,
     "max_wave_height": 1.3,
-    "note": "不確定，可能會被趕",
+    "note": "可能會被趕",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2533,6 +2671,7 @@
     "lng": 121.296752,
     "max_wave_height": 99,
     "note": "定時會有管理員查看，可能會被開單",
+    "allowed": false,
     "good_wind_directions": [
       "西"
     ],
@@ -2549,6 +2688,7 @@
     "lng": 121.8361342,
     "max_wave_height": 1.3,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2566,6 +2706,7 @@
     "lng": 121.8695662,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2583,6 +2724,7 @@
     "lng": 121.8930738,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2600,6 +2742,7 @@
     "lng": 121.5328563,
     "max_wave_height": 1.5,
     "note": "沙礁混合地偏沙地，近邊水泥結構易卡",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2617,6 +2760,7 @@
     "lng": 121.566833,
     "max_wave_height": 99,
     "note": "航道為沙底地 春天有 在地人都在右提肉粽朝航道丟",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -2632,6 +2776,7 @@
     "lng": 121.5865704,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2650,6 +2795,7 @@
     "lng": 121.694837,
     "max_wave_height": 1.2,
     "note": "25.181369, 121.694837",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2668,6 +2814,7 @@
     "lng": 121.694927,
     "max_wave_height": 1.2,
     "note": "能站的位置很少 礁岩地形易卡",
+    "allowed": true,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "北",
@@ -2684,6 +2831,7 @@
     "lng": 121.6633678,
     "max_wave_height": 1.3,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2703,6 +2851,7 @@
     "lng": 121.8890773,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2720,6 +2869,7 @@
     "lng": 121.689745,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "北",
@@ -2729,16 +2879,18 @@
     ]
   },
   {
-    "name": "中角灣",
+    "name": "金山中角灣",
     "type": "野場",
     "area": "金山萬里",
     "lat": 25.236646,
     "lng": 121.637894,
     "max_wave_height": 1.1,
     "note": "沙地 白天可丟小鐵板 夏天黃昏有透抽",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
-      "南"
+      "南",
+      "西南"
     ],
     "bad_wind_directions": [
       "北",
@@ -2753,6 +2905,7 @@
     "lng": 121.587178,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2771,6 +2924,7 @@
     "lng": 121.475144,
     "max_wave_height": 1.2,
     "note": "平台可坐欄杆，超淺場 只能釣滿頂",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2789,6 +2943,7 @@
     "lng": 121.434301,
     "max_wave_height": 1.1,
     "note": "只能釣流底那1-2時 石頭露出來的時候",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2808,6 +2963,7 @@
     "lng": 121.936199,
     "max_wave_height": 1.3,
     "note": "24.973427, 121.936199",
+    "allowed": true,
     "good_wind_directions": [
       "東北",
       "東"
@@ -2825,6 +2981,7 @@
     "lng": 121.950249,
     "max_wave_height": 1.2,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2843,6 +3000,7 @@
     "lng": 121.998216,
     "max_wave_height": 1.2,
     "note": "與海貼齊 需要穿雨鞋",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2861,6 +3019,7 @@
     "lng": 121.990953,
     "max_wave_height": 99,
     "note": "",
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南"
@@ -2871,13 +3030,14 @@
     ]
   },
   {
-    "name": "萊萊野釣場",
+    "name": "萊萊磯釣場",
     "type": "野場",
     "area": "宜蘭東部",
     "lat": 25.00271,
     "lng": 122.004034,
     "max_wave_height": 1.2,
     "note": "浪大易潑 是磯釣聖地 請務必穿著救生裝備",
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2896,6 +3056,7 @@
     "lng": 121.950014,
     "max_wave_height": 99,
     "note": "可安全合法作釣",
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
