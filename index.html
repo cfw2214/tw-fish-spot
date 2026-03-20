@@ -10,8 +10,9 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
     header{background:linear-gradient(135deg,var(--bg2),var(--accent2));padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100}
-    header h1{font-size:1.1rem;font-weight:700;letter-spacing:1px;position:absolute;left:50%;transform:translateX(-50%);margin:0;white-space:nowrap} header h1 span{color:var(--accent)}
+    header h1{font-size:1rem;font-weight:700;letter-spacing:1px;position:absolute;left:50%;transform:translateX(-50%);margin:0;white-space:nowrap} header h1 span{color:var(--accent)}
     .header-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
+    .header-actions .btn-mini{background:rgba(244,162,97,.2);border:1px solid rgba(244,162,97,.4);color:var(--gold)}
     #hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer}
     .main-wrap{display:flex;max-width:1300px;margin:0 auto}
     #sidebar{width:270px;min-width:270px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:20px;min-height:calc(100vh - 60px)}
@@ -50,7 +51,17 @@
     .loading-placeholder{text-align:center;color:var(--text2);padding:50px 20px;grid-column:1/-1}.spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:12px auto}
     .sponsor-bar{max-width:1300px;margin:20px auto 0;padding:0 20px}.sponsor-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}.sponsor-title{font-size:.82rem;color:var(--accent);letter-spacing:1px;margin-bottom:10px}.sponsor-banner{width:100%;background:linear-gradient(135deg,var(--card),var(--card2));border:1px dashed var(--accent);border-radius:12px;padding:18px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:120px;text-align:center}.sponsor-banner div{font-size:1rem;color:var(--text);letter-spacing:1px}.sponsor-banner div:nth-child(2){font-size:1.1rem;color:var(--gold);font-weight:700}
     @keyframes spin{to{transform:rotate(360deg)}}
-    @media(max-width:768px){#hamburger{display:block}.header-actions{display:flex}#sidebar{position:fixed;left:-290px;top:0;height:100vh;z-index:150;transition:left .3s;padding-top:70px}#sidebar.open{left:0}.filter-grid{grid-template-columns:1fr}#recommend-grid{grid-template-columns:1fr}.sponsor-banner{min-height:108px;padding:16px 12px}.sponsor-banner div{font-size:.95rem}}
+    @media(max-width:768px){
+      #hamburger{display:block}
+      .header-actions{display:flex}
+      header h1{font-size:0.9rem;left:0;transform:none;margin-left:50px;margin-right:120px;text-align:left}
+      #sidebar{position:fixed;left:-290px;top:0;height:100vh;z-index:150;transition:left .3s;padding-top:70px}
+      #sidebar.open{left:0}
+      .filter-grid{grid-template-columns:1fr}
+      #recommend-grid{grid-template-columns:1fr}
+      .sponsor-banner{min-height:108px;padding:16px 12px}
+      .sponsor-banner div{font-size:.95rem}
+    }
   </style>
 </head>
 <body>
@@ -188,9 +199,30 @@
     function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sb-overlay');if(!sb||!ov)return;sb.classList.toggle('open');ov.style.display=sb.classList.contains('open')?'block':'none'}
     function openMap(lat,lng){window.open(`https://www.google.com/maps?q=${lat},${lng}`,'_blank')}
     function addFavoritePrompt(){
-      const ua=navigator.userAgent;
-      if(/Mac|iPhone|iPad|iPod/i.test(ua)) showToast('請按 Command + D 加入最愛');
-      else showToast('請按 Ctrl + D 加入最愛');
+      const url = window.location.href;
+      const title = document.title;
+
+      // 嘗試調用瀏覽器原生加入書籤介面（部分 Android 瀏覽器可能支援）
+      if (window.external && window.external.AddFavorite) {
+        try {
+          window.external.AddFavorite(url, title);
+          showToast('✅ 已嘗試加入書籤');
+          return;
+        } catch(e) {}
+      }
+
+      // iOS Safari
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        showToast('📱 請按分享按鈕 → 「加入書籤」');
+        return;
+      }
+
+      // Android Chrome 及其他瀏覽器：提示手動按鈕或選單
+      if (/Android/i.test(navigator.userAgent)) {
+        showToast('🤖 請按選單（⋮）→ 星號圖示 加入書籤');
+      } else {
+        showToast('請按 Ctrl+D 加入書籤');
+      }
     }
     window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const btn=document.getElementById('install-btn');if(btn)btn.style.display='inline-flex';});
     async function installApp(){
