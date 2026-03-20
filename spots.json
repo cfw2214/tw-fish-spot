@@ -1,253 +1,2361 @@
 [
   {
-    "name": "基隆嶼旁礁石",
+    "name": "野柳公園 畚箕湖",
     "type": "野場",
     "area": "基隆區",
-    "lat": 25.1384,
-    "lng": 121.7278,
+    "lat": 25.212158,
+    "lng": 121.698748,
     "max_wave_height": 1.2,
-    "note": "需搭船前往，浪大危險",
+    "note": "",
     "good_wind_directions": [
       "南",
-      "西南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳公園二斜坪",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.20908,
+    "lng": 121.694755,
+    "max_wave_height": 1.2,
+    "note": "不深 容易掛蝦 需選高一點的礁石上做釣",
+    "good_wind_directions": [],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳公園仙女鞋",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.2092467,
+    "lng": 121.6930941,
+    "max_wave_height": 1.2,
+    "note": "不深 容易掛蝦有時可以攔截到一些過路流水絲",
+    "good_wind_directions": [
+      "東"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "西",
+      "西北"
+    ]
+  },
+  {
+    "name": "野柳公園雷達站",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.2078846,
+    "lng": 121.6910158,
+    "max_wave_height": 1.2,
+    "note": "有深度漲八分 較好",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳公園三塊石",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.217126,
+    "lng": 121.701,
+    "max_wave_height": 1.2,
+    "note": "要走很遠的遠",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳公園 一斜坪",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.2076784,
+    "lng": 121.6938722,
+    "max_wave_height": 1.2,
+    "note": "往對面的銅像丟  也可向外海丟",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳公園玻璃船",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.204907,
+    "lng": 121.69266,
+    "max_wave_height": 1.2,
+    "note": "海巡常來巡",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳港內岩塊",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.206711,
+    "lng": 121.688614,
+    "max_wave_height": 1.2,
+    "note": "淺場",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳港內舊肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.2077683,
+    "lng": 121.6889794,
+    "max_wave_height": 1.3,
+    "note": "",
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": [
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "野柳港內711小提",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.2042059,
+    "lng": 121.6870876,
+    "max_wave_height": 99,
+    "note": "春冬天有花枝 但海巡會來趕",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳港內 肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.20657,
+    "lng": 121.6882262,
+    "max_wave_height": 1.2,
+    "note": "丟航道很深",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳斷堤禁釣區",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.2094796,
+    "lng": 121.687387,
+    "max_wave_height": 1.3,
+    "note": "釣漲退潮 流停住的時候 注意海浪 浪大請勿前往 禁釣區 被抓到會開罰單",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "草裡舊港提",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.280953,
+    "lng": 121.608022,
+    "max_wave_height": 1.2,
+    "note": "偏淺",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "東澳外提",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.2041959,
+    "lng": 121.6939898,
+    "max_wave_height": 1.2,
+    "note": "場很深 釣漲滿",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "水尾漁港",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.225721,
+    "lng": 121.650927,
+    "max_wave_height": 1.2,
+    "note": "港內沒啥貨 要站肉粽巷外釣",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "磺港",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.23099,
+    "lng": 121.648159,
+    "max_wave_height": 99,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "龜吼漁港中提",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.195801,
+    "lng": 121.688717,
+    "max_wave_height": 99,
+    "note": "沙地 <br>很觀光的安全點<br>春天拖底 會遇到花枝",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "龜喉漁港龍頭 站肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.1945636,
+    "lng": 121.6893941,
+    "max_wave_height": 1.2,
+    "note": "沙底 釣漲滿頂2小時",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "萬里港 左側肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.181562,
+    "lng": 121.696027,
+    "max_wave_height": 1.2,
+    "note": "春天有時會靠花枝",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "大武崙漁港外肉粽",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.167222,
+    "lng": 121.709322,
+    "max_wave_height": 1.2,
+    "note": "肉粽大顆不太好跳",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "章魚游泳池右支",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.170356,
+    "lng": 121.709644,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "外木山 龍蝦麻糬",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1650979,
+    "lng": 121.7252271,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "外木山 小島(死因仔溝",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.163685,
+    "lng": 121.7282022,
+    "max_wave_height": 1.2,
+    "note": "淺場 浪大會洗",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "外木山外提二樓",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.161227,
+    "lng": 121.73513,
+    "max_wave_height": 3,
+    "note": "朝外海釣，深場流強，白天可釣鐵板秋紅甘，春馬加，夏天晚上有白帶",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "外木山港內帝王位",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.159973,
+    "lng": 121.734765,
+    "max_wave_height": 99,
+    "note": "有專屬座位可以座 但這邊丟到對面發電廠進水口很淺很容易掛蝦，航道中間較深",
+    "good_wind_directions": [
       "西"
     ],
     "bad_wind_directions": [
       "北",
       "東北",
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "草里港",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.2817602,
+    "lng": 121.6072264,
+    "max_wave_height": 1.2,
+    "note": "聽別人說很多巨物",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "後厝漁港外提",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.2578543,
+    "lng": 121.472697,
+    "max_wave_height": 1.2,
+    "note": "4-5月有時會靠軟絲 三月有花枝，不過只有 滿頂前後比較有貨，丟航道",
+    "good_wind_directions": [
+      "東"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "淡水新市鎮肉粽",
+    "type": "肉粽",
+    "area": "淡水三芝",
+    "lat": 25.202322,
+    "lng": 121.422154,
+    "max_wave_height": 1.2,
+    "note": "只能釣漲滿1-2h  很淺 外面為沙地不太容易掛蝦  但肉粽大顆不好跳要小心",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "和平橋上",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.153816,
+    "lng": 121.768829,
+    "max_wave_height": 99,
+    "note": "釣漲滿流停時 在橋上木蝦放到底  在朗上來 警察會開單",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "正濱遊客中心前",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1530081,
+    "lng": 121.7678745,
+    "max_wave_height": 99,
+    "note": "航道流很強 一般來說釣漲潮比較好 底下垃圾很多 很會掛 春天花枝多",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "和平橋下工作平台",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.153404,
+    "lng": 121.768985,
+    "max_wave_height": 99,
+    "note": "航道流很強 一般來說釣漲潮比較好 底下垃圾很多 很會掛",
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "和平島餐廳前",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.154666,
+    "lng": 121.769173,
+    "max_wave_height": 99,
+    "note": "航道流強 航道中間很深 但旁邊又變淺 所以容易在朗回來的半路掛蝦",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "正濱 鐵棚",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1514326,
+    "lng": 121.7656375,
+    "max_wave_height": 99,
+    "note": "場深  這邊算比較比不會掛蝦的點 春天花枝多",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "正濱小港",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1510221,
+    "lng": 121.7643557,
+    "max_wave_height": 99,
+    "note": "航道場深流強 下面垃圾又很多 春天花枝多 白天可丟小鐵板",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "和平島社寮橋",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1564482,
+    "lng": 121.772901,
+    "max_wave_height": 99,
+    "note": "會開單",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "洗面台",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.155545,
+    "lng": 121.77362,
+    "max_wave_height": 1.2,
+    "note": "往航道丟深場 但流強 也比較容易掛 往右邊丟 比較淺 比較不易掛",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
       "東"
     ]
   },
   {
-    "name": "外木山漁港",
+    "name": "潮境公園 已禁釣",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.142614,
+    "lng": 121.803945,
+    "max_wave_height": 1.2,
+    "note": "已禁釣",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ]
+  },
+  {
+    "name": "垃圾場肉粽下礁岩",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.148179,
+    "lng": 121.80468,
+    "max_wave_height": 1.2,
+    "note": "一級危險釣場 浪大很危險  還要垂降肉粽下去",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "番仔澳 外提內肉粽",
     "type": "港區",
     "area": "基隆區",
-    "lat": 25.1521,
-    "lng": 121.6892,
+    "lat": 25.132522,
+    "lng": 121.823037,
     "max_wave_height": 99,
-    "note": "港內作釣，浪高不限制，適合初學者",
+    "note": "場算深 春天算是花枝窟",
+    "good_wind_directions": [
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": [
+      "北"
+    ]
+  },
+  {
+    "name": "昭明宮下",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1335468,
+    "lng": 121.8123182,
+    "max_wave_height": 1.2,
+    "note": "浪大要小心",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "明隧道左礁",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1234733,
+    "lng": 121.8802723,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "紫菜坪",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.128385,
+    "lng": 121.835159,
+    "max_wave_height": 1.2,
+    "note": "釣左邊內灣處 漲往退時比較好",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "鼻頭港嘴",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.124732,
+    "lng": 121.913341,
+    "max_wave_height": 1.2,
+    "note": "釣乾底反漲",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "鼻頭漁港涼亭",
+    "type": "港區",
+    "area": "東北角區",
+    "lat": 25.1249942,
+    "lng": 121.9148834,
+    "max_wave_height": 1.3,
+    "note": "釣漲潮比較好<br>中間很深 但靠岸有斷層 要小心<br>打對面的肉粽 搜尋躲在肉粽下的軟絲",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "鼻頭漁港內燈塔小提",
+    "type": "港區",
+    "area": "東北角區",
+    "lat": 25.1243993,
+    "lng": 121.9150788,
+    "max_wave_height": 99,
+    "note": "拖鞋點 漲滿 前1小時比較好",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "大溪漁港舊港",
+    "type": "野場",
+    "area": "宜蘭東部",
+    "lat": 24.940696,
+    "lng": 121.8984494,
+    "max_wave_height": 1.2,
+    "note": "會被趕",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "垃圾場左邊礁岩",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.147584,
+    "lng": 121.801563,
+    "max_wave_height": 1.2,
+    "note": "只有夏天能來 但要從潮境公園進入",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "南雅港",
+    "type": "肉粽",
+    "area": "東北角區",
+    "lat": 25.1233941,
+    "lng": 121.8881444,
+    "max_wave_height": 1.2,
+    "note": "大浪會洗",
     "good_wind_directions": [
       "南",
       "西南",
       "西",
+      "西北"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "龍洞漁港",
+    "type": "港區",
+    "area": "東北角區",
+    "lat": 25.112243,
+    "lng": 121.916182,
+    "max_wave_height": 99,
+    "note": "",
+    "good_wind_directions": [
+      "東",
       "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "和美漁港",
+    "type": "港區",
+    "area": "東北角區",
+    "lat": 25.0793627,
+    "lng": 121.9160428,
+    "max_wave_height": 1.5,
+    "note": "",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "紫菜坪內灣",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.127885,
+    "lng": 121.834258,
+    "max_wave_height": 1.2,
+    "note": "活餌多",
+    "good_wind_directions": [
+      "東"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "碧砂遊艇平台",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.148121,
+    "lng": 121.785175,
+    "max_wave_height": 99,
+    "note": "這邊比較不會掛",
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "海大斷堤",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.151844,
+    "lng": 121.778614,
+    "max_wave_height": 1.2,
+    "note": "平浪才能釣 聽說正在退比較好",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "外木山外堤一樓",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1609638,
+    "lng": 121.7346689,
+    "max_wave_height": 99,
+    "note": "裡面是沙地  春天花枝會靠 但春天活餌竿子也在比多支",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "碧砂漁港最內側",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.146627,
+    "lng": 121.789048,
+    "max_wave_height": 99,
+    "note": "花軟區 超深場",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東北",
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "深奧漁港外停車場",
+    "type": "肉粽",
+    "area": "其他",
+    "lat": 25.13319,
+    "lng": 121.822574,
+    "max_wave_height": 1.5,
+    "note": "很淺易掛 只適合滿頂釣",
+    "good_wind_directions": [
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "八斗子左小平台",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.145736,
+    "lng": 121.789809,
+    "max_wave_height": 99,
+    "note": "要爬肉粽，所以只去過一次就不想去了，聽朋友說很不錯。",
+    "good_wind_directions": [
       "北",
       "東北",
       "東",
-      "西北"
+      "南",
+      "西南"
     ],
     "bad_wind_directions": []
+  },
+  {
+    "name": "八斗子左邊肉粽",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.144726,
+    "lng": 121.788726,
+    "max_wave_height": 99,
+    "note": "離岸10-15米開始一堆肉粽，很會割。  釣漲潮。",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "蝙蝠洞 肉粽區",
+    "type": "肉粽",
+    "area": "東北角區",
+    "lat": 25.126957,
+    "lng": 121.8311,
+    "max_wave_height": 1.2,
+    "note": "要爬肉粽 小肉粽好爬",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "蝙蝠洞左側",
+    "type": "肉粽",
+    "area": "東北角區",
+    "lat": 25.126714,
+    "lng": 121.827435,
+    "max_wave_height": 1.4,
+    "note": "偏淺 又超會掛蝦",
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "八斗子外提一樓",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.147771,
+    "lng": 121.791451,
+    "max_wave_height": 3,
+    "note": "適合新手的大眾釣點",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "八斗子外堤二樓",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.148005,
+    "lng": 121.791469,
+    "max_wave_height": 3,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "大武崙漁港內",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.16725,
+    "lng": 121.708421,
+    "max_wave_height": 99,
+    "note": "有些位置要站港內的肉粽，沙底水易濁",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "磺港港嘴肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.233072,
+    "lng": 121.647058,
+    "max_wave_height": 1.3,
+    "note": "全沙底地 夏天可能有透抽",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "磺港 外肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.2316359,
+    "lng": 121.6486552,
+    "max_wave_height": 1.2,
+    "note": "山壁區附近 搜尋",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳港 春天花枝區",
+    "type": "區域",
+    "area": "基隆區",
+    "lat": 25.205849,
+    "lng": 121.687462,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "正濱漁會前",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.152593,
+    "lng": 121.767038,
+    "max_wave_height": 99,
+    "note": "春天會有花枝 可巡的範圍大",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "八尺門海巡旁肉粽",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.1566618,
+    "lng": 121.7737052,
+    "max_wave_height": 1.2,
+    "note": "會被趕",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "正濱製冰廠",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.150348,
+    "lng": 121.763476,
+    "max_wave_height": 99,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "水南洞釣具前凸礁",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1251148,
+    "lng": 121.8609956,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "三芝淺水灣長堤",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.2520621,
+    "lng": 121.4669933,
+    "max_wave_height": 1.2,
+    "note": "釣滿頂前後 沙底地 春天有軟絲",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "獅子山公園 海蝕平台菜坪",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.1768347,
+    "lng": 121.7039344,
+    "max_wave_height": 0.8,
+    "note": "幾乎與海切齊 浪大不可去 容易洗",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "萬里港右側肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.1819453,
+    "lng": 121.6973502,
+    "max_wave_height": 1.2,
+    "note": "肉粽算好下",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "萬里港右邊港嘴",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.183117,
+    "lng": 121.696447,
+    "max_wave_height": 1.5,
+    "note": "外面都沙地",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "章魚 游泳池 右側肉粽",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.171225,
+    "lng": 121.709221,
+    "max_wave_height": 1.2,
+    "note": "活餌必佔去的點",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "白燈 禁區 需報名",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.162605,
+    "lng": 121.754338,
+    "max_wave_height": 1.2,
+    "note": "白天需報名才能進入，晚上為禁釣區",
+    "good_wind_directions": [
+      "東",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "白燈入口前的小平台",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.1603053,
+    "lng": 121.7616039,
+    "max_wave_height": 1.5,
+    "note": "很淺",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "海大遊艇碼頭堤內",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.155735,
+    "lng": 121.7744421,
+    "max_wave_height": 1.3,
+    "note": "站肉粽向內拋",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "和平島斷提",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.1590076,
+    "lng": 121.7788838,
+    "max_wave_height": 1.2,
+    "note": "要走很遠",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "基隆燈堂下",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1564796,
+    "lng": 121.7475928,
+    "max_wave_height": 1.2,
+    "note": "商港區 禁釣",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "八斗子油庫外大坪海岸",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1480791,
+    "lng": 121.7955907,
+    "max_wave_height": 1.2,
+    "note": "要涉水 跳水坑  有危險性",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "西",
+      "西北"
+    ]
+  },
+  {
+    "name": "BOSS 咖啡",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1354317,
+    "lng": 121.8052084,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "瑞濱岩礁1",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1253475,
+    "lng": 121.8202344,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "瑞濱岩礁2",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1256681,
+    "lng": 121.8193144,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "深奧港右側小提",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1289027,
+    "lng": 121.8196041,
+    "max_wave_height": 1.2,
+    "note": "砂底  要下肉粽 但好下",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "東",
+      "東南"
+    ]
+  },
+  {
+    "name": "海園餐廳下面",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1242946,
+    "lng": 121.9125324,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "83.5 礁平台",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1222511,
+    "lng": 121.9087626,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "83.3",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1218965,
+    "lng": 121.9064571,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "83",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.123214,
+    "lng": 121.904333,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "82.9很多人拋水球的地方",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1223301,
+    "lng": 121.9028041,
+    "max_wave_height": 1.2,
+    "note": "也是可以釣軟絲",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "82.5子母岩",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1204578,
+    "lng": 121.8996259,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "鼻頭國小下",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1202,
+    "lng": 121.920076,
+    "max_wave_height": 1.2,
+    "note": "25.120200, 121.920076",
+    "good_wind_directions": [],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "龍洞九孔池",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1164576,
+    "lng": 121.9163425,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "觀光坪火焰山",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.0716892,
+    "lng": 121.9239492,
+    "max_wave_height": 1.3,
+    "note": "深場 但正期活餌多",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "奧底漁港右外肉粽",
+    "type": "肉粽",
+    "area": "東北角區",
+    "lat": 25.0577207,
+    "lng": 121.9297857,
+    "max_wave_height": 1.2,
+    "note": "算好下肉粽 但能站的位置少",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ]
+  },
+  {
+    "name": "奧底漁港上外肉粽",
+    "type": "肉粽",
+    "area": "東北角區",
+    "lat": 25.0590551,
+    "lng": 121.9308486,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "阿婆洞",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1253411,
+    "lng": 121.8616788,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "龍洞一支",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1037612,
+    "lng": 121.9228273,
+    "max_wave_height": 1.2,
+    "note": "下去很陡 少數能檔東北風的野場",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "水產試驗所福德宮",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.154366,
+    "lng": 121.764169,
+    "max_wave_height": 99,
+    "note": "要站漁船上釣",
+    "good_wind_directions": [],
+    "bad_wind_directions": [
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "四行倉庫",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.1562629,
+    "lng": 121.7718568,
+    "max_wave_height": 99,
+    "note": "要從八尺門安檢所走過來",
+    "good_wind_directions": [
+      "北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "正濱小港 左側",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1507698,
+    "lng": 121.7641384,
+    "max_wave_height": 99,
+    "note": "淺場 小軟多 小黑鯛",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "外木山港做左側肉粽區",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.1610024,
+    "lng": 121.7339064,
+    "max_wave_height": 1.2,
+    "note": "不太好下",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "碧砂外提內灣",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.147902,
+    "lng": 121.7887635,
+    "max_wave_height": 99,
+    "note": "有點掛",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "八斗子 小綠燈",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1468741,
+    "lng": 121.791667,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "外木山港內",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1591444,
+    "lng": 121.7339748,
+    "max_wave_height": 99,
+    "note": "拖鞋點  淺 貨少",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "鶯歌石",
+    "type": "野場",
+    "area": "宜蘭東部",
+    "lat": 24.9917142,
+    "lng": 121.9792976,
+    "max_wave_height": 1.2,
+    "note": "要小涉水 請著防滑雨鞋 及救身衣",
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "烏石港左港嘴",
+    "type": "港區",
+    "area": "宜蘭東部",
+    "lat": 24.8664838,
+    "lng": 121.8411538,
+    "max_wave_height": 99,
+    "note": "沙底春天有花枝但量少",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "烏石港外一字堤",
+    "type": "肉粽",
+    "area": "宜蘭東部",
+    "lat": 24.8645335,
+    "lng": 121.8438905,
+    "max_wave_height": 2,
+    "note": "需烏石港搭船前往 春天花枝多",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳公園豆腐岬",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.2114942,
+    "lng": 121.6949319,
+    "max_wave_height": 0.8,
+    "note": "要涉水過去",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "粉鳥林漁港",
+    "type": "港區",
+    "area": "宜蘭東部",
+    "lat": 24.4982727,
+    "lng": 121.8423699,
+    "max_wave_height": 99,
+    "note": "冬春天港內花枝多 釣港嘴",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "十八王宮進水口",
+    "type": "肉粽",
+    "area": "淡水三芝",
+    "lat": 25.2912935,
+    "lng": 121.5966004,
+    "max_wave_height": 1.2,
+    "note": "夏天的白帶聖地 軟絲請向內靜水區釣",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳隧道下",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.203883,
+    "lng": 121.681371,
+    "max_wave_height": 1.1,
+    "note": "超淺場 約1米多深  春天有大物 貼水浪大易洗",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "相思亭",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.205432,
+    "lng": 121.67746,
+    "max_wave_height": 1.2,
+    "note": "入口附近為墓地",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "香菇礁雨傘礁",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.124652,
+    "lng": 121.872157,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "紅磚牆",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.125074,
+    "lng": 121.87368,
+    "max_wave_height": 1.1,
+    "note": "很貼水 所以浪大不建議來",
+    "good_wind_directions": [
+      "東"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "鱗山鼻 野場",
+    "type": "野場",
+    "area": "淡水三芝",
+    "lat": 25.2885965,
+    "lng": 121.512499,
+    "max_wave_height": 1.2,
+    "note": "白天必須著救生裝備 不然會被開單",
+    "good_wind_directions": [],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ]
+  },
+  {
+    "name": "麟山鼻 野場",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.2877928,
+    "lng": 121.5123255,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "萬里岬",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.1757667,
+    "lng": 121.7089888,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "番仔澳外提",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.131659,
+    "lng": 121.823021,
+    "max_wave_height": 99,
+    "note": "需要付停車費",
+    "good_wind_directions": [
+      "東",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "大溪漁港外提",
+    "type": "港區",
+    "area": "宜蘭東部",
+    "lat": 24.9395986,
+    "lng": 121.9033496,
+    "max_wave_height": 99,
+    "note": "禁釣中～重蝦 往外拋會有大砲管",
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "東",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "六塊厝",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.2425765,
+    "lng": 121.4485584,
+    "max_wave_height": 1.3,
+    "note": "釣漲滿前後 春天3-5月有軟",
+    "good_wind_directions": [
+      "東",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "南",
+      "西南",
+      "西",
+      "西北"
+    ]
+  },
+  {
+    "name": "野柳港外提綠燈旁",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.208374,
+    "lng": 121.6887746,
+    "max_wave_height": 1.3,
+    "note": "",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "望海漁巷合法釣魚區",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1382313,
+    "lng": 121.8033681,
+    "max_wave_height": 99,
+    "note": "有路燈 合法開放釣魚區 適合帶全家大小來 3月有花枝",
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "東"
+    ]
+  },
+  {
+    "name": "龍洞遊艇碼頭鯨魚",
+    "type": "港區",
+    "area": "東北角區",
+    "lat": 25.097396,
+    "lng": 121.9190204,
+    "max_wave_height": 1.2,
+    "note": "一般時段不開放進入  你懂的",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
   },
   {
     "name": "和平島公園",
     "type": "野場",
     "area": "基隆區",
-    "lat": 25.1543,
-    "lng": 121.7812,
-    "max_wave_height": 1.0,
-    "note": "礁石地形，東北季風期間風浪大需注意",
+    "lat": 25.1627115,
+    "lng": 121.762405,
+    "max_wave_height": 1.2,
+    "note": "",
     "good_wind_directions": [
+      "東南",
       "南",
-      "西南",
-      "西",
-      "東南"
+      "西南"
     ],
     "bad_wind_directions": [
-      "東北",
       "北",
-      "東"
+      "東北"
     ]
   },
   {
-    "name": "八斗子漁港",
-    "type": "港區",
+    "name": "和平島公園內",
+    "type": "野場",
     "area": "基隆區",
-    "lat": 25.1445,
-    "lng": 121.8012,
-    "max_wave_height": 99,
-    "note": "港區作釣，無浪高限制，魚種豐富",
-    "good_wind_directions": [
-      "南",
-      "西南",
-      "西",
-      "東南",
-      "北",
-      "東北",
-      "東",
-      "西北"
-    ],
-    "bad_wind_directions": []
-  },
-  {
-    "name": "鼻頭角",
-    "type": "野場",
-    "area": "東北角區",
-    "lat": 25.1247,
-    "lng": 121.9241,
+    "lat": 25.1608872,
+    "lng": 121.7699197,
     "max_wave_height": 1.2,
-    "note": "退潮後石礁外露，適合黑毛、白帶魚",
+    "note": "",
     "good_wind_directions": [
       "南",
-      "西南",
-      "西",
-      "西北"
+      "西南"
     ],
     "bad_wind_directions": [
-      "東北",
-      "東",
-      "北"
+      "北",
+      "東北"
     ]
   },
   {
-    "name": "龍洞灣",
+    "name": "200礁",
     "type": "野場",
     "area": "東北角區",
-    "lat": 25.1056,
-    "lng": 121.9312,
-    "max_wave_height": 1.0,
-    "note": "峭壁地形，浪稍大即危險，景色優美",
+    "lat": 25.1273139,
+    "lng": 121.9144807,
+    "max_wave_height": 1.2,
+    "note": "高水位時 需花$200 過去<br>退潮可涉水走回來",
     "good_wind_directions": [
-      "西",
-      "西南",
-      "南"
+      "南",
+      "西南"
     ],
     "bad_wind_directions": [
-      "東北",
-      "東",
       "北",
-      "東南"
+      "東北"
     ]
   },
   {
-    "name": "澳底漁港",
+    "name": "觀光坪 2點",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.0730239,
+    "lng": 121.9214316,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "澳仔漁港",
     "type": "港區",
     "area": "東北角區",
-    "lat": 25.0534,
-    "lng": 121.9087,
-    "max_wave_height": 99,
-    "note": "港內作釣安全，假日人多",
+    "lat": 25.0521322,
+    "lng": 121.9307833,
+    "max_wave_height": 1.3,
+    "note": "",
     "good_wind_directions": [
-      "南",
-      "西南",
-      "西",
-      "東南",
       "北",
-      "東北",
-      "東",
-      "西北"
+      "東北"
     ],
-    "bad_wind_directions": []
+    "bad_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ]
   },
   {
-    "name": "萊萊礁石",
+    "name": "金石園下",
     "type": "野場",
     "area": "東北角區",
-    "lat": 25.0312,
-    "lng": 121.8956,
+    "lat": 25.1282381,
+    "lng": 121.8372822,
     "max_wave_height": 1.2,
-    "note": "開闊礁磯，適合竿釣，需注意浪況",
+    "note": "",
     "good_wind_directions": [
-      "西",
-      "西南",
-      "南",
-      "西北"
-    ],
-    "bad_wind_directions": [
-      "東北",
-      "東",
-      "北"
-    ]
-  },
-  {
-    "name": "富貴角燈塔旁",
-    "type": "野場",
-    "area": "北海岸區",
-    "lat": 25.2981,
-    "lng": 121.5344,
-    "max_wave_height": 1.2,
-    "note": "東北季風強勁，冬季需謹慎",
-    "good_wind_directions": [
-      "南",
-      "西南",
-      "東南"
-    ],
-    "bad_wind_directions": [
-      "北",
-      "東北",
-      "西北"
-    ]
-  },
-  {
-    "name": "麟山鼻",
-    "type": "野場",
-    "area": "北海岸區",
-    "lat": 25.2756,
-    "lng": 121.5123,
-    "max_wave_height": 1.2,
-    "note": "熔岩礁石地形，漲退潮落差大",
-    "good_wind_directions": [
-      "南",
-      "西南",
-      "東南"
-    ],
-    "bad_wind_directions": [
-      "北",
-      "東北",
-      "西北"
-    ]
-  },
-  {
-    "name": "老梅石槽",
-    "type": "野場",
-    "area": "北海岸區",
-    "lat": 25.2867,
-    "lng": 121.5489,
-    "max_wave_height": 1.0,
-    "note": "石槽地形獨特，春季藻類美景，浪高限制嚴格",
-    "good_wind_directions": [
-      "南",
-      "西南",
-      "東南"
-    ],
-    "bad_wind_directions": [
-      "北",
-      "東北",
-      "西北",
-      "東"
-    ]
-  },
-  {
-    "name": "石門漁港",
-    "type": "港區",
-    "area": "北海岸區",
-    "lat": 25.2934,
-    "lng": 121.5678,
-    "max_wave_height": 99,
-    "note": "港區作釣，無浪高限制，附近有停車場",
-    "good_wind_directions": [
-      "南",
-      "西南",
-      "西",
       "東南",
-      "北",
-      "東北",
-      "東",
-      "西北"
+      "南",
+      "西南"
     ],
-    "bad_wind_directions": []
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
   },
   {
-    "name": "白沙灣旁礁岸",
+    "name": "軍艦岩",
     "type": "野場",
-    "area": "北海岸區",
-    "lat": 25.2612,
-    "lng": 121.5234,
+    "area": "東北角區",
+    "lat": 25.1286565,
+    "lng": 121.8413135,
     "max_wave_height": 1.2,
-    "note": "沙灘旁礁區，適合投釣",
+    "note": "",
     "good_wind_directions": [
-      "南",
-      "西南",
       "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "昭明宮凸礁",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1342164,
+    "lng": 121.8141349,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳斷堤前肉粽",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.2082149,
+    "lng": 121.6859478,
+    "max_wave_height": 1.2,
+    "note": "肉粽大顆不太好爬",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳公園情人洞",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.2108202,
+    "lng": 121.696348,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
       "西"
     ],
     "bad_wind_directions": [
@@ -256,23 +2364,510 @@
     ]
   },
   {
-    "name": "淡水漁人碼頭",
+    "name": "獅子山公園涼亭下",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.175758,
+    "lng": 121.705652,
+    "max_wave_height": 1.2,
+    "note": "活餌聖地",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "鼻頭漁港",
     "type": "港區",
-    "area": "北海岸區",
-    "lat": 25.1823,
-    "lng": 121.4234,
-    "max_wave_height": 99,
-    "note": "河口港區，無浪高限制，交通方便",
+    "area": "東北角區",
+    "lat": 25.1243692,
+    "lng": 121.9143632,
+    "max_wave_height": 1.3,
+    "note": "車可停旁邊 但幾乎都是活餌在插",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "海興游泳池肉粽",
+    "type": "肉粽",
+    "area": "基隆區",
+    "lat": 25.162446,
+    "lng": 121.7310575,
+    "max_wave_height": 1.2,
+    "note": "很淺 白天游泳的遊客很多，只能夜釣",
     "good_wind_directions": [
       "南",
-      "西南",
-      "西",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "富基漁港油庫",
+    "type": "肉粽",
+    "area": "淡水三芝",
+    "lat": 25.2918525,
+    "lng": 121.533442,
+    "max_wave_height": 1.2,
+    "note": "往外丟容易卡到魚網",
+    "good_wind_directions": [
+      "東",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "114k 煙仔坎",
+    "type": "野場",
+    "area": "宜蘭東部",
+    "lat": 24.9825877,
+    "lng": 121.9623101,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
       "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "外木山濱海大道公廁下",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.1647575,
+    "lng": 121.723311,
+    "max_wave_height": 1,
+    "note": "很貼水的野場，超過一米就會洗礁",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "海興游泳池跳台",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.161961,
+    "lng": 121.7321407,
+    "max_wave_height": 1.2,
+    "note": "這個點要注意掌退潮 退潮走的過來 漲太滿會走不過來",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "大香蘭",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.0260382,
+    "lng": 121.9765706,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "明光港",
+    "type": "肉粽",
+    "area": "淡水三芝",
+    "lat": 25.203586,
+    "lng": 121.6733531,
+    "max_wave_height": 1.3,
+    "note": "不確定，可能會被趕",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "林口發電廠",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.12429,
+    "lng": 121.296752,
+    "max_wave_height": 99,
+    "note": "定時會有管理員查看，可能會被開單",
+    "good_wind_directions": [
+      "西"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "將軍岩",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1282942,
+    "lng": 121.8361342,
+    "max_wave_height": 1.3,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "大頭狗岩",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1250867,
+    "lng": 121.8695662,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "南雅奇岩",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.1204467,
+    "lng": 121.8930738,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "富基漁港外提",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.2923066,
+    "lng": 121.5328563,
+    "max_wave_height": 1.5,
+    "note": "沙礁混合地偏沙地，近邊水泥結構易卡",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "石門漁港",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.295086,
+    "lng": 121.566833,
+    "max_wave_height": 99,
+    "note": "航道為沙底地 春天有 在地人都在右提肉粽朝航道丟",
+    "good_wind_directions": [
       "北",
       "東北",
-      "東",
-      "西北"
+      "東"
     ],
     "bad_wind_directions": []
+  },
+  {
+    "name": "十八王公左出水口",
+    "type": "肉粽",
+    "area": "淡水三芝",
+    "lat": 25.2928918,
+    "lng": 121.5865704,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "萬里港左舊堤",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.181369,
+    "lng": 121.694837,
+    "max_wave_height": 1.2,
+    "note": "25.181369, 121.694837",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "野柳駱駝峰",
+    "type": "野場",
+    "area": "基隆區",
+    "lat": 25.202771,
+    "lng": 121.694927,
+    "max_wave_height": 1.2,
+    "note": "能站的位置很少 礁岩地形易卡",
+    "good_wind_directions": [],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "核二小平台",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.2096105,
+    "lng": 121.6633678,
+    "max_wave_height": 1.3,
+    "note": "",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "南雅港 右堤",
+    "type": "肉粽",
+    "area": "東北角區",
+    "lat": 25.1220896,
+    "lng": 121.8890773,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "龜吼漁港停車場肉粽",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.196107,
+    "lng": 121.689745,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "中角灣",
+    "type": "野場",
+    "area": "金山萬里",
+    "lat": 25.236646,
+    "lng": 121.637894,
+    "max_wave_height": 1.1,
+    "note": "沙地 白天可丟小鐵板 夏天黃昏有透抽",
+    "good_wind_directions": [
+      "東南",
+      "南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "十八王宮出水口右提",
+    "type": "肉粽",
+    "area": "淡水三芝",
+    "lat": 25.293178,
+    "lng": 121.587178,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "後厝大家好加油站後",
+    "type": "肉粽",
+    "area": "金山萬里",
+    "lat": 25.259646,
+    "lng": 121.475144,
+    "max_wave_height": 1.2,
+    "note": "平台可坐欄杆，超淺場 只能釣滿頂",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "龍蝦嶼",
+    "type": "野場",
+    "area": "淡水三芝",
+    "lat": 25.218679,
+    "lng": 121.434301,
+    "max_wave_height": 1.1,
+    "note": "只能釣流底那1-2時 石頭露出來的時候",
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "桶盤堀漁港",
+    "type": "港區",
+    "area": "宜蘭東部",
+    "lat": 24.973427,
+    "lng": 121.936199,
+    "max_wave_height": 1.3,
+    "note": "24.973427, 121.936199",
+    "good_wind_directions": [
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": [
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "石城漁港外礁石",
+    "type": "野場",
+    "area": "宜蘭東部",
+    "lat": 24.978831,
+    "lng": 121.950249,
+    "max_wave_height": 1.2,
+    "note": "",
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "馬崗野場",
+    "type": "野場",
+    "area": "東北角區",
+    "lat": 25.019549,
+    "lng": 121.998216,
+    "max_wave_height": 1.2,
+    "note": "與海貼齊 需要穿雨鞋",
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
+  },
+  {
+    "name": "卯澳漁港",
+    "type": "港區",
+    "area": "東北角區",
+    "lat": 25.012494,
+    "lng": 121.990953,
+    "max_wave_height": 99,
+    "note": "",
+    "good_wind_directions": [
+      "東",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
   }
 ]
