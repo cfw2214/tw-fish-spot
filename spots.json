@@ -7,7 +7,7 @@
     "lng": 121.698748,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -25,7 +25,7 @@
     "lng": 121.694755,
     "max_wave_height": 1.2,
     "note": "不深 容易掛蝦 需選高一點的礁石上做釣",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "北",
@@ -40,7 +40,7 @@
     "lng": 121.6930941,
     "max_wave_height": 1.2,
     "note": "不深 容易掛蝦有時可以攔截到一些過路流水絲",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東"
     ],
@@ -59,7 +59,7 @@
     "lng": 121.6910158,
     "max_wave_height": 1.2,
     "note": "有深度漲八分 較好",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -79,7 +79,7 @@
     "lng": 121.701,
     "max_wave_height": 1.2,
     "note": "要走很遠的遠",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -99,7 +99,7 @@
     "lng": 121.6938722,
     "max_wave_height": 1.2,
     "note": "往對面的銅像丟  也可向外海丟",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -119,7 +119,7 @@
     "lng": 121.69266,
     "max_wave_height": 1.2,
     "note": "海巡常來巡",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -215,7 +215,7 @@
     "lng": 121.687387,
     "max_wave_height": 1.3,
     "note": "釣漲退潮 流停住的時候 注意海浪 浪大請勿前往 禁釣區 被抓到會開罰單",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -252,7 +252,7 @@
     "lng": 121.6939898,
     "max_wave_height": 1.2,
     "note": "場很深 釣漲滿",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -458,7 +458,7 @@
     "lng": 121.734765,
     "max_wave_height": 99,
     "note": "有專屬座位可以座 但這邊丟到對面發電廠進水口很淺很容易掛蝦，航道中間較深",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "西"
     ],
@@ -535,7 +535,7 @@
     "lng": 121.768829,
     "max_wave_height": 99,
     "note": "釣漲滿流停時 在橋上木蝦放到底  在朗上來 警察會開單",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -581,7 +581,7 @@
     "bad_wind_directions": []
   },
   {
-    "name": "和平島餐廳前",
+    "name": "和平島海產街",
     "type": "港區",
     "area": "基隆區",
     "lat": 25.154666,
@@ -590,12 +590,13 @@
     "note": "航道流強 航道中間很深 但旁邊又變淺 所以容易在朗回來的半路掛蝦",
     "allowed": true,
     "good_wind_directions": [
-      "南",
-      "西南"
-    ],
-    "bad_wind_directions": [
       "北",
       "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
     ]
   },
   {
@@ -642,7 +643,7 @@
     "lng": 121.772901,
     "max_wave_height": 99,
     "note": "會開單",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -680,7 +681,7 @@
     "lng": 121.803945,
     "max_wave_height": 1.2,
     "note": "已禁釣",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -699,7 +700,7 @@
     "lng": 121.80468,
     "max_wave_height": 1.2,
     "note": "一級危險釣場 浪大很危險  還要垂降肉粽下去",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -850,7 +851,7 @@
     "lng": 121.8984494,
     "max_wave_height": 1.2,
     "note": "會被趕",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -888,7 +889,7 @@
     "lng": 121.8881444,
     "max_wave_height": 1.2,
     "note": "大浪會洗",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南",
@@ -985,7 +986,7 @@
     "lng": 121.778614,
     "max_wave_height": 1.2,
     "note": "提已斷 請勿前往",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1040,7 +1041,7 @@
     "lng": 121.822574,
     "max_wave_height": 1.5,
     "note": "很淺易掛 只適合滿頂釣",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1052,7 +1053,7 @@
     ]
   },
   {
-    "name": "八斗子左小平台",
+    "name": "八斗子左提小平台",
     "type": "港區",
     "area": "基隆區",
     "lat": 25.145736,
@@ -1245,7 +1246,7 @@
     "lng": 121.7737052,
     "max_wave_height": 1.2,
     "note": "會被趕",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1397,7 +1398,7 @@
     "lng": 121.754338,
     "max_wave_height": 1.2,
     "note": "白天需報名才能進入，晚上為禁釣區",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南"
@@ -1427,7 +1428,7 @@
     ]
   },
   {
-    "name": "海大遊艇碼頭堤內",
+    "name": "海大遊艇碼頭堤頭",
     "type": "肉粽",
     "area": "基隆區",
     "lat": 25.155735,
@@ -1452,7 +1453,7 @@
     "lng": 121.7788838,
     "max_wave_height": 1.2,
     "note": "要走很遠",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1470,7 +1471,7 @@
     "lng": 121.7475928,
     "max_wave_height": 1.2,
     "note": "商港區 禁釣",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1842,7 +1843,7 @@
     "lng": 121.7718568,
     "max_wave_height": 99,
     "note": "要從八尺門安檢所走過來",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1987,7 +1988,7 @@
     "lng": 121.8438905,
     "max_wave_height": 2,
     "note": "需烏石港搭船前往 春天花枝多",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2007,7 +2008,7 @@
     "lng": 121.6949319,
     "max_wave_height": 0.8,
     "note": "要涉水過去",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2214,7 +2215,7 @@
     "lng": 121.9033496,
     "max_wave_height": 99,
     "note": "禁釣中～重蝦 往外拋會有大砲管",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北",
@@ -2292,7 +2293,7 @@
     "lng": 121.9190204,
     "max_wave_height": 1.2,
     "note": "一般時段不開放進入  你懂的",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2311,7 +2312,7 @@
     "lng": 121.762405,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2330,7 +2331,7 @@
     "lng": 121.7699197,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2483,7 +2484,7 @@
     "lng": 121.696348,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "西"
     ],
@@ -2651,7 +2652,7 @@
     "lng": 121.6733531,
     "max_wave_height": 1.3,
     "note": "可能會被趕",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2671,7 +2672,7 @@
     "lng": 121.296752,
     "max_wave_height": 99,
     "note": "定時會有管理員查看，可能會被開單",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "西"
     ],
@@ -2740,7 +2741,7 @@
     "area": "淡水三芝",
     "lat": 25.2923066,
     "lng": 121.5328563,
-    "max_wave_height": 1.5,
+    "max_wave_height": 1.3,
     "note": "沙礁混合地偏沙地，近邊水泥結構易卡",
     "allowed": true,
     "good_wind_directions": [
@@ -2905,7 +2906,7 @@
     "lng": 121.587178,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "東南",
       "南",
@@ -3118,5 +3119,58 @@
       "西南"
     ],
     "bad_wind_directions": []
+  },
+  {
+    "name": "正濱和平島漁船加油站",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.154023,
+    "lng": 121.767845,
+    "max_wave_height": 99,
+    "note": "作釣平坦的釣點，但白天會有漁船靠岸加油，請勿影響漁船作業",
+    "allowed": true,
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "和平橋福德廟",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.154151,
+    "lng": 121.768479,
+    "max_wave_height": 99,
+    "note": "級少數能躲雨釣的釣點，有燈還有廁所，只是航道中間很掛",
+    "allowed": true,
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "海大遊艇碼頭內",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.1525,
+    "lng": 121.775615,
+    "max_wave_height": 99,
+    "note": "沒什麼貨，但春天可能有花枝",
+    "allowed": true,
+    "good_wind_directions": [
+      "東",
+      "東南",
+      "南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北"
+    ]
   }
 ]
