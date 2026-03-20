@@ -308,7 +308,7 @@
     "lng": 121.688717,
     "max_wave_height": 99,
     "note": "沙地 很觀光的安全點春天拖底 會遇到花枝",
-    "allowed": true,
+    "allowed": false,
     "good_wind_directions": [
       "北",
       "東北"
@@ -3083,5 +3083,40 @@
     "bad_wind_directions": [
       "北"
     ]
+  },
+  {
+    "name": "龜吼漁港外提內",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.19568,
+    "lng": 121.689336,
+    "max_wave_height": 99,
+    "note": "安全有路燈，海巡可能有時會來關切一下",
+    "allowed": true,
+    "good_wind_directions": [
+      "東北",
+      "東",
+      "東南"
+    ],
+    "bad_wind_directions": []
+  },
+  {
+    "name": "東澳漁港內小提",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.203505,
+    "lng": 121.692266,
+    "max_wave_height": 99,
+    "note": "海巡看到會趕，但春天3月往中間丟有花枝",
+    "allowed": false,
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": []
   }
 ]
