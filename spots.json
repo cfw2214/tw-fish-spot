@@ -3066,5 +3066,22 @@
       "北",
       "東北"
     ]
+  },
+  {
+    "name": "野柳漁港合法釣區",
+    "type": "港區",
+    "area": "金山萬里",
+    "lat": 25.206014,
+    "lng": 121.688335,
+    "max_wave_height": 99,
+    "note": "合法釣區 有路燈廟那邊有廁所，適合新手 親子作釣",
+    "allowed": true,
+    "good_wind_directions": [
+      "東",
+      "東南"
+    ],
+    "bad_wind_directions": [
+      "北"
+    ]
   }
 ]
