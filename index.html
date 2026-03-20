@@ -138,6 +138,7 @@
       <section id="recommend-section">
         <div class="section-header">
           <div class="section-title">🎯 今日推薦釣點 <span class="badge-new">LIVE</span></div>
+          <div id="page-indicator" style="font-size:.8rem;color:var(--text2);display:none;"></div>
         </div>
         <div id="wave-alert" class="wave-alert" style="display:none;">🌊 <span id="wave-message"></span></div>
         <div id="recommend-grid"><div class="loading-placeholder"><div class="spinner"></div><div>分析今日海況中...</div></div></div>
@@ -325,10 +326,29 @@
       const total=pool.length,totalPages=Math.ceil(total/RECOMMEND_PER_PAGE),picks=pool.slice(recommendationPage*RECOMMEND_PER_PAGE,(recommendationPage+1)*RECOMMEND_PER_PAGE);
       const ranks=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣'];
       const cards=picks.map((r,i)=>recommendationCard(r,ranks[i]||`${i+1}`)).join('');
-      const pager=totalPages>1?`<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px;padding-top:12px;border-top:1px solid var(--border)"><button class="btn-mini" onclick="changeRecommendationPage(-1)" ${recommendationPage===0?'disabled style="opacity:.4;cursor:default"':''}>◀ 上一頁</button><span style="font-size:.8rem;color:var(--text2)">第 ${recommendationPage+1} 頁 / 共 ${totalPages} 頁（${total} 個釣點）</span><button class="btn-mini" onclick="changeRecommendationPage(1)" ${recommendationPage>=totalPages-1?'disabled style="opacity:.4;cursor:default"':''}>下一頁 ▶</button></div>`:'';
+
+      // ✨ 更新标题旁边的页数显示
+      const pageIndicator = document.getElementById('page-indicator');
+      if(totalPages > 1){
+        pageIndicator.style.display = 'block';
+        pageIndicator.textContent = `(${recommendationPage+1} / ${totalPages} 頁)`;
+      }else{
+        pageIndicator.style.display = 'none';
+      }
+
+      const pager=totalPages>1?`<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px;padding-top:12px;border-top:1px solid var(--border)"><button class="btn-mini" onclick="changeRecommendationPage(-1, true)" ${recommendationPage===0?'disabled style="opacity:.4;cursor:default"':''}>◀ 上一頁</button><span style="font-size:.8rem;color:var(--text2)">第 ${recommendationPage+1} 頁 / 共 ${totalPages} 頁（${total} 個釣點）</span><button class="btn-mini" onclick="changeRecommendationPage(1, true)" ${recommendationPage>=totalPages-1?'disabled style="opacity:.4;cursor:default"':''}>下一頁 ▶</button></div>`:'';
       document.getElementById('recommend-grid').innerHTML=cards+pager;
     }
-    function changeRecommendationPage(dir){const totalPages=Math.ceil(recommendationPool.length/RECOMMEND_PER_PAGE);recommendationPage=Math.max(0,Math.min(totalPages-1,recommendationPage+dir));renderRecommendationPage(recommendationPool)}
+    function changeRecommendationPage(dir, shouldScroll = false){
+      const totalPages=Math.ceil(recommendationPool.length/RECOMMEND_PER_PAGE);
+      recommendationPage=Math.max(0,Math.min(totalPages-1,recommendationPage+dir));
+      renderRecommendationPage(recommendationPool);
+
+      // ✨ 手機版自動滾動到推薦區域
+      if(shouldScroll && window.innerWidth <= 768){
+        document.getElementById('recommend-section').scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }
     function refreshRecommendations(){if(recommendationPool.length){recommendationPool=shuffleArray(recommendationPool);recommendationPage=0;renderRecommendationPage(recommendationPool)}}
     async function initRecommendations(){
       if(!SPOTS.length){document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有可用釣點資料</div>';return;}
