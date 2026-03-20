@@ -7,7 +7,7 @@
     "lng": 121.698748,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -25,7 +25,7 @@
     "lng": 121.694755,
     "max_wave_height": 1.2,
     "note": "不深 容易掛蝦 需選高一點的礁石上做釣",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [],
     "bad_wind_directions": [
       "北",
@@ -40,7 +40,7 @@
     "lng": 121.6930941,
     "max_wave_height": 1.2,
     "note": "不深 容易掛蝦有時可以攔截到一些過路流水絲",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東"
     ],
@@ -59,7 +59,7 @@
     "lng": 121.6910158,
     "max_wave_height": 1.2,
     "note": "有深度漲八分 較好",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -79,7 +79,7 @@
     "lng": 121.701,
     "max_wave_height": 1.2,
     "note": "要走很遠的遠",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -99,7 +99,7 @@
     "lng": 121.6938722,
     "max_wave_height": 1.2,
     "note": "往對面的銅像丟  也可向外海丟",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -119,7 +119,7 @@
     "lng": 121.69266,
     "max_wave_height": 1.2,
     "note": "海巡常來巡",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -215,7 +215,7 @@
     "lng": 121.687387,
     "max_wave_height": 1.3,
     "note": "釣漲退潮 流停住的時候 注意海浪 浪大請勿前往 禁釣區 被抓到會開罰單",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -252,7 +252,7 @@
     "lng": 121.6939898,
     "max_wave_height": 1.2,
     "note": "場很深 釣漲滿",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -308,7 +308,7 @@
     "lng": 121.688717,
     "max_wave_height": 99,
     "note": "沙地 很觀光的安全點春天拖底 會遇到花枝",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -458,7 +458,7 @@
     "lng": 121.734765,
     "max_wave_height": 99,
     "note": "有專屬座位可以座 但這邊丟到對面發電廠進水口很淺很容易掛蝦，航道中間較深",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "西"
     ],
@@ -535,7 +535,7 @@
     "lng": 121.768829,
     "max_wave_height": 99,
     "note": "釣漲滿流停時 在橋上木蝦放到底  在朗上來 警察會開單",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -642,7 +642,7 @@
     "lng": 121.772901,
     "max_wave_height": 99,
     "note": "會開單",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -680,7 +680,7 @@
     "lng": 121.803945,
     "max_wave_height": 1.2,
     "note": "已禁釣",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -699,7 +699,7 @@
     "lng": 121.80468,
     "max_wave_height": 1.2,
     "note": "一級危險釣場 浪大很危險  還要垂降肉粽下去",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -850,7 +850,7 @@
     "lng": 121.8984494,
     "max_wave_height": 1.2,
     "note": "會被趕",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -888,7 +888,7 @@
     "lng": 121.8881444,
     "max_wave_height": 1.2,
     "note": "大浪會洗",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南",
@@ -985,7 +985,7 @@
     "lng": 121.778614,
     "max_wave_height": 1.2,
     "note": "提已斷 請勿前往",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -1245,7 +1245,7 @@
     "lng": 121.7737052,
     "max_wave_height": 1.2,
     "note": "會被趕",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1397,7 +1397,7 @@
     "lng": 121.754338,
     "max_wave_height": 1.2,
     "note": "白天需報名才能進入，晚上為禁釣區",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南"
@@ -1452,7 +1452,7 @@
     "lng": 121.7788838,
     "max_wave_height": 1.2,
     "note": "要走很遠",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -1470,7 +1470,7 @@
     "lng": 121.7475928,
     "max_wave_height": 1.2,
     "note": "商港區 禁釣",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -1842,7 +1842,7 @@
     "lng": 121.7718568,
     "max_wave_height": 99,
     "note": "要從八尺門安檢所走過來",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -1987,7 +1987,7 @@
     "lng": 121.8438905,
     "max_wave_height": 2,
     "note": "需烏石港搭船前往 春天花枝多",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2007,7 +2007,7 @@
     "lng": 121.6949319,
     "max_wave_height": 0.8,
     "note": "要涉水過去",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東",
       "東南",
@@ -2027,7 +2027,7 @@
     "lng": 121.8423699,
     "max_wave_height": 99,
     "note": "冬春天港內花枝多 釣港嘴 海巡看到會趕",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2214,7 +2214,7 @@
     "lng": 121.9033496,
     "max_wave_height": 99,
     "note": "禁釣中～重蝦 往外拋會有大砲管",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北",
@@ -2292,7 +2292,7 @@
     "lng": 121.9190204,
     "max_wave_height": 1.2,
     "note": "一般時段不開放進入  你懂的",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "北",
       "東北"
@@ -2311,7 +2311,7 @@
     "lng": 121.762405,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "東南",
       "南",
@@ -2330,7 +2330,7 @@
     "lng": 121.7699197,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "南",
       "西南"
@@ -2483,7 +2483,7 @@
     "lng": 121.696348,
     "max_wave_height": 1.2,
     "note": "",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "西"
     ],
@@ -2646,7 +2646,7 @@
   {
     "name": "明光港",
     "type": "肉粽",
-    "area": "淡水三芝",
+    "area": "金山萬里",
     "lat": 25.203586,
     "lng": 121.6733531,
     "max_wave_height": 1.3,
@@ -2671,7 +2671,7 @@
     "lng": 121.296752,
     "max_wave_height": 99,
     "note": "定時會有管理員查看，可能會被開單",
-    "allowed": false,
+    "allowed": true,
     "good_wind_directions": [
       "西"
     ],
