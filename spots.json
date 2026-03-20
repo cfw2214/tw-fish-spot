@@ -3172,5 +3172,25 @@
       "北",
       "東北"
     ]
+  },
+  {
+    "name": "社寮橋下",
+    "type": "港區",
+    "area": "基隆區",
+    "lat": 25.156636,
+    "lng": 121.772784,
+    "max_wave_height": 99,
+    "note": "可躲雨釣 但海巡會趕",
+    "allowed": false,
+    "good_wind_directions": [
+      "北",
+      "東北"
+    ],
+    "bad_wind_directions": [
+      "東",
+      "東南",
+      "南",
+      "西南"
+    ]
   }
 ]
