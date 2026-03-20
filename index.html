@@ -69,7 +69,7 @@
     <button id="hamburger" onclick="toggleSidebar()">☰</button>
     <h1>🎣 北台灣海釣天氣小幫手</h1>
     <div class="header-actions">
-      <button class="btn-mini" onclick="addFavoritePrompt()">⭐ 加入最愛</button>
+      <button class="btn-mini" onclick="shareLink()">📤 分享給龜蜜</button>
     </div>
   </header>
   <div id="sb-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
@@ -84,6 +84,9 @@
       <div class="sidebar-section">
         <h3>📊 釣點統計</h3>
         <div style="font-size:.78rem;color:var(--text2)">已載入 <span id="spots-num" style="color:var(--accent);font-weight:700">0</span> 個釣點</div>
+      </div>
+      <div class="sidebar-section" style="margin-top:12px">
+        <div id="paypal-buttons-container" style="display:flex;justify-content:center;"></div>
       </div>
     </aside>
     <main id="main-content">
@@ -198,30 +201,26 @@
     function initTypeChips(){const chips=document.querySelectorAll('.type-chips .chip');chips.forEach(chip=>{chip.onclick=()=>{chips.forEach(c=>c.classList.remove('active'));chip.classList.add('active')}})}
     function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sb-overlay');if(!sb||!ov)return;sb.classList.toggle('open');ov.style.display=sb.classList.contains('open')?'block':'none'}
     function openMap(lat,lng){window.open(`https://www.google.com/maps?q=${lat},${lng}`,'_blank')}
-    function addFavoritePrompt(){
+    async function shareLink(){
       const url = window.location.href;
-      const title = document.title;
-
-      // 嘗試調用瀏覽器原生加入書籤介面（部分 Android 瀏覽器可能支援）
-      if (window.external && window.external.AddFavorite) {
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast('已複製網頁連結，快分享給你的好釣友吧！');
+      } catch (err) {
+        // 降級方案：使用 execCommand
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
         try {
-          window.external.AddFavorite(url, title);
-          showToast('✅ 已嘗試加入書籤');
-          return;
-        } catch(e) {}
-      }
-
-      // iOS Safari
-      if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        showToast('📱 請按分享按鈕 → 「加入書籤」');
-        return;
-      }
-
-      // Android Chrome 及其他瀏覽器：提示手動按鈕或選單
-      if (/Android/i.test(navigator.userAgent)) {
-        showToast('🤖 請按選單（⋮）→ 星號圖示 加入書籤');
-      } else {
-        showToast('請按 Ctrl+D 加入書籤');
+          document.execCommand('copy');
+          showToast('已複製網頁連結，快分享給你的好釣友吧！');
+        } catch (e) {
+          showToast('請手動複製網址分享給朋友', true);
+        }
+        document.body.removeChild(textArea);
       }
     }
     window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const btn=document.getElementById('install-btn');if(btn)btn.style.display='inline-flex';});
@@ -614,6 +613,39 @@
     }
     function initPage(){const today=getTWDateString();const dateStart=document.getElementById('input-date');const dateEnd=document.getElementById('input-date-end');if(dateStart)dateStart.value=today;if(dateEnd)dateEnd.value=today;const twNow=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));const startHour=twNow.getHours();const endHour=(startHour+4)%24;fillHourOptions('input-time-start',startHour);fillHourOptions('input-time-end',endHour);initAreaChips();initTypeChips();renderFavList();loadSpots()}
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initPage);else initPage();
+
+    // PayPal 赞助按钮
+    (function(){
+      const script=document.createElement('script');
+      script.src='https://www.paypal.com/sdk/js?client-id=BAAsO9WJem_rY2oNrqMIwlE9EjfdduwA3_jvZh9xPFY0IhTMW4pnTMXqvCCZRdFclifxC6job_RZbpikEI&components=hosted-buttons&disable-funding=venmo&currency=TWD';
+      script.onload=function(){
+        paypal.Buttons({
+          style:{
+            layout:'horizontal',
+            color:'gold',
+            shape:'rect',
+            label:'donate'
+          },
+          createOrder:function(data,actions){
+            return actions.order.create({
+              purchase_units:[{
+                amount:{value:'150'}
+              }]
+            });
+          },
+          onApprove:function(data,actions){
+            return actions.order.capture().then(function(details){
+              showToast('感謝您的贊助 ❤️');
+            }).catch(function(err){
+              showToast('贊助失敗，請稍後再試',true);
+            });
+          }
+        }).render('#paypal-buttons-container').catch(function(err){
+          console.error('PayPal按渲染失敗:',err);
+        });
+      };
+      document.head.appendChild(script);
+    })();
   </script>
 </body>
 </html>
