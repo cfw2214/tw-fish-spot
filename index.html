@@ -86,7 +86,35 @@
         <div style="font-size:.78rem;color:var(--text2)">已載入 <span id="spots-num" style="color:var(--accent);font-weight:700">0</span> 個釣點</div>
       </div>
       <div class="sidebar-section" style="margin-top:12px">
-        <div id="paypal-buttons-container" style="display:flex;justify-content:center;"></div>
+        <div id="paypal-buttons-container" style="display:flex;justify-content:center;margin-bottom:12px;"></div>
+        <script src="https://www.paypal.com/sdk/js?client-id=BAAsO9WJem_rY2oNrqMIwlE9EjfdduwA3_jvZh9xPFY0IhTMW4pnTMXqvCCZRdFclifxC6job_RZbpikEI&components=hosted-buttons&disable-funding=venmo&currency=TWD"></script>
+        <script>
+          paypal.Buttons({
+            style: {
+              layout: 'horizontal',
+              color: 'gold',
+              shape: 'rect',
+              label: 'donate'
+            },
+            createOrder: function(data, actions) {
+              return actions.order.create({
+                purchase_units: [{
+                  amount: { value: '150' }
+                }]
+              });
+            },
+            onApprove: function(data, actions) {
+              return actions.order.capture().then(function(details) {
+                showToast('感謝您的贊助 ❤️');
+              }).catch(function(err) {
+                showToast('贊助失敗，請稍後再試', true);
+              });
+            }
+          }).render('#paypal-buttons-container').catch(function(err) {
+            console.error('PayPal按渲染失敗:', err);
+            document.getElementById('paypal-buttons-container').innerHTML = '<div style="font-size:.75rem;color:var(--text2);text-align:center;">載入中...</div>';
+          });
+        </script>
       </div>
     </aside>
     <main id="main-content">
@@ -613,39 +641,6 @@
     }
     function initPage(){const today=getTWDateString();const dateStart=document.getElementById('input-date');const dateEnd=document.getElementById('input-date-end');if(dateStart)dateStart.value=today;if(dateEnd)dateEnd.value=today;const twNow=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));const startHour=twNow.getHours();const endHour=(startHour+4)%24;fillHourOptions('input-time-start',startHour);fillHourOptions('input-time-end',endHour);initAreaChips();initTypeChips();renderFavList();loadSpots()}
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initPage);else initPage();
-
-    // PayPal 赞助按钮
-    (function(){
-      const script=document.createElement('script');
-      script.src='https://www.paypal.com/sdk/js?client-id=BAAsO9WJem_rY2oNrqMIwlE9EjfdduwA3_jvZh9xPFY0IhTMW4pnTMXqvCCZRdFclifxC6job_RZbpikEI&components=hosted-buttons&disable-funding=venmo&currency=TWD';
-      script.onload=function(){
-        paypal.Buttons({
-          style:{
-            layout:'horizontal',
-            color:'gold',
-            shape:'rect',
-            label:'donate'
-          },
-          createOrder:function(data,actions){
-            return actions.order.create({
-              purchase_units:[{
-                amount:{value:'150'}
-              }]
-            });
-          },
-          onApprove:function(data,actions){
-            return actions.order.capture().then(function(details){
-              showToast('感謝您的贊助 ❤️');
-            }).catch(function(err){
-              showToast('贊助失敗，請稍後再試',true);
-            });
-          }
-        }).render('#paypal-buttons-container').catch(function(err){
-          console.error('PayPal按渲染失敗:',err);
-        });
-      };
-      document.head.appendChild(script);
-    })();
   </script>
 </body>
 </html>
