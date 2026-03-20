@@ -2919,11 +2919,11 @@
   {
     "name": "後厝大家好加油站後",
     "type": "肉粽",
-    "area": "金山萬里",
+    "area": "淡水三芝",
     "lat": 25.259646,
     "lng": 121.475144,
     "max_wave_height": 1.2,
-    "note": "平台可坐欄杆，超淺場 只能釣滿頂",
+    "note": "平台可坐欄杆，超淺場 只能釣滿頂前後",
     "allowed": true,
     "good_wind_directions": [
       "東南",
