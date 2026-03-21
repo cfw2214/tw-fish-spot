@@ -7,7 +7,136 @@ app.use(express.json());
 
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
 const WEBSITE_URL = 'https://cfw2214.github.io/tw-fish-spot';
+const express = require('express');
+const axios = require('axios');
+require('dotenv').config();
+const fs = require('fs');
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+
+// 加載釣點數據
+let spotsData = [];
+try {
+    const spotsPath = './webhook-server/spots.json';
+    if (fs.existsSync(spotsPath)) {
+          spotsData = JSON.parse(fs.readFileSync(spotsPath, 'utf8'));
+          console.log(`✅ 已加載 ${spotsData.length} 個釣點`);
+    } else {
+          console.warn('⚠️  spots.json 文件未找到');
+    }
+} catch (error) {
+    console.error('❌ 加載 spots.json 失敗:', error.message);
+}
+
+app.use(express.json());
+
+// 健康檢查端點
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// LINE Webhook 端點
+app.post('/webhook', (req, res) => {
+    console.log('📩 收到 webhook 請求');
+
+    // 立即返回 200，告訴 LINE 已收到
+    res.status(200).json({ message: 'ok' });
+
+    // 在後台處理事件
+    try {
+          const events = req.body.events || [];
+          console.log(`⏳ 處理 ${events.length} 個事件`);
+
+          events.forEach((event) => {
+                  if (event.type === 'message' && event.message.type === 'text') {
+                            console.log(`📝 用戶訊息: ${event.message.text}`);
+                            handleUserMessage(event.replyToken, event.message.text);
+                  }
+          });
+    } catch (error) {
+          console.error('❌ 處理 webhook 事件出錯:', error);
+    }
+});
+
+// 處理用戶訊息
+function handleUserMessage(replyToken, userMessage) {
+    try {
+          let responseText = '';
+
+          // 搜尋釣點
+          const spot = spotsData.find(s => 
+                  s.name.toLowerCase().includes(userMessage.toLowerCase()) ||
+                  s.area.toLowerCase().includes(userMessage.toLowerCase())
+                );
+
+          if (spot) {
+                  responseText = `🎣 ${spot.name}\n`;
+                  responseText += `📍 ${spot.area}\n`;
+                  responseText += `🌡️ ${spot.weather || '天氣資訊未更新'}\n`;
+                  responseText += `💧 水溫: ${spot.temperature || '未知'}°C\n`;
+                  responseText += `🌊 浪高: ${spot.waveHeight || '未知'}米`;
+          } else {
+                  responseText = '找不到該釣點。請試試其他名稱，例如：\n' +
+                            '• 基隆\n' +
+                            '• 宜蘭\n' +
+                            '• 台中\n' +
+                            '• 高雄';
+          }
+
+          replyToUser(replyToken, responseText);
+    } catch (error) {
+          console.error('❌ 處理用戶訊息出錯:', error);
+          replyToUser(replyToken, '❌ 處理訊息時出錯，請稍後再試');
+    }
+}
+
+// 回覆用戶
+async function replyToUser(replyToken, responseText) {
+    try {
+          if (!LINE_CHANNEL_ACCESS_TOKEN) {
+                  console.error('❌ 錯誤: LINE_CHANNEL_ACCESS_TOKEN 未設定');
+                  return;
+          }
+
+          const response = await axios.post(
+                  'https://api.line.biz/v2/bot/message/reply',
+            {
+                      replyToken: replyToken,
+                      messages: [
+                        {
+                                      type: 'text',
+                                      text: responseText
+                        }
+                                ]
+            },
+            {
+                      headers: {
+                                  'Content-Type': 'application/json',
+                                  'Authorization': `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`
+                      }
+            }
+                );
+
+          console.log('✅ 回覆成功:', response.status);
+    } catch (error) {
+          console.error('❌ 回覆失敗:', error.response?.status, error.response?.data || error.message);
+    }
+}
+
+// 啟動服務器
+app.listen(PORT, () => {
+    console.log(`🚀 釣點天氣 Bot 服務器運行在 port ${PORT}`);
+    console.log(`📡 Webhook URL: https://tw-fish-spot-production.up.railway.app/webhook`);
+    console.log(`💾 已加載 ${spotsData.length} 個釣點`);
+});
+
+// 優雅關閉
+process.on('SIGTERM', () => {
+    console.log('📴 服務器關閉中...');
+    process.exit(0);
+});
 let spotsData = [];
 
 async function loadSpotsData() {
