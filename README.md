@@ -1,2 +1,2 @@
-# fish-point
-Fish Point - HTML web project
+# tw-fish-spot
+tw-fish-spot - HTML web project
