@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.0</title>
+  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.5</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#0a1628;--bg2:#0f2040;--card:#132545;--card2:#1a3060;--accent:#00b4d8;--accent2:#0077b6;--gold:#f4a261;--green:#2ec4b6;--red:#e63946;--text:#e0f0ff;--text2:#8ab4cc;--border:#1e3a5f;--radius:12px}
@@ -42,7 +42,8 @@
     .rec-rank{position:absolute;top:12px;right:12px;font-size:1.4rem;opacity:.6}.rec-name{font-size:.95rem;font-weight:700;margin-bottom:6px;padding-right:30px}
     .rec-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}.badge{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:700}
     .badge-野場{background:rgba(244,162,97,.2);color:var(--gold);border:1px solid rgba(244,162,97,.4)}.badge-港區{background:rgba(230,57,70,.15);color:#ff8fa3;border:1px solid rgba(230,57,70,.3)}.badge-肉粽{background:rgba(46,196,182,.2);color:var(--green);border:1px solid rgba(46,196,182,.4)}.badge-area{background:rgba(0,180,216,.15);color:var(--accent);border:1px solid rgba(0,180,216,.3)}
-    .suitability{font-size:.72rem;padding:3px 10px;border-radius:10px;font-weight:700}.suit-great{background:rgba(46,196,182,.2);color:var(--green);border:1px solid rgba(46,196,182,.4)}.suit-ok{background:rgba(244,162,97,.2);color:var(--gold);border:1px solid rgba(244,162,97,.4)}.suit-bad{background:rgba(230,57,70,.2);color:var(--red);border:1px solid rgba(230,57,70,.4)}
+    .badge-temp-low{background:rgba(0,180,216,.15);color:var(--accent);border:1px solid var(--accent)}.badge-temp-mid{background:rgba(255,255,255,.1);color:var(--text);border:1px solid var(--text)}.badge-temp-high{background:rgba(230,57,70,.2);color:var(--red);border:1px solid var(--red)}
+    .suitability{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:700}.suit-great{background:rgba(46,196,182,.2);color:var(--green);border:1px solid rgba(46,196,182,.4)}.suit-ok{background:rgba(244,162,97,.2);color:var(--gold);border:1px solid rgba(244,162,97,.4)}.suit-bad{background:rgba(230,57,70,.2);color:var(--red);border:1px solid rgba(230,57,70,.4)}
     .score-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:10px}.score-bar-fill{height:100%;border-radius:2px}
     .rec-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}.rec-stat{font-size:.78rem;color:var(--text)}.rec-stat strong{color:var(--text)}
     .tide-mini{background:var(--card2);border-radius:8px;padding:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:10px}
@@ -178,7 +179,7 @@
       </div>
     </div>
   </div>
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.0</footer>
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.5</footer>
   <script>
     const CWA_KEY='CWA-668A5759-9FC3-4C75-91A3-F84C27565A7A';
     const DEFAULT_SPOTS=[];
@@ -250,7 +251,7 @@
     function showToast(msg,isError=false){const t=document.createElement('div');t.textContent=msg;t.style.cssText=`position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:${isError?'var(--red)':'var(--accent2)'};color:#fff;padding:10px 20px;border-radius:20px;font-size:.85rem;z-index:999`;document.body.appendChild(t);setTimeout(()=>t.remove(),2500)}
     function degToDir(deg){return['北','東北','東','東南','南','西南','西','西北'][Math.round(deg/45)%8]}
     function msToBeaufort(ms){const scale=[0.3,1.6,3.4,5.5,8.0,10.8,13.9,17.2,20.8,24.5,28.5,32.7];for(let i=0;i<scale.length;i++){if(ms<scale[i])return i}return 12}
-    function getSuitabilityLabel(score){if(score>=4)return '<span class="suitability suit-great">✅ 適合出釣</span>';if(score>=3)return '<span class="suitability suit-ok">⚠️ 尚可</span>';return '<span class="suitability suit-bad">❌ 不建議</span>'}
+    function getSuitabilityLabel(score){if(score>=4)return '<span class="suitability suit-great">✅ 適合作釣</span>';if(score>=3)return '<span class="suitability suit-ok">⚠️ 尚可</span>';return '<span class="suitability suit-bad">❌ 不建議</span>'}
     function calcScore(spot,wave,beaufort,windDir){let s=5;const max=spot.max_wave_height===99?999:spot.max_wave_height;if(wave>max)s-=3;else if(wave>max*0.8)s-=1;if(beaufort>5)s-=3;else if(beaufort>3)s-=1;if(windDir&&spot.bad_wind_directions?.includes(windDir))s-=1;if(windDir&&spot.good_wind_directions?.includes(windDir))s+=1;return Math.max(1,Math.min(5,s))}
     function mockTides(){const r=()=>String(Math.floor(Math.random()*59)).padStart(2,'0');return[{time:`03:${r()}`,type:'低潮',height:(Math.random()*.4+.2).toFixed(1)},{time:`09:${r()}`,type:'高潮',height:(Math.random()*.6+1.4).toFixed(1)},{time:`15:${r()}`,type:'低潮',height:(Math.random()*.4+.2).toFixed(1)},{time:`21:${r()}`,type:'高潮',height:(Math.random()*.6+1.4).toFixed(1)}]}
     function toRad(deg){return deg*Math.PI/180}
@@ -316,6 +317,7 @@
       }
     }
     function recommendationCard(r,rank){
+      console.log('🎴 生成卡片:', r.spot.name, '| temp=', r.temp, '| rain=', r.rain, '| wave=', r.wave);
       const isFav=FAVS.find(f=>f.name===r.spot.name);const max=r.spot.max_wave_height===99?999:r.spot.max_wave_height;
       const barColor=r.score>=4?'var(--green)':r.score>=3?'var(--gold)':'var(--red)';
 
@@ -329,6 +331,11 @@
       // 降雨概率顏色：0-30%白色，40-60%橘色，70-100%紅色
       const rain = r.rain !== undefined ? r.rain : 0;
       const rainColor = rain>=70?'var(--red)':rain>=40?'var(--gold)':'var(--text)';
+
+      // 溫度顏色 class：17°C以下藍色，18-29°C白色，30°C以上紅色
+      let tempBadgeClass = 'badge-temp-mid';
+      if(r.temp <= 17) tempBadgeClass = 'badge-temp-low';
+      else if(r.temp >= 30) tempBadgeClass = 'badge-temp-high';
 
       // 潮差顏色：大紅色、中橘色、小深藍
       let tideRangeColor='var(--text)';
@@ -350,17 +357,17 @@
       const forbiddenBadge = r.spot.allowed === false
         ? `<span class="badge" style="background:rgba(230,57,70,.2);color:#ff8fa3;border:1px solid rgba(230,57,70,.4)">❌ 禁釣區</span>`
         : '';
-      // 先組裝 rec-stats 內部結構
+      // 先組裝 rec-stats 內部結構（移除溫度，改為放在 rec-meta）
       const statsHtml =
         `<div class="rec-stat"><span style="color:var(--text2)">風力：</span><strong style="color:${windColor} !important">${beaufort}級</strong></div>` +
         `<div class="rec-stat"><span style="color:var(--text2)">風向：</span><strong style="color:${windDirColor} !important">${r.wd}</strong></div>` +
-        `<div class="rec-stat"><span style="color:var(--text2)">降雨機率：</span><strong style="color:${rainColor} !important">${rain}%</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">降雨率：</span><strong style="color:${rainColor} !important">${rain}%</strong></div>` +
         `<div class="rec-stat"><span style="color:var(--text2)">浪高🌊 </span><strong style="color:${waveColor} !important">${r.wave}m</strong></div>` +
         `<div class="rec-stat"><span style="color:var(--text2)">潮差：</span><strong style="color:${tideRangeColor} !important">${r.tideType.replace(/^潮差：/, '')||'無資料'}</strong></div>` +
         (Number.isFinite(r.distance) ?
           `<div class="rec-stat"><span style="color:var(--text2)">🚗 距離</span><strong style="color:${waveColor} !important">${Math.round(r.distance)} km</strong></div>` : '');
 
-      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}</div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="openMap(${r.spot.lat}, ${r.spot.lng})" style="margin-right:8px;">🗺️ 地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
+      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}<span class="badge ${tempBadgeClass}">🌡️ ${r.temp}°C</span></div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="openMap(${r.spot.lat}, ${r.spot.lng})" style="margin-right:8px;">🗺️ 地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     function renderRecommendationPage(pool){
       const total=pool.length,totalPages=Math.ceil(total/RECOMMEND_PER_PAGE),picks=pool.slice(recommendationPage*RECOMMEND_PER_PAGE,(recommendationPage+1)*RECOMMEND_PER_PAGE);
