@@ -132,7 +132,6 @@ process.on('SIGTERM', () => {
     console.log('📴 服務器關閉中...');
     process.exit(0);
 });
-let spotsData = [];
 
 async function loadSpotsData() {
   try {
@@ -350,7 +349,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Webhook 伺服器運行於 http://localhost:${PORT}`);
   console.log(`📡 Webhook 端點: http://localhost:${PORT}/webhook`);
