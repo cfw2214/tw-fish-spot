@@ -11,8 +11,6 @@ const WEBSITE_URL = 'https://cfw2214.github.io/tw-fish-spot';
 const fs = require('fs');
 
 const PORT = process.env.PORT || 3000;
-const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-
 // 加載釣點數據
 let spotsData = [];
 try {
