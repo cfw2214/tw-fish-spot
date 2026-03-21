@@ -7,12 +7,9 @@ app.use(express.json());
 
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
 const WEBSITE_URL = 'https://cfw2214.github.io/tw-fish-spot';
-const express = require('express');
-const axios = require('axios');
-require('dotenv').config();
+
 const fs = require('fs');
 
-const app = express();
 const PORT = process.env.PORT || 3000;
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
 
