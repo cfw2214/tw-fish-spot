@@ -121,10 +121,6 @@ async function replyToUser(replyToken, responseText) {
 }
 
 // 啟動服務器
-app.listen(PORT, () => {
-    console.log(`🚀 釣點天氣 Bot 服務器運行在 port ${PORT}`);
-    console.log(`📡 Webhook URL: https://tw-fish-spot-production.up.railway.app/webhook`);
-    console.log(`💾 已加載 ${spotsData.length} 個釣點`);
 });
 
 // 優雅關閉
