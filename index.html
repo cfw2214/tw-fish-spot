@@ -131,11 +131,12 @@
             </div>
           </div>
           <div class="filter-group filter-row-full">
-            <label>🎣 釣點類型</label>
+            <label>🎣 釣點類型 <span style="font-size:.7rem;color:var(--text2);margin-left:4px">(可複選)</span></label>
             <div class="type-chips">
-              <div class="chip active" data-type="all">全部</div>
+              <div class="chip" data-type="all">全部</div>
               <div class="chip" data-type="野場">🏔️ 野場</div>
               <div class="chip" data-type="港區">⚓ 港區</div>
+              <div class="chip" data-type="肉粽">🗿 肉粽</div>
             </div>
           </div>
           <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
@@ -211,7 +212,40 @@
         chip.classList.add('active');
       }
     }});}
-    function initTypeChips(){const chips=document.querySelectorAll('.type-chips .chip');chips.forEach(chip=>{chip.onclick=()=>{chips.forEach(c=>c.classList.remove('active'));chip.classList.add('active')}})}
+    function initTypeChips(){
+      const chips = document.querySelectorAll('.type-chips .chip');
+      const allChip = document.querySelector('.type-chips [data-type="all"]');
+      chips.forEach(chip => {
+        chip.onclick = () => {
+          // 「全部」邏輯：點擊全部時，清除其他並選中全部；點擊其他時，取消全部
+          if(chip.dataset.type === 'all') {
+            if(chip.classList.contains('active')) {
+              // 已激活全部，點擊取消全部，保留當前非全部選項
+              chip.classList.remove('active');
+            } else {
+              // 激活全部，清除其他
+              chips.forEach(c => c.classList.remove('active'));
+              chip.classList.add('active');
+            }
+            return;
+          }
+          // 點擊非全部按鈕
+          allChip.classList.remove('active'); // 取消「全部」
+          const activeNonAll = document.querySelectorAll('.type-chips .chip:not([data-type="all"]).active');
+          if(chip.classList.contains('active')) {
+            // 已激活，點擊取消
+            chip.classList.remove('active');
+          } else {
+            // 未激活，嘗試新增選擇
+            if(activeNonAll.length >= 2) {
+              showToast('最多只能選擇2個類型', true);
+              return;
+            }
+            chip.classList.add('active');
+          }
+        };
+      });
+    }
     function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sb-overlay');if(!sb||!ov)return;sb.classList.toggle('open');ov.style.display=sb.classList.contains('open')?'block':'none'}
     function openMap(lat,lng){window.open(`https://www.google.com/maps?q=${lat},${lng}`,'_blank')}
     async function shareLink(){
@@ -494,8 +528,10 @@
       if(!SPOTS.length){showToast('❌ 尚未載入釣點資料',true);return}
       const startHour=parseInt(document.getElementById('input-time-start')?.value??'6',10);
       const endHour=parseInt(document.getElementById('input-time-end')?.value??'12',10);
-      let selectedAreas=[...document.querySelectorAll('#area-chips .chip.active')].map(c=>c.dataset.area);
-      const selectedType=document.querySelector('.type-chips .chip.active')?.dataset.type||'all';
+      let selectedAreas=[...document.querySelectorAll('#area-chips .chip.active')].map(c=>c.dataset.area).filter(a=>a);
+      const selectedTypes=[...document.querySelectorAll('.type-chips .chip.active')].map(c=>c.dataset.type).filter(t=>t && t!=='all');
+      // 如果選了「全部」或什麼都沒選，就等於選了全部類型
+      const types = (selectedTypes.length === 0 || selectedTypes.includes('all')) ? ['野場','港區','肉粽'] : selectedTypes;
       const ignoreWind = document.getElementById('ignore-wind')?.checked;
       const ignoreWave = document.getElementById('ignore-wave')?.checked;
       const forceWild = document.getElementById('force-wild')?.checked;
@@ -512,15 +548,15 @@
           console.log(`  ✗ ${s.name}: 區域不匹配 (${s.area} not in [${selectedAreas.join(',')}])`);
           return false;
         }
-        const typeMatch = selectedType==='all' || s.type===selectedType;
-        if(selectedType!=='all' && !typeMatch){
-          console.log(`  ✗ ${s.name}: 類型不匹配 (${s.type} !== ${selectedType})`);
+        const typeMatch = types.includes('all') || types.includes(s.type);
+        if(!typeMatch){
+          console.log(`  ✗ ${s.name}: 類型不匹配 (${s.type} not in [${types.join(',')}])`);
           return false;
         }
         console.log(`  ✓ ${s.name}: 通過`);
         return true;
       });
-      console.log('搜索條件→ 區域:',selectedAreas,'類型:',selectedType,'忽略風力:',ignoreWind,'強制野場:',forceWild,'顯示禁釣:',showForbidden);
+      console.log('搜索條件→ 區域:',selectedAreas,'類型:',types,'忽略風力:',ignoreWind,'強制野場:',forceWild,'顯示禁釣:',showForbidden);
       document.getElementById('recommend-grid').innerHTML=`<div class="loading-placeholder"><div class="spinner"></div><div>查詢 ${filtered.length} 個釣點天氣中...</div></div>`;
 
       // ✨ 步驟 1：獲取使用者位置（優先）
