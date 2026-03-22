@@ -102,7 +102,7 @@
     </aside>
     <main id="main-content">
       <div class="filter-box">
-        <h2>🔍 輸入您要海邊釣魚的日期與時間</h2>
+        <h2 style="font-size:1.05rem;">🔍 輸入您想釣魚的日期與時間（預報三日內較準）</h2>
         <div class="filter-grid">
           <div class="filter-group">
             <label>📅 作釣日期</label>
@@ -140,7 +140,17 @@
             </div>
           </div>
           <div class="filter-group filter-row-full" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-            <button class="btn-search" onclick="searchSpots()">🎣 海釣點篩選</button>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+              <button class="btn-search" onclick="searchSpots()">🎣 海釣點篩選</button>
+              <div style="display:flex;flex-direction:row;gap:12px;">
+                <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer;">
+                  <input type="radio" name="sort-mode" id="sort-score" value="score" checked style="accent-color:var(--accent);width:15px;height:15px;cursor:pointer;"> 依評分推薦
+                </label>
+                <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer;">
+                  <input type="radio" name="sort-mode" id="sort-distance" value="distance" style="accent-color:var(--accent);width:15px;height:15px;cursor:pointer;"> 依距離近的優先顯示
+                </label>
+              </div>
+            </div>
             <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
               <label style="font-size:.82rem;color:var(--text2);display:flex;align-items:center;gap:6px;cursor:pointer;">
                 <input type="checkbox" id="ignore-wind" style="accent-color:var(--accent);width:16px;height:16px;cursor:pointer;"> 忽略風力
@@ -767,13 +777,22 @@
         });
       }
 
+      const sortByDistance = document.querySelector('input[name="sort-mode"]:checked')?.value === 'distance';
+
       filteredResults.sort((a,b) => {
-        // 第一優先：分數
-        if (a.score !== b.score) return b.score - a.score;
-        // 第二優先：距離（無位置資訊的視為無限遠，排最後）
-        const distA = a.distance ?? Infinity;
-        const distB = b.distance ?? Infinity;
-        return distA - distB;
+        if(sortByDistance){
+          // 依距離優先：距離相同時再比分數
+          const distA = a.distance ?? Infinity;
+          const distB = b.distance ?? Infinity;
+          if(distA !== distB) return distA - distB;
+          return b.score - a.score;
+        } else {
+          // 依評分優先：分數相同時再比距離
+          if (a.score !== b.score) return b.score - a.score;
+          const distA = a.distance ?? Infinity;
+          const distB = b.distance ?? Infinity;
+          return distA - distB;
+        }
       });
 
       recommendationPool = filteredResults;
