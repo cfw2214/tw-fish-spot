@@ -3228,5 +3228,65 @@
       "北",
       "東北"
     ]
+  },
+  {
+    "name": "淡水河口油車口",
+    "type": "野場",
+    "area": "淡水三芝",
+    "lat": 25.175603,
+    "lng": 121.424578,
+    "max_wave_height": 2,
+    "note": "黑鯛 石斑 大金目勝地 建議釣流底",
+    "allowed": true,
+    "good_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ],
+    "bad_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ]
+  },
+  {
+    "name": "八里渡船頭",
+    "type": "港區",
+    "area": "淡水三芝",
+    "lat": 25.159177,
+    "lng": 121.435639,
+    "max_wave_height": 99,
+    "note": "黑鯛 鱸魚 晚上有路燈",
+    "allowed": true,
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ]
+  },
+  {
+    "name": "社子島頭公園",
+    "type": "野場",
+    "area": "淡水三芝",
+    "lat": 25.110542,
+    "lng": 121.465275,
+    "max_wave_height": 2,
+    "note": "黑鯛 鱸魚 紅曹......河口魚類",
+    "allowed": true,
+    "good_wind_directions": [
+      "東南",
+      "南",
+      "西南"
+    ],
+    "bad_wind_directions": [
+      "北",
+      "東北",
+      "東"
+    ]
   }
 ]
