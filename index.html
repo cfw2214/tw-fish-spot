@@ -401,7 +401,7 @@
 
       const tideHtml=(r.tides||[]).slice(0,4).map(t=>`<div>${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'} <strong>${t.time}</strong></div>`).join('');
 
-      const typeLabel = r.spot.type === '港區' ? '⚓️ 港區' : r.spot.type;
+      const typeLabel = r.spot.type;  // 移除 emoji，只顯示文字
       const forbiddenBadge = r.spot.allowed === false
         ? `<span class="badge" style="background:rgba(230,57,70,.2);color:#ff8fa3;border:1px solid rgba(230,57,70,.4)">❌ 禁釣區</span>`
         : '';
