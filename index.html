@@ -300,10 +300,21 @@
           fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`),
           fetch(`https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`)
         ]);
-        const m=await marineRes.json(); const w=await weatherRes.json(); const h=startHour;
-        const wave=parseFloat(((m.hourly?.wave_height?.[h]??0.8)).toFixed(1));
-        const wsKm=w.hourly?.windspeed_10m?.[h]??0; const ws=parseFloat((wsKm/3.6).toFixed(1));
-        const wdDeg=w.hourly?.winddirection_10m?.[h]??0; const temp=Math.round(w.hourly?.temperature_2m?.[h]??22); const rain=Math.round(w.hourly?.precipitation_probability?.[h]??0);
+        const m=await marineRes.json(); const w=await weatherRes.json();
+        const wave=parseFloat(((m.hourly?.wave_height?.[startHour]??0.8)).toFixed(1));
+        const wsKm=w.hourly?.windspeed_10m?.[startHour]??0; const ws=parseFloat((wsKm/3.6).toFixed(1));
+        const wdDeg=w.hourly?.winddirection_10m?.[startHour]??0;
+        const rain=Math.round(w.hourly?.precipitation_probability?.[startHour]??0);
+
+        // 計算時間範圍內的溫度區間
+        const temps = [];
+        for(let h = startHour; h <= endHour; h++) {
+          const t = w.hourly?.temperature_2m?.[h];
+          if(t !== undefined) temps.push(Math.round(t));
+        }
+        const tempMin = temps.length ? Math.min(...temps) : 22;
+        const tempMax = temps.length ? Math.max(...temps) : 22;
+        const temp = Math.round(w.hourly?.temperature_2m?.[startHour]??22); // 單點溫度（保留相容性）
         let tides=mockTides(); let tideType='';
         try{
           const tr=await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=${CWA_KEY}&format=JSON&Date=${date}`);
@@ -341,7 +352,7 @@
           ).toFixed(1));
         }
 
-        return {spot,wave,ws,wd,temp,rain,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live',distance};
+        return {spot,wave,ws,wd,temp,rain,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live',distance,tempMin,tempMax};
       }catch(e){
         let distance = Infinity;
         if (userLocation) {
@@ -350,7 +361,7 @@
             spot.lat, spot.lng
           ).toFixed(1));
         }
-        return {spot,wave:0.8,ws:2.1,wd:'北',temp:22,rain:0,tides:mockTides(),tideType:'中潮',score:4,source:'demo',distance};
+        return {spot,wave:0.8,ws:2.1,wd:'北',temp:22,tempMin:22,tempMax:22,rain:0,tides:mockTides(),tideType:'中潮',score:4,source:'demo',distance};
       }
     }
     function recommendationCard(r,rank){
@@ -369,10 +380,10 @@
       const rain = r.rain !== undefined ? r.rain : 0;
       const rainColor = rain>=70?'var(--red)':rain>=40?'var(--gold)':'var(--text)';
 
-      // 溫度顏色 class：17°C以下藍色，18-29°C白色，30°C以上紅色
+      // 溫度顏色 class：根據最高溫判斷，17°C以下藍色，18-29°C白色，30°C以上紅色
       let tempBadgeClass = 'badge-temp-mid';
-      if(r.temp <= 17) tempBadgeClass = 'badge-temp-low';
-      else if(r.temp >= 30) tempBadgeClass = 'badge-temp-high';
+      if(r.tempMax <= 17) tempBadgeClass = 'badge-temp-low';
+      else if(r.tempMax >= 30) tempBadgeClass = 'badge-temp-high';
 
       // 潮差顏色：大紅色、中橘色、小深藍
       let tideRangeColor='var(--text)';
@@ -404,7 +415,7 @@
         (Number.isFinite(r.distance) ?
           `<div class="rec-stat"><span style="color:var(--text2)">🚗 距離</span><strong style="color:${waveColor} !important">${Math.round(r.distance)} km</strong></div>` : '');
 
-      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}<span class="badge ${tempBadgeClass}">🌡️ ${r.temp}°C</span></div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="openMap(${r.spot.lat}, ${r.spot.lng})" style="margin-right:8px;">🗺️ 地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
+      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}<span class="badge ${tempBadgeClass}">🌡️ ${r.tempMin}°-${r.tempMax}°C</span></div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini">${tideHtml}</div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="openMap(${r.spot.lat}, ${r.spot.lng})" style="margin-right:8px;">🗺️ 地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     function renderRecommendationPage(pool){
       const total=pool.length,totalPages=Math.ceil(total/RECOMMEND_PER_PAGE),picks=pool.slice(recommendationPage*RECOMMEND_PER_PAGE,(recommendationPage+1)*RECOMMEND_PER_PAGE);
