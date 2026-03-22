@@ -442,7 +442,7 @@
       const key=`${locationName}|${date}`;
       if(_tideCache[key]) return _tideCache[key];
       try{
-        const tr=await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=${CWA_KEY}&format=JSON&Date=${date}&LocationName=${encodeURIComponent(locationName)}`);
+        const tr=await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=${CWA_KEY}&format=JSON&Date=${date}&LocationName=${encodeURIComponent(locationName)}`,{cache:'no-store'});
         const td=await tr.json();
         const rec=td?.records?.TideForecasts?.[0];
         _tideCache[key]=rec||null;
@@ -456,9 +456,10 @@
 
     async function getWeather(spot,date,startHour,endHour,userLocation=null){
       try{
+        const noCache={cache:'no-store'};
         const [marineRes,weatherRes]=await Promise.all([
-          fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`),
-          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`)
+          fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`,noCache),
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m&timezone=Asia%2FTaipei&start_date=${date}&end_date=${date}`,noCache)
         ]);
         const m=await marineRes.json(); const w=await weatherRes.json();
         const wave=parseFloat(((m.hourly?.wave_height?.[startHour]??0.8)).toFixed(1));
@@ -616,17 +617,6 @@
     function refreshRecommendations(){if(recommendationPool.length){recommendationPool=shuffleArray(recommendationPool);recommendationPage=0;renderRecommendationPage(recommendationPool)}}
     async function initRecommendations(){
       if(!SPOTS.length){document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有可用釣點資料</div>';return;}
-      const today=getTWDateString();
-      document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div class="spinner"></div><div>預載釣點資料中...</div></div>';
-      // 先過濾掉禁釣的釣點
-      const allowedSpots = SPOTS.filter(s => s.allowed !== false);
-      if(!allowedSpots.length){
-        document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有可推薦的釣點（全部禁止垂釣）</div>';
-        return;
-      }
-      // ✨ 預先載入所有 allowed spots 的天氣資料（async），不進行推薦篩選
-      await Promise.all(allowedSpots.map(s=>getWeather(s,today,8,14)));
-      // ✨ 載入完成後顯示提示訊息，不推薦任何釣點
       recommendationPool = [];
       recommendationPage = 0;
       document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div style="font-size:1.2rem;margin-bottom:8px">✅</div><div>釣點資料已載入，請使用篩選條件搜尋</div></div>';
@@ -638,10 +628,12 @@
         return;
       }
       if(!SPOTS.length){showToast('❌ 尚未載入釣點資料',true);return}
+      clearTideCache(); // 確保拿最新資料
 
-      const date = getTWDateString(); // 使用今天日期
-      const startHour = 8;  // 默認時段
-      const endHour = 14;
+      const date = getTWDateString(); // 今天台灣日期
+      const twNow = new Date(new Date().toLocaleString('en-US', {timeZone: 'Asia/Taipei'}));
+      const startHour = twNow.getHours();       // 當前小時
+      const endHour = (startHour + 4) % 24;     // 往後4小時
 
       document.getElementById('recommend-grid').innerHTML = `<div class="loading-placeholder"><div class="spinner"></div><div>查詢 ${FAVS.length} 個最愛釣點天氣中...</div></div>`;
 
