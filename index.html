@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.5</title>
+  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.8</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#0a1628;--bg2:#0f2040;--card:#132545;--card2:#1a3060;--accent:#00b4d8;--accent2:#0077b6;--gold:#f4a261;--green:#2ec4b6;--red:#e63946;--text:#e0f0ff;--text2:#8ab4cc;--border:#1e3a5f;--radius:12px}
@@ -79,7 +79,7 @@
     <aside id="sidebar">
       <div class="sidebar-section">
         <h3>⭐ 我的最愛釣點</h3>
-        <button class="btn-mini" onclick="searchFavorites()" style="width:100%;margin-bottom:8px;">🌤️ 查詢最愛釣點天氣</button>
+        <button class="btn-mini" onclick="searchFavorites()" style="width:100%;margin-bottom:8px;">🌤️ 一鍵查詢最愛釣點天氣</button>
         <ul id="fav-list"><li class="fav-empty">尚未收藏任何釣點</li></ul>
         <div style="font-size:.7rem;color:var(--text2);margin-top:8px">最多收藏 12 個</div>
       </div>
@@ -181,7 +181,7 @@
       </div>
     </div>
   </div>
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.5
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V0.6.8
     <div style="font-size:.65rem;margin-top:2px;opacity:0.8">天氣數據皆來源自網路公開資料，僅供大致參考，精確數據請再自行查驗</div>
   </footer>
   <script>
@@ -203,7 +203,7 @@
       return `${y}-${m}-${d}`;
     }
     function shuffleArray(array){const arr=[...array];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
-    function fillHourOptions(selectId,defaultHour){const el=document.getElementById(selectId);console.log(`[DEBUG] fillHourOptions: selectId=${selectId}, el=${el? 'found' : 'NOT found'}, optionsCount=${el?.options.length || 0}`);if(!el||el.options.length>0)return;for(let i=0;i<24;i++){const opt=document.createElement('option');opt.value=String(i).padStart(2,'0');opt.textContent=String(i).padStart(2,'0')+':00';if(i===defaultHour)opt.selected=true;el.appendChild(opt)}console.log(`[DEBUG] filled ${selectId} with 24 options`)}
+    function fillHourOptions(selectId,defaultHour){const el=document.getElementById(selectId);if(!el||el.options.length>0)return;for(let i=0;i<24;i++){const opt=document.createElement('option');opt.value=String(i).padStart(2,'0');opt.textContent=String(i).padStart(2,'0')+':00';if(i===defaultHour)opt.selected=true;el.appendChild(opt)}}
     function syncEndDate(){const start=document.getElementById('input-date');const end=document.getElementById('input-date-end');if(!start||!end)return;if(!end.value||end.value<start.value)end.value=start.value}
     function initAreaChips(){const chips=document.querySelectorAll('#area-chips .chip');chips.forEach(chip=>{chip.onclick=()=>{const activeNonAll=[...document.querySelectorAll('#area-chips .chip.active')];if(chip.classList.contains('active')){// 取消選擇
         chip.classList.remove('active');
@@ -294,6 +294,156 @@
     function toRad(deg){return deg*Math.PI/180}
     function haversineDistance(lat1,lon1,lat2,lon2){if([lat1,lon1,lat2,lon2].some(isNaN)){console.warn('無效的座標資料，返回 Infinity');return Infinity}const R=6371;const dLat=toRad(lat2-lat1);const dLon=toRad(lon2-lon1);const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));return R*c}
     async function getUserLocation(){return new Promise(resolve=>{if(!navigator.geolocation){console.log('❌ 瀏覽器不支援地理位置功能');resolve(null);return}const timeoutId=setTimeout(()=>{console.log('⏰ 地理位置請求超時（10秒）');resolve(null);},10000);navigator.geolocation.getCurrentPosition(pos=>{clearTimeout(timeoutId);console.log('✅ 成功獲取位置:',pos.coords.latitude,pos.coords.longitude);resolve({lat:pos.coords.latitude,lng:pos.coords.longitude})},err=>{clearTimeout(timeoutId);let errorMsg='未知錯誤';switch(err.code){case err.PERMISSION_DENIED:errorMsg='使用者拒絕分享位置';break;case err.POSITION_UNAVAILABLE:errorMsg='位置資訊無法取得';break;case err.TIMEOUT:errorMsg='地理位置請求超時';break;}console.log(`❌ 地理位置錯誤: ${errorMsg} (code: ${err.code})`);resolve(null);},{enableHighAccuracy:false,timeout:10000,maximumAge:60000})})}
+    // ✅ CWA 站點經緯度對照表（來源：F-A0021-001 官方文件）
+    // 用於查詢前先找最近站點名稱，再帶 LocationName 參數，避免下載全部 266 筆
+    const CWA_TIDE_STATIONS=[
+      {n:'新北市貢寮區',lat:25.0217,lng:121.95},{n:'新北市瑞芳區',lat:25.1307,lng:121.8285},
+      {n:'基隆市中正區',lat:25.1506,lng:121.79},{n:'基隆市中山區',lat:25.155,lng:121.7522},
+      {n:'基隆市安樂區',lat:25.1675,lng:121.711},{n:'新北市萬里區',lat:25.2111,lng:121.6892},
+      {n:'新北市金山區',lat:25.2475,lng:121.638},{n:'新北市石門區',lat:25.2936,lng:121.5314},
+      {n:'新北市三芝區',lat:25.2559,lng:121.469},{n:'新北市淡水區',lat:25.1915,lng:121.414},
+      {n:'新北市八里區',lat:25.1567,lng:121.3717},{n:'新北市林口區',lat:25.1354,lng:121.3426},
+      {n:'桃園市蘆竹區',lat:25.1207,lng:121.2801},{n:'桃園市大園區',lat:25.1181,lng:121.2433},
+      {n:'桃園市觀音區',lat:25.0669,lng:121.08},{n:'桃園市新屋區',lat:24.9844,lng:121.0046},
+      {n:'新竹縣新豐鄉',lat:24.9278,lng:120.9668},{n:'新竹縣竹北市',lat:24.862,lng:120.9275},
+      {n:'新竹市北區',lat:24.8486,lng:120.9206},{n:'新竹市香山區',lat:24.7571,lng:120.8813},
+      {n:'苗栗縣竹南鎮',lat:24.7117,lng:120.8537},{n:'苗栗縣後龍鎮',lat:24.6514,lng:120.7714},
+      {n:'苗栗縣通霄鎮',lat:24.4948,lng:120.6547},{n:'苗栗縣苑裡鎮',lat:24.456,lng:120.6217},
+      {n:'臺中市大甲區',lat:24.4015,lng:120.5809},{n:'臺中市大安區',lat:24.3778,lng:120.5633},
+      {n:'臺中市清水區',lat:24.3331,lng:120.5418},{n:'臺中市梧棲區',lat:24.2878,lng:120.5331},
+      {n:'臺中市龍井區',lat:24.226,lng:120.4642},{n:'彰化縣伸港鄉',lat:24.1897,lng:120.4613},
+      {n:'彰化縣線西鄉',lat:24.1445,lng:120.4113},{n:'彰化縣鹿港鎮',lat:24.094,lng:120.3618},
+      {n:'彰化縣福興鄉',lat:24.0457,lng:120.3588},{n:'彰化縣芳苑鄉',lat:23.9683,lng:120.3145},
+      {n:'彰化縣大城鄉',lat:23.882,lng:120.2776},{n:'雲林縣麥寮鄉',lat:23.7861,lng:120.1603},
+      {n:'雲林縣臺西鄉',lat:23.7474,lng:120.165},{n:'雲林縣四湖鄉',lat:23.6186,lng:120.1375},
+      {n:'雲林縣口湖鄉',lat:23.5654,lng:120.1379},{n:'嘉義縣東石鄉',lat:23.4494,lng:120.14},
+      {n:'嘉義縣布袋鎮',lat:23.3889,lng:120.1443},{n:'臺南市北門區',lat:23.2374,lng:120.0755},
+      {n:'臺南市將軍區',lat:23.2125,lng:120.0831},{n:'臺南市七股區',lat:23.1371,lng:120.0734},
+      {n:'臺南市安南區',lat:23.0404,lng:120.0623},{n:'臺南市安平區',lat:22.9786,lng:120.1758},
+      {n:'臺南市南區',lat:22.9482,lng:120.1605},{n:'高雄市茄萣區',lat:22.8701,lng:120.1855},
+      {n:'高雄市永安區',lat:22.8189,lng:120.1975},{n:'高雄市彌陀區',lat:22.7761,lng:120.2211},
+      {n:'高雄市梓官區',lat:22.7478,lng:120.2379},{n:'高雄市楠梓區',lat:22.714,lng:120.248},
+      {n:'高雄市左營區',lat:22.6958,lng:120.2496},{n:'高雄市鼓山區',lat:22.6144,lng:120.2883},
+      {n:'高雄市旗津區',lat:22.5801,lng:120.2875},{n:'高雄市前鎮區',lat:22.5605,lng:120.2999},
+      {n:'高雄市小港區',lat:22.5337,lng:120.3179},{n:'高雄市林園區',lat:22.4923,lng:120.3785},
+      {n:'屏東縣新園鄉',lat:22.4716,lng:120.4295},{n:'屏東縣東港鎮',lat:22.465,lng:120.4383},
+      {n:'屏東縣琉球鄉',lat:22.3533,lng:120.3833},{n:'屏東縣林邊鄉',lat:22.4283,lng:120.4795},
+      {n:'屏東縣佳冬鄉',lat:22.3645,lng:120.5869},{n:'屏東縣枋寮鄉',lat:22.308,lng:120.6365},
+      {n:'屏東縣枋山鄉',lat:22.195,lng:120.6836},{n:'屏東縣車城鄉',lat:22.0932,lng:120.713},
+      {n:'屏東縣恆春鎮',lat:21.9458,lng:120.7453},{n:'屏東縣滿州鄉',lat:22.0463,lng:120.8962},
+      {n:'屏東縣牡丹鄉',lat:22.1487,lng:120.8922},{n:'臺東縣達仁鄉',lat:22.2879,lng:120.897},
+      {n:'臺東縣大武鄉',lat:22.3375,lng:120.8972},{n:'臺東縣蘭嶼鄉',lat:22.0581,lng:121.5069},
+      {n:'臺東縣太麻里鄉',lat:22.5794,lng:121.0045},{n:'臺東縣卑南鄉',lat:22.7629,lng:121.1889},
+      {n:'臺東縣臺東市',lat:22.7908,lng:121.1931},{n:'臺東縣綠島鄉',lat:22.6622,lng:121.4647},
+      {n:'臺東縣東河鄉',lat:22.945,lng:121.292},{n:'臺東縣成功鎮',lat:23.0972,lng:121.38},
+      {n:'臺東縣長濱鄉',lat:23.3109,lng:121.4547},{n:'花蓮縣豐濱鄉',lat:23.4947,lng:121.5061},
+      {n:'花蓮縣壽豐鄉',lat:23.828,lng:121.5862},{n:'花蓮縣吉安鄉',lat:23.9424,lng:121.6125},
+      {n:'花蓮縣花蓮市',lat:23.9806,lng:121.6236},{n:'花蓮縣新城鄉',lat:24.039,lng:121.6343},
+      {n:'花蓮縣秀林鄉',lat:24.3031,lng:121.7561},{n:'宜蘭縣南澳鄉',lat:24.4149,lng:121.8068},
+      {n:'宜蘭縣蘇澳鎮',lat:24.5925,lng:121.8669},{n:'宜蘭縣五結鄉',lat:24.6804,lng:121.842},
+      {n:'宜蘭縣壯圍鄉',lat:24.7597,lng:121.8426},{n:'宜蘭縣頭城鎮',lat:24.8672,lng:121.8375},
+      {n:'澎湖縣馬公市',lat:23.5603,lng:119.5781},{n:'澎湖縣湖西鄉',lat:23.6105,lng:119.6188},
+      {n:'澎湖縣白沙鄉',lat:23.667,lng:119.6089},{n:'澎湖縣西嶼鄉',lat:23.6041,lng:119.5},
+      {n:'澎湖縣望安鄉',lat:23.3612,lng:119.5097},{n:'澎湖縣七美鄉',lat:23.1931,lng:119.4179},
+      {n:'金門縣金寧鄉',lat:24.4617,lng:118.2975},{n:'金門縣金城鎮',lat:24.4211,lng:118.2892},
+      {n:'金門縣烈嶼鄉',lat:24.4266,lng:118.2679},{n:'金門縣金湖鎮',lat:24.4086,lng:118.43},
+      {n:'金門縣金沙鎮',lat:24.5324,lng:118.4153},{n:'金門縣烏坵鄉',lat:24.9881,lng:119.4564},
+      {n:'連江縣東引鄉',lat:26.3665,lng:120.4835},{n:'連江縣北竿鄉',lat:26.2184,lng:119.9982},
+      {n:'連江縣南竿鄉',lat:26.1617,lng:119.9428},{n:'連江縣莒光鄉',lat:25.9642,lng:119.96},
+      {n:'漁港龜吼',lat:25.2117,lng:121.6908},{n:'漁港野柳',lat:25.2008,lng:121.6903},
+      {n:'漁港磺港',lat:25.2347,lng:121.6422},{n:'漁港外木山',lat:25.1719,lng:121.7097},
+      {n:'漁港大武崙',lat:25.1644,lng:121.7253},{n:'漁港八斗子',lat:25.1475,lng:121.7908},
+      {n:'漁港正濱',lat:25.1567,lng:121.775},{n:'漁港鼻頭',lat:25.1217,lng:121.9092},
+      {n:'漁港南雅',lat:25.0969,lng:121.9267},{n:'漁港澳底',lat:25.0478,lng:121.9419},
+      {n:'漁港福隆',lat:25.0228,lng:121.9419},{n:'漁港烏石',lat:24.8628,lng:121.8469},
+      {n:'漁港大里',lat:24.8894,lng:121.8731},{n:'漁港東澳',lat:24.5003,lng:121.8381},
+      {n:'漁港南方澳',lat:24.5703,lng:121.8647},{n:'漁港蘇澳',lat:24.5975,lng:121.8731},
+      {n:'漁港梗枋',lat:24.8261,lng:121.8633},{n:'漁港竹圍',lat:25.1783,lng:121.4481},
+      {n:'漁港淡水第二',lat:25.1775,lng:121.4272},{n:'漁港白沙崙',lat:25.1272,lng:121.3803},
+      {n:'漁港新竹',lat:24.8369,lng:120.9064},{n:'漁港通霄',lat:24.4933,lng:120.6481},
+      {n:'漁港外埔',lat:24.3694,lng:120.5531},{n:'漁港梧棲',lat:24.2928,lng:120.5278},
+      {n:'漁港望海巷',lat:24.2431,lng:120.4933},{n:'漁港興達',lat:22.8203,lng:120.2028},
+      {n:'漁港彌陀',lat:22.7767,lng:120.2111},{n:'漁港蚵仔寮',lat:22.7483,lng:120.2281},
+      {n:'漁港旗津',lat:22.5994,lng:120.2822},{n:'漁港前鎮',lat:22.5703,lng:120.3086},
+      {n:'漁港中芸',lat:22.5022,lng:120.3894},{n:'漁港東港鹽埔',lat:22.4619,lng:120.4497},
+      {n:'漁港後壁湖',lat:21.9514,lng:120.7403},{n:'漁港花蓮',lat:23.9783,lng:121.6311},
+      {n:'漁港石梯',lat:23.5578,lng:121.5264},{n:'漁港成功',lat:23.0972,lng:121.3783},
+      {n:'漁港金樽',lat:22.9644,lng:121.3311},{n:'漁港新港',lat:23.0072,lng:121.3594},
+      {n:'漁港綠島',lat:22.6636,lng:121.4825},{n:'漁港布袋',lat:23.3842,lng:120.1708},
+      {n:'漁港安平',lat:22.9883,lng:120.1683},{n:'漁港將軍',lat:23.2092,lng:120.0867},
+      {n:'漁港馬公',lat:23.5681,lng:119.5664},{n:'漁港吉貝',lat:23.7542,lng:119.6231},
+      {n:'海水浴場頭城',lat:24.8523,lng:121.8283},{n:'海水浴場龍洞南口',lat:25.102,lng:121.9181},
+      {n:'海水浴場和平島',lat:25.1608,lng:121.7638},{n:'海水浴場翡翠灣',lat:25.1872,lng:121.6841},
+      {n:'海水浴場新金山',lat:25.2249,lng:121.6433},{n:'海水浴場福隆',lat:25.018,lng:121.9433},
+      {n:'海水浴場鹽寮',lat:25.0421,lng:121.9264},{n:'海水浴場龍門公園',lat:25.0187,lng:121.9385},
+      {n:'海水浴場龍洞灣公園',lat:25.1174,lng:121.9159},{n:'海水浴場磯崎',lat:23.7006,lng:121.5496},
+      {n:'海水浴場墾丁',lat:21.9459,lng:120.79},{n:'海水浴場南灣',lat:21.9604,lng:120.7613},
+      {n:'海水浴場小灣',lat:21.9414,lng:120.8044},{n:'海水浴場崎頂',lat:24.7228,lng:120.8656},
+      {n:'海水浴場通霄',lat:24.4928,lng:120.6736},{n:'海水浴場西子灣',lat:22.625,lng:120.2648},
+      {n:'海水浴場旗津海岸公園',lat:22.6024,lng:120.2751},{n:'海水浴場三條崙',lat:23.6628,lng:120.1516},
+      {n:'海水浴場大安',lat:24.3839,lng:120.5841},{n:'海水浴場馬沙溝',lat:23.2175,lng:120.0841},
+      {n:'海水浴場杉原',lat:22.8312,lng:121.1852},{n:'海水浴場吉貝海園',lat:23.7332,lng:119.6032},
+      {n:'海釣外木山',lat:25.175,lng:121.71},{n:'海釣深澳',lat:25.1181,lng:121.8764},
+      {n:'海釣瑞濱隧道與水湳洞之間',lat:25.1069,lng:121.8972},{n:'海釣芭崎牛寮坑',lat:25.0342,lng:121.9175},
+      {n:'海釣東澳烏石鼻',lat:24.5042,lng:121.8283},{n:'海釣東澳粉鳥林漁港',lat:24.5108,lng:121.8319},
+      {n:'海釣石梯港',lat:23.5542,lng:121.525},{n:'海釣三仙台',lat:23.1311,lng:121.4319},
+      {n:'海釣長濱界橋',lat:23.3114,lng:121.4547},{n:'海釣成功港',lat:23.0964,lng:121.3792},
+      {n:'海釣花蓮港東堤垂釣區',lat:23.9792,lng:121.6378},{n:'海釣蘇澳港南防波堤靠內港側',lat:24.5893,lng:121.8777},
+      {n:'海釣基隆港東岸防坡堤',lat:25.1508,lng:121.7789},{n:'海釣和平島',lat:25.1608,lng:121.7808},
+      {n:'海釣臺北港北防坡堤',lat:25.1269,lng:121.3764},{n:'海釣梧棲港',lat:24.2922,lng:120.5261},
+      {n:'海釣臺中港100號碼頭',lat:24.2931,lng:120.5228},{n:'海釣臺中港北防波堤',lat:24.3253,lng:120.5119},
+      {n:'海釣鹽埔漁港',lat:22.4592,lng:120.4506},{n:'海釣東港南堤',lat:22.4617,lng:120.4481},
+      {n:'海釣安平港北防波堤',lat:22.9939,lng:120.1611},{n:'海釣安平港南防波堤',lat:22.9761,lng:120.1692},
+      {n:'海釣西子灣',lat:22.6239,lng:120.2614},{n:'海釣高雄港旗后山一港口護岸',lat:22.6069,lng:120.2697},
+      {n:'海釣高雄港第10船渠',lat:22.6003,lng:120.2881},{n:'海釣布袋商港釣魚示範區',lat:23.3878,lng:120.1631},
+      {n:'海釣澎湖港龍門尖山碼頭區',lat:23.5756,lng:119.5864},{n:'海釣澎湖港馬公碼頭區',lat:23.5694,lng:119.5672},
+      {n:'潛點龍洞南口水域C區',lat:25.1014,lng:121.9189},{n:'潛點龍洞灣水域B區北側',lat:25.1183,lng:121.9147},
+      {n:'潛點龍洞灣水域B區南側',lat:25.1147,lng:121.9172},{n:'潛點豆腐岬水域',lat:25.1058,lng:121.9072},
+      {n:'潛點眺石',lat:25.0978,lng:121.9194},{n:'潛點東澳漁港與龜吼漁港',lat:24.5033,lng:121.8356},
+      {n:'潛點後灣',lat:21.9675,lng:120.7297},{n:'潛點後壁湖遊艇港東側',lat:21.9514,lng:120.7506},
+      {n:'潛點後壁湖航道西側',lat:21.9519,lng:120.7397},{n:'潛點萬里桐',lat:21.9681,lng:120.7253},
+      {n:'潛點船帆石',lat:21.9339,lng:120.7808},{n:'潛點紅柴坑',lat:21.9572,lng:120.7997},
+      {n:'潛點哈巴狗海域',lat:25.1317,lng:121.7811},{n:'潛點小灣',lat:21.9414,lng:120.8058},
+      {n:'潛點龜灣海域',lat:21.9372,lng:120.7919},{n:'潛點石朗海域',lat:21.9658,lng:120.7733},
+      {n:'潛點柴口海域',lat:21.9711,lng:120.7664},{n:'潛點杉原海域',lat:22.8294,lng:121.1878},
+      {n:'衝浪蜜月灣',lat:24.8947,lng:121.8492},{n:'衝浪福隆鹽寮水域F區',lat:25.0239,lng:121.9431},
+      {n:'衝浪東澳漁港與龜吼漁港間海域',lat:24.5028,lng:121.8414},{n:'衝浪白砂',lat:25.2028,lng:121.5394},
+      {n:'衝浪中角沙珠灣',lat:25.1864,lng:121.5867},{n:'衝浪金樽',lat:22.9647,lng:121.3325},
+      {n:'衝浪大灣',lat:21.9644,lng:120.7306},{n:'衝浪南灣',lat:21.9603,lng:120.7625},
+      {n:'衝浪風吹砂',lat:22.0394,lng:120.8556},{n:'衝浪港口',lat:22.0789,lng:120.8672},
+      {n:'衝浪港澳水域遊憩活動範圍A、C區',lat:21.9692,lng:120.7256},{n:'衝浪山水',lat:23.6086,lng:119.5358},
+      {n:'衝浪大安海水域場B區',lat:24.3814,lng:120.5783}
+    ];
+
+    // 根據經緯度找最近的 CWA 潮汐站名稱
+    function findNearestTideStation(lat, lng){
+      let best=CWA_TIDE_STATIONS[0], bestDist=Infinity;
+      CWA_TIDE_STATIONS.forEach(s=>{
+        const d=haversineDistance(lat,lng,s.lat,s.lng);
+        if(d<bestDist){bestDist=d;best=s;}
+      });
+      console.log('🗺️ 最近潮汐站:',best.n,'距離:',bestDist.toFixed(1),'km');
+      return best.n;
+    }
+
+    // ✅ 潮汐快取：key = "locationName|date"，只查需要的站點
+    let _tideCache = {};
+    async function getTideByStation(locationName, date){
+      const key=`${locationName}|${date}`;
+      if(_tideCache[key]) return _tideCache[key];
+      try{
+        const tr=await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=${CWA_KEY}&format=JSON&Date=${date}&LocationName=${encodeURIComponent(locationName)}`);
+        const td=await tr.json();
+        const rec=td?.records?.TideForecasts?.[0];
+        _tideCache[key]=rec||null;
+      }catch(e){
+        console.error('潮汐API錯誤:',e);
+        _tideCache[key]=null;
+      }
+      return _tideCache[key];
+    }
+    function clearTideCache(){ _tideCache={}; }
+
     async function getWeather(spot,date,startHour,endHour,userLocation=null){
       try{
         const [marineRes,weatherRes]=await Promise.all([
@@ -317,28 +467,38 @@
         const temp = Math.round(w.hourly?.temperature_2m?.[startHour]??22); // 單點溫度（保留相容性）
         let tides=mockTides(); let tideType='';
         try{
-          const tr=await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=${CWA_KEY}&format=JSON&Date=${date}`);
-          const td=await tr.json(); const recs=td?.records?.TideForecasts;
-          console.log('🔍 潮汐API回應:', td); // 除錯：查看完整回应
-          if(recs?.length){
-            const daily=recs[0]?.Location?.TimePeriods?.Daily?.find(d=>d.Date===date);
-            console.log('📅 日期匹配到的daily:', daily); // 除錯：查看daily物件
-            if(daily?.TideRange){
-              tideType = '潮差：' + daily.TideRange;
-              console.log('🌊 潮差:', tideType, '(原始值:', daily.TideRange, ')');
-            }else{
-              console.log('⚠️ daily.TideRange 不存在');
+          // ✅ 用內建站點表找最近站名，只查該站資料，速度快
+          const stationName=findNearestTideStation(spot.lat, spot.lng);
+          const nextDateObj=new Date(date+'T00:00:00+08:00');
+          nextDateObj.setDate(nextDateObj.getDate()+1);
+          const nextDate=nextDateObj.toISOString().split('T')[0];
+          const [rec, rec2]=await Promise.all([
+            getTideByStation(stationName, date),
+            getTideByStation(stationName, nextDate)
+          ]);
+
+          const parseTideList=(timeArr,offsetMin=0)=>timeArr.map(cur=>{
+            const time=cur.DateTime?.split('T')[1]?.substring(0,5)||'--:--';
+            const type=cur.Tide==='滿潮'?'高潮':'低潮';
+            const height=parseFloat(cur.TideHeights?.AboveChartDatum??0).toFixed(1);
+            const [h,mn]=time.split(':');
+            const totalMin=parseInt(h,10)*60+parseInt(mn,10)+offsetMin;
+            return {time,type,height,totalMin};
+          });
+
+          const daily=rec?.Location?.TimePeriods?.Daily?.find(d=>d.Date===date);
+          if(daily?.TideRange) tideType='潮差：'+daily.TideRange;
+          if(daily?.Time?.length){
+            let allTides=parseTideList(daily.Time);
+            const nextDaily=rec2?.Location?.TimePeriods?.Daily?.find(d=>d.Date===nextDate);
+            if(nextDaily?.Time?.length){
+              allTides=allTides.concat(parseTideList(nextDaily.Time, 1440));
             }
-            if(daily?.HourlyTides?.length){
-              const list=[];
-              for(let i=0;i<daily.HourlyTides.length;i++){
-                const cur=daily.HourlyTides[i];
-                list.push({time:cur.DateTime.split('T')[1].substring(0,5),type:cur.TideType==='H'?'高潮':'低潮',height:parseFloat(cur.TideHeights?.AboveChartDatum??0).toFixed(1)});
-              }
-              if(list.length)tides=list.slice(0,4);
-            }
-          }else{
-            console.log('❌ recs 不存在或為空');
+            const startMin=startHour*60;
+            const fromStart=allTides.filter(t=>t.totalMin>=startMin);
+            const result=(fromStart.length>=1?fromStart:allTides).slice(0,4);
+            if(result.length) tides=result;
+            console.log('🌊 從作釣時間起的潮汐（前4筆）:', result);
           }
         }catch(e){console.error('潮汐API錯誤:',e)}
         const wd=degToDir(wdDeg);
@@ -365,7 +525,6 @@
       }
     }
     function recommendationCard(r,rank){
-      console.log('🎴 生成卡片:', r.spot.name, '| temp=', r.temp, '| rain=', r.rain, '| wave=', r.wave);
       const isFav=FAVS.find(f=>f.name===r.spot.name);const max=r.spot.max_wave_height===99?999:r.spot.max_wave_height;
       const barColor=r.score>=4?'var(--green)':r.score>=3?'var(--gold)':'var(--red)';
 
@@ -395,9 +554,6 @@
 
       // 浪高顏色：1.0m以下白色，1.1-1.3米橘色，1.4m以上紅色
       const waveColor=r.wave>=1.4?'var(--red)':r.wave>=1.1?'var(--gold)':'var(--text)';
-
-      // 除錯：輸出顏色判斷結果
-      console.log(`${r.spot.name}: 風力${beaufort}級→${windColor}, 浪高${r.wave}m→${waveColor}, 潮差${r.tideType}→${tideRangeColor}`);
 
       const tideHtml=(r.tides||[]).slice(0,4).map(t=>`<div>${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'} <strong>${t.time}</strong></div>`).join('');
 
@@ -534,6 +690,7 @@
     }
 
     async function searchSpots(){
+      clearTideCache(); // ✅ 每次新查詢清除潮汐快取
       const date=document.getElementById('input-date')?.value;
       if(!date){showToast('❌ 請選擇出發日期',true);return}
       if(!SPOTS.length){showToast('❌ 尚未載入釣點資料',true);return}
@@ -548,40 +705,21 @@
       const forceWild = document.getElementById('force-wild')?.checked;
       const showForbidden = document.getElementById('show-forbidden')?.checked;
       const filtered=SPOTS.filter(s=>{
-        // 過濾禁釣的釣點（除非勾選顯示禁釣區）
-        if(s.allowed===false && !showForbidden){
-          console.log(`  ✗ ${s.name}: 禁止垂釣`);
-          return false;
-        }
-        // 區域篩選：未選擇任何區域時顯示全部
+        if(s.allowed===false && !showForbidden){ return false; }
         const areaMatch = selectedAreas.length === 0 || selectedAreas.includes(s.area);
-        if(!areaMatch){
-          console.log(`  ✗ ${s.name}: 區域不匹配 (${s.area} not in [${selectedAreas.join(',')}])`);
-          return false;
-        }
+        if(!areaMatch){ return false; }
         const typeMatch = types.includes('all') || types.includes(s.type);
-        if(!typeMatch){
-          console.log(`  ✗ ${s.name}: 類型不匹配 (${s.type} not in [${types.join(',')}])`);
-          return false;
-        }
-        console.log(`  ✓ ${s.name}: 通過`);
+        if(!typeMatch){ return false; }
         return true;
       });
-      console.log('搜索條件→ 區域:',selectedAreas,'類型:',types,'忽略風力:',ignoreWind,'強制野場:',forceWild,'顯示禁釣:',showForbidden);
       document.getElementById('recommend-grid').innerHTML=`<div class="loading-placeholder"><div class="spinner"></div><div>查詢 ${filtered.length} 個釣點天氣中...</div></div>`;
 
-      // ✨ 步驟 1：獲取使用者位置（優先）
+      // 步驟 1：獲取使用者位置
       let userLocation = null;
       try {
-        console.log('🔍 嘗試獲取使用者地理位置...');
         userLocation = await getUserLocation();
-        if (userLocation) {
-          console.log(`📍 使用者位置: ${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`);
-        } else {
-          console.log('⚪ 未獲取到位置，將使用原始分數排序');
-        }
       } catch (e) {
-        console.error('⚠️ 地理位置請求異常:', e);
+        console.error('地理位置請求異常:', e);
       }
 
       // ✨ 步驟 2：獲取天氣資料（傳入位置）
@@ -656,7 +794,6 @@
       const avgLat = FAVS.reduce((sum, s) => sum + s.lat, 0) / FAVS.length;
       const avgLng = FAVS.reduce((sum, s) => sum + s.lng, 0) / FAVS.length;
       const query = `${avgLat.toFixed(4)},${avgLng.toFixed(4)}`;
-      console.log('開啟地圖中心座標:', query);
       window.open(`https://www.google.com/maps?q=${query}`, '_blank');
     }
     async function loadSpots(){
