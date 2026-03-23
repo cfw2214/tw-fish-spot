@@ -83,6 +83,12 @@
     #fav-list li{background:var(--card);border-radius:8px;padding:8px 10px;font-size:.82rem;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border)}
     .fav-area{color:var(--text2);font-size:.72rem;margin-left:4px}.fav-del{color:var(--red);background:none;border:none;cursor:pointer;font-size:.9rem}.fav-empty{color:var(--text2);font-size:.8rem;padding:8px 0}
     .filter-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:24px}
+    .filter-box-body{overflow:hidden;transition:max-height .25s ease, opacity .25s ease;max-height:800px;opacity:1;}
+    .filter-box-body.collapsed{max-height:0;opacity:0;}
+    .filter-collapse-btn{width:100%;margin-top:14px;background:none;border:1px dashed var(--border);border-radius:8px;color:var(--text2);padding:6px;font-size:.78rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:border-color .2s,color .2s;}
+    .filter-collapse-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .filter-collapse-btn .arrow{display:inline-block;transition:transform .25s ease;}
+    .filter-collapse-btn.collapsed .arrow{transform:rotate(180deg);}
     .filter-box h2{font-size:.9rem;color:var(--accent);margin-bottom:14px;letter-spacing:1px}
     .filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .filter-group{display:flex;flex-direction:column;gap:5px;width:75%;justify-self:start}.filter-group label{font-size:.78rem;color:var(--text2)}
@@ -275,7 +281,8 @@
     <div id="right-col" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
       <main id="main-content" style="flex:1;">
       <div class="filter-box">
-        <h2 style="font-size:1.05rem;">🔍 輸入您想釣魚的日期與時間（預報三日內較準）</h2>
+        <h2 style="font-size:1.05rem;cursor:pointer;user-select:none;" onclick="toggleFilterBox()">🔍 輸入您想釣魚的日期與時間（預報三日內較準）</h2>
+        <div class="filter-box-body" id="filter-box-body">
         <div class="filter-grid">
           <div class="filter-group">
             <label>📅 開始作釣日期</label>
@@ -364,6 +371,10 @@
             </div>
           </div>
         </div>
+        </div><!-- /filter-box-body -->
+        <button class="filter-collapse-btn" id="filter-collapse-btn" onclick="toggleFilterBox()">
+          <span class="arrow">▲</span><span id="filter-collapse-label">收合篩選條件</span>
+        </button>
       </div>
       <section id="recommend-section">
         <div class="section-header" style="align-items:center;flex-wrap:wrap;gap:8px;">
@@ -506,6 +517,24 @@
           }
         };
       });
+    }
+    function toggleFilterBox(forceCollapse){
+      const body = document.getElementById('filter-box-body');
+      const btn  = document.getElementById('filter-collapse-btn');
+      const label= document.getElementById('filter-collapse-label');
+      if(!body) return;
+      const isCollapsed = body.classList.contains('collapsed');
+      if(forceCollapse === true && !isCollapsed || forceCollapse !== true && isCollapsed){
+        // 展開
+        body.classList.remove('collapsed');
+        btn.classList.remove('collapsed');
+        if(label) label.textContent = '收合篩選條件';
+      } else if(forceCollapse === true || !isCollapsed){
+        // 摺疊
+        body.classList.add('collapsed');
+        btn.classList.add('collapsed');
+        if(label) label.textContent = '展開篩選條件';
+      }
     }
     function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sb-overlay');if(!sb||!ov)return;sb.classList.toggle('open');ov.style.display=sb.classList.contains('open')?'block':'none'}
     function openMap(lat,lng){window.open(`https://www.google.com/maps?q=${lat},${lng}`,'_blank')}
@@ -964,6 +993,7 @@
     }
     // 🌟 查詢收藏釣點的天氣（忽略所有篩選條件）
     async function searchFavorites(){
+      toggleFilterBox(true); // 自動摺疊篩選框
       if(!FAVS.length){
         showToast('❌ 尚未收藏任何釣點',true);
         return;
@@ -1308,7 +1338,7 @@
       setTimeout(()=>{
         google.maps.event.trigger(_gmap,'resize');
         _gmap.panTo(pos);
-        _gmap.setZoom(15);
+        _gmap.setZoom(17);
         if(marker) _gmapInfoWindow.open(_gmap, marker);
         else { _gmapInfoWindow.setPosition(pos); _gmapInfoWindow.open(_gmap); }
         window._gmapIW = _gmapInfoWindow;
