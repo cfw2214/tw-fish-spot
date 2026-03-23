@@ -125,7 +125,7 @@
     #map-frame{
       position:relative;
       width:100%;
-      height:730px;          /* 足夠放6張小卡 + 地圖底部 */
+      height:740px;          /* 足夠放6張小卡 + 地圖底部 */
       border-radius:var(--radius);
       overflow:hidden;
       border:1px solid var(--border);
@@ -242,7 +242,6 @@
     <h1 id="site-title" onclick="scrollToTop()" style="cursor:pointer;" title="回到頂部">🎣 北台灣海釣點神器</h1>
     <div class="header-actions">
       <button class="btn-mini" id="install-app-btn" onclick="handleInstallApp()" style="background:rgba(46,196,182,.15);border:1px solid rgba(46,196,182,.4);color:var(--green);">📲 加入APP</button>
-      <button class="btn-mini" onclick="shareLink()">📤 分享給龜蜜</button>
     </div>
   </header>
   <div id="sb-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
@@ -251,7 +250,7 @@
       <div class="sidebar-section">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
           <img src="icon.png" alt="北台灣海釣點神器" style="width:50px;height:50px;border-radius:10px;flex-shrink:0;">
-          <h3 style="margin-bottom:0;border-bottom:none;padding-bottom:0;">⭐ 我的最愛釣點</h3>
+          <h3 style="margin-bottom:0;border-bottom:none;padding-bottom:0;font-size:1.05rem;">⭐ 我的最愛釣點</h3>
         </div>
         <button class="btn-mini" onclick="searchFavorites()" style="width:100%;margin-bottom:8px;">🌤️ 一鍵查詢最愛釣點天氣</button>
         <ul id="fav-list"><li class="fav-empty">尚未收藏任何釣點</li></ul>
@@ -267,6 +266,7 @@
         <div style="font-size:.78rem;color:var(--text2)">已載入 <span id="spots-num" style="color:var(--accent);font-weight:700">0</span> 個釣點</div>
       </div>
       <div class="sidebar-section" style="margin-top:12px">
+        <button class="btn-mini" onclick="shareLink()" style="display:block;width:100%;text-align:center;padding:6px 10px;background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.35);color:var(--accent);font-weight:700;font-size:.85rem;border-radius:8px;cursor:pointer;margin-bottom:10px;">📤 網站分享給龜蜜釣友</button>
         <div style="font-size:.8rem;color:var(--text2);text-align:center;margin-bottom:6px; line-height:1.4;">
           如果你覺得這個網站對你很有幫助
         </div>
@@ -525,16 +525,22 @@
       const label= document.getElementById('filter-collapse-label');
       if(!body) return;
       const isCollapsed = body.classList.contains('collapsed');
-      if(forceCollapse === true && !isCollapsed || forceCollapse !== true && isCollapsed){
-        // 展開
-        body.classList.remove('collapsed');
-        btn.classList.remove('collapsed');
-        if(label) label.textContent = '收合篩選條件';
-      } else if(forceCollapse === true || !isCollapsed){
-        // 摺疊
+      if(forceCollapse === true){
+        // 強制摺疊
         body.classList.add('collapsed');
-        btn.classList.add('collapsed');
+        if(btn) btn.classList.add('collapsed');
         if(label) label.textContent = '展開篩選條件';
+      } else {
+        // 切換
+        if(isCollapsed){
+          body.classList.remove('collapsed');
+          if(btn) btn.classList.remove('collapsed');
+          if(label) label.textContent = '收合篩選條件';
+        } else {
+          body.classList.add('collapsed');
+          if(btn) btn.classList.add('collapsed');
+          if(label) label.textContent = '展開篩選條件';
+        }
       }
     }
     function toggleSidebar(){const sb=document.getElementById('sidebar');const ov=document.getElementById('sb-overlay');if(!sb||!ov)return;sb.classList.toggle('open');ov.style.display=sb.classList.contains('open')?'block':'none'}
