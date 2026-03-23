@@ -239,8 +239,9 @@
 <body>
   <header>
     <button id="hamburger" onclick="toggleSidebar()">☰</button>
-    <h1>🎣 北台灣海釣點神器</h1>
+    <h1 id="site-title" onclick="scrollToTop()" style="cursor:pointer;" title="回到頂部">🎣 北台灣海釣點神器</h1>
     <div class="header-actions">
+      <button class="btn-mini" id="install-app-btn" onclick="handleInstallApp()" style="background:rgba(46,196,182,.15);border:1px solid rgba(46,196,182,.4);color:var(--green);">📲 加入APP</button>
       <button class="btn-mini" onclick="shareLink()">📤 分享給龜蜜</button>
     </div>
   </header>
@@ -1517,6 +1518,92 @@
         ctx.stroke();
       }
     }
+
+    // ── Service Worker 註冊 ──
+    if('serviceWorker' in navigator){
+      window.addEventListener('load', ()=>{
+        navigator.serviceWorker.register('./sw.js').then(reg=>{
+          console.log('SW 已註冊:', reg.scope);
+        }).catch(err=>{
+          console.log('SW 註冊失敗:', err);
+        });
+      });
+    }
+
+    // ── 回到頂部 ──
+    function scrollToTop(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    // ── 安裝 APP 智慧偵測 ──
+    function handleInstallApp(){
+      const ua = navigator.userAgent.toLowerCase();
+      const isIOS = /iphone|ipad|ipod/.test(ua);
+      const isAndroid = /android/.test(ua);
+      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
+        || window.navigator.standalone === true;
+
+      if(isInStandaloneMode){
+        showToast('已在桌面 App 模式運行中');
+        return;
+      }
+
+      if(isIOS){
+        showInstallDialog();
+        return;
+      }
+
+      if(deferredPrompt){
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choice=>{
+          deferredPrompt = null;
+          if(choice.outcome === 'accepted'){
+            showToast('已加入桌面！');
+            const btn = document.getElementById('install-app-btn');
+            if(btn) btn.style.display='none';
+          } else {
+            showToast('已取消安裝');
+          }
+        });
+        return;
+      }
+
+      showInstallDialog();
+    }
+
+    function showInstallDialog(){
+      const ua = navigator.userAgent.toLowerCase();
+      const isIOS = /iphone|ipad|ipod/.test(ua);
+      const isSafari = /safari/.test(ua) && !/chrome/.test(ua);
+
+      let msg = '';
+      if(isIOS && isSafari){
+        msg = '點下方「分享」按鈕（方框加箭頭）\n→ 選「加入主畫面」\n→ 點右上角「新增」';
+      } else if(isIOS && !isSafari){
+        msg = '點網址列右側「分享」圖示\n→ 選「加入主畫面」\n→ 點「新增」';
+      } else {
+        msg = '瀏覽器右上角選單\n→ 點「加入主畫面」或「安裝應用程式」';
+      }
+
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:20px;';
+      modal.innerHTML = `
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;max-width:310px;width:100%;position:relative;">
+          <div style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:14px;">📲 加入主畫面</div>
+          <div style="font-size:.88rem;color:var(--text2);line-height:2;white-space:pre-line;">${msg}</div>
+          <button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top:18px;width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:25px;padding:10px;font-size:.9rem;font-weight:700;cursor:pointer;">✅ 了解了</button>
+        </div>`;
+      document.body.appendChild(modal);
+      modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+    }
+
+    window.addEventListener('load', ()=>{
+      if(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone){
+        const btn = document.getElementById('install-app-btn');
+        if(btn) btn.style.display = 'none';
+      }
+    });
+
   </script>
 </body>
 </html>
