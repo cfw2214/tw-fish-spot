@@ -1,7 +1,7 @@
 {
-  "name": "🎣 北台灣海釣點神器",
-  "short_name": "🎣 北台灣海釣點神器",
-  "description": "北台灣海釣點天氣、潮汐一次查，by 我是黑叔",
+  "name": "北台灣海釣點神器",
+  "short_name": "北台灣海釣點神器",
+  "description": "北台灣海釣點天氣、潮汐一次查by我是黑叔",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0a1628",
