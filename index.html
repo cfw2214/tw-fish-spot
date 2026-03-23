@@ -24,13 +24,14 @@
     .header-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
     .header-actions .btn-mini{background:rgba(244,162,97,.2);border:1px solid rgba(244,162,97,.4);color:var(--gold)}
     #hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer}
-    .main-wrap{display:flex;max-width:1300px;margin:0 auto}
+    .main-wrap{display:flex;max-width:1300px;margin:0 auto;align-items:stretch}
     #sidebar{width:270px;min-width:270px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:20px;min-height:calc(100vh - 60px)}
+    #right-col{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    #main-content{flex:1;padding:20px;overflow:hidden}
     .sidebar-section h3{font-size:.75rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px}
     #fav-list{list-style:none;display:flex;flex-direction:column;gap:6px}
     #fav-list li{background:var(--card);border-radius:8px;padding:8px 10px;font-size:.82rem;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border)}
     .fav-area{color:var(--text2);font-size:.72rem;margin-left:4px}.fav-del{color:var(--red);background:none;border:none;cursor:pointer;font-size:.9rem}.fav-empty{color:var(--text2);font-size:.8rem;padding:8px 0}
-    #main-content{flex:1;padding:20px;overflow:hidden}
     .filter-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:24px}
     .filter-box h2{font-size:.9rem;color:var(--accent);margin-bottom:14px;letter-spacing:1px}
     .filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -60,7 +61,7 @@
     .tide-mini div{font-size:.75rem;color:var(--text2)} .tide-mini strong{color:var(--text)}
     .rec-note{font-size:.72rem;color:var(--text2);margin-bottom:10px}.rec-footer{display:flex;justify-content:space-between;align-items:center}
     .loading-placeholder{text-align:center;color:var(--text2);padding:50px 20px;grid-column:1/-1}.spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:12px auto}
-    .sponsor-bar{max-width:1300px;margin:20px auto 0;padding:0 20px 0 calc(270px + 20px)}.sponsor-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}.sponsor-title{font-size:.82rem;color:var(--accent);letter-spacing:1px;margin-bottom:10px}.sponsor-banner{width:100%;background:linear-gradient(135deg,var(--card),var(--card2));border:1px dashed var(--accent);border-radius:12px;padding:18px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:120px;text-align:center}.sponsor-banner div{font-size:1rem;color:var(--text);letter-spacing:1px}.sponsor-banner div:nth-child(2){font-size:1.1rem;color:var(--gold);font-weight:700}
+    .sponsor-bar{padding:0 20px 20px;}.sponsor-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}.sponsor-title{font-size:.82rem;color:var(--accent);letter-spacing:1px;margin-bottom:10px}.sponsor-banner{width:100%;background:linear-gradient(135deg,var(--card),var(--card2));border:1px dashed var(--accent);border-radius:12px;padding:18px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:120px;text-align:center}.sponsor-banner div{font-size:1rem;color:var(--text);letter-spacing:1px}.sponsor-banner div:nth-child(2){font-size:1.1rem;color:var(--gold);font-weight:700}
     @keyframes spin{to{transform:rotate(360deg)}}
     @media(max-width:768px){
       #hamburger{display:block}
@@ -71,7 +72,6 @@
       .filter-grid{grid-template-columns:1fr}
       .filter-group{width:100%!important;justify-self:auto!important}  /* 手機版拉寬輸入框 */
       #recommend-grid{grid-template-columns:1fr}  /* 手機版 1 欄 × 6 行 = 6 張 */
-      .sponsor-bar{padding:0 20px}  /* 手機版 sidebar 收起，padding-left 回到正常 */
       .sponsor-banner{min-height:108px;padding:16px 12px}
       .sponsor-banner div{font-size:.95rem}
     }
@@ -115,7 +115,9 @@
         </div>
       </div>
     </aside>
-    <main id="main-content">
+    </main>
+    <div id="right-col" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+      <main id="main-content" style="flex:1;">
       <div class="filter-box">
         <h2 style="font-size:1.05rem;">🔍 輸入您想釣魚的日期與時間（預報三日內較準）</h2>
         <div class="filter-grid">
@@ -216,16 +218,17 @@
         <div id="recommend-grid"><div class="loading-placeholder"><div class="spinner"></div><div>分析今日海況中...</div></div></div>
       </section>
     </main>
-  </div>
-  <div class="sponsor-bar">
-    <div class="sponsor-box">
-      <div class="sponsor-title">🤝 工商服務廣告區</div>
-      <div class="sponsor-banner" id="sponsor-list" style="padding:0;overflow:hidden;background:none;border:none;min-height:unset;">
-        <a href="https://www.kuyingtaiwan.com/" target="_blank" rel="noopener noreferrer" style="display:block;width:100%;line-height:0;">
-          <img src="banner1.png" alt="贊助商廣告" style="width:100%;height:auto;border-radius:12px;display:block;">
-        </a>
+    <div class="sponsor-bar" style="padding:20px;">
+      <div class="sponsor-box">
+        <div class="sponsor-title">🤝 工商服務廣告區</div>
+        <div class="sponsor-banner" id="sponsor-list" style="padding:0;overflow:hidden;background:none;border:none;min-height:unset;">
+          <a href="https://www.kuyingtaiwan.com/" target="_blank" rel="noopener noreferrer" style="display:block;width:100%;line-height:0;">
+            <img src="banner1.png" alt="贊助商廣告" style="width:100%;height:auto;border-radius:12px;display:block;">
+          </a>
+        </div>
       </div>
     </div>
+  </div>
   </div>
   <!-- 潮位圖 Modal -->
   <div id="tide-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);align-items:center;justify-content:center;" onclick="closeTideModal(event)">
