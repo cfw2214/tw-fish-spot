@@ -748,9 +748,60 @@
     function refreshRecommendations(){if(recommendationPool.length){recommendationPool=shuffleArray(recommendationPool);recommendationPage=0;renderRecommendationPage(recommendationPool)}}
     async function initRecommendations(){
       if(!SPOTS.length){document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder">目前沒有可用釣點資料</div>';return;}
-      recommendationPool = [];
+
+      const today = getTWDateString();
+      const twNow = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));
+      const startHour = twNow.getHours();
+      const duration = 4;
+      const { endDate, endHour } = calcEndFromDuration(today, startHour, duration);
+
+      document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div class="spinner"></div><div>正在為你尋找附近最佳釣點...</div></div>';
+
+      // 先嘗試取得使用者位置
+      let userLocation = null;
+      try { userLocation = await getUserLocation(); } catch(e){}
+
+      // 若沒有位置，顯示提示後靜默結束
+      if(!userLocation){
+        document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div style="font-size:1.2rem;margin-bottom:8px">📍</div><div style="margin-bottom:8px">開放位置權限即可查看附近推薦釣點</div><div style="font-size:.8rem;color:var(--text2)">或使用上方篩選條件手動搜尋</div></div>';
+        return;
+      }
+
+      // 從所有允許的釣點中，先用距離排序取最近 15 個，避免全部查太慢
+      const allowed = SPOTS.filter(s=>s.allowed!==false);
+      const withDist = allowed.map(s=>({
+        ...s,
+        _dist: parseFloat(haversineDistance(userLocation.lat,userLocation.lng,s.lat,s.lng).toFixed(1))
+      }));
+      withDist.sort((a,b)=>a._dist-b._dist);
+      const candidates = withDist.slice(0,15);
+
+      clearTideCache();
+      const results = await Promise.all(candidates.map(s=>getWeather(s,today,startHour,endHour,userLocation,endDate)));
+
+      // 篩選評分 >= 3、浪高合格
+      const good = results.filter(r=>{
+        if(r.spot.max_wave_height===99) return r.score>=3;
+        return r.score>=3 && r.wave<=r.spot.max_wave_height;
+      });
+
+      // 排序：評分優先，同分再比距離
+      good.sort((a,b)=>{
+        if(a.score!==b.score) return b.score-a.score;
+        return (a.distance??Infinity)-(b.distance??Infinity);
+      });
+
+      const top3 = good.slice(0,3);
+      if(!top3.length){
+        document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div style="font-size:1.5rem;margin-bottom:8px">🌊</div><div>今日附近釣點海況較差</div><div style="font-size:.8rem;color:var(--text2);margin-top:6px">可勾選「忽略浪高」或調整篩選條件</div></div>';
+        return;
+      }
+
+      recommendationPool = top3;
       recommendationPage = 0;
-      document.getElementById('recommend-grid').innerHTML='<div class="loading-placeholder"><div style="font-size:1.2rem;margin-bottom:8px">✅</div><div>釣點資料已載入，請使用篩選條件搜尋</div></div>';
+      const titleEl = document.getElementById('section-title-text');
+      if(titleEl) titleEl.textContent = `今日附近推薦釣點`;
+      renderRecommendationPage(top3);
     }
     // 🌟 查詢收藏釣點的天氣（忽略所有篩選條件）
     async function searchFavorites(){
