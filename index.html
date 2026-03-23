@@ -208,10 +208,12 @@
     }
     .gmap-infocard .icard-nav:hover{ opacity:.9; }
     /* 移除 Google InfoWindow 預設白框 */
-    .gm-style .gm-style-iw-c{ padding:0 !important; border-radius:14px !important; overflow:visible !important; box-shadow:none !important; }
-    .gm-style .gm-style-iw-d{ overflow:visible !important; padding:0 !important; }
+    .gm-style .gm-style-iw-c{ padding:0 !important; border-radius:14px !important; overflow:visible !important; box-shadow:none !important; background:transparent !important; }
+    .gm-style .gm-style-iw-d{ overflow:visible !important; padding:0 !important; background:transparent !important; }
+    .gm-style .gm-style-iw-chr{ display:none !important; }
     .gm-style .gm-ui-hover-effect{ display:none !important; }
     .gm-style .gm-style-iw-tc::after{ background:#1a2035 !important; }
+    .gm-style .gm-style-iw-t::after{ background:#1a2035 !important; }
     
     @media(max-width:768px){
       #hamburger{display:block}
@@ -222,6 +224,7 @@
       .filter-grid{grid-template-columns:1fr}
       .filter-group{width:100%!important;justify-self:auto!important}  /* 手機版拉寬輸入框 */
       #recommend-grid{grid-template-columns:1fr}  /* 手機版 1 欄 × 6 行 = 6 張 */
+      #view-tabs{margin-left:0 !important;width:100% !important;}  /* 手機版 tab 獨立一行 */
       .sponsor-banner{min-height:108px;padding:16px 12px}
       .sponsor-banner div{font-size:.95rem}
     }
@@ -363,12 +366,12 @@
         </div>
       </div>
       <section id="recommend-section">
-        <div class="section-header" style="align-items:center;">
+        <div class="section-header" style="align-items:center;flex-wrap:wrap;gap:8px;">
           <div class="section-title">🎯 <span id="section-title-text">推薦釣點</span> <span class="badge-new">LIVE</span></div>
           <!-- Tab 切換：釣點列表 / 地圖 -->
-          <div id="view-tabs" style="display:none;margin-left:auto;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
-            <button id="tab-list" onclick="switchTab('list')" style="padding:7px 18px;font-size:.82rem;font-weight:700;border:none;cursor:pointer;background:var(--accent2);color:#fff;transition:all .2s;">📋 釣點列表</button>
-            <button id="tab-map" onclick="switchTab('map')" style="padding:7px 18px;font-size:.82rem;font-weight:700;border:none;cursor:pointer;background:var(--card);color:var(--text2);transition:all .2s;">🗺️ 地圖</button>
+          <div id="view-tabs" style="display:none;width:400px;border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-left:auto;flex-shrink:0;">
+            <button id="tab-list" onclick="switchTab('list')" style="width:50%;padding:7px 0;font-size:.82rem;font-weight:700;border:none;cursor:pointer;background:var(--accent2);color:#fff;transition:all .2s;">📋 釣點列表</button>
+            <button id="tab-map" onclick="switchTab('map')" style="width:50%;padding:7px 0;font-size:.82rem;font-weight:700;border:none;cursor:pointer;background:var(--card);color:var(--text2);transition:all .2s;">🗺️ 地圖</button>
           </div>
         </div>
         <div id="wave-alert" class="wave-alert" style="display:none;">🌊 <span id="wave-message"></span></div>
@@ -839,7 +842,7 @@
         (Number.isFinite(r.distance) ?
           `<div class="rec-stat"><span style="color:var(--text2)">🚗 距離</span><strong style="color:${waveColor} !important">${Math.round(r.distance)} km</strong></div>` : '');
 
-      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}<span class="badge ${tempBadgeClass}">🌡️ ${r.tempMin}°-${r.tempMax}°C</span></div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini" onclick="openTideModal('${spotName}','${tidesJson}','${cardDate}')" style="cursor:pointer;position:relative;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=''">${tideHtml}<span style="position:absolute;bottom:5px;right:7px;font-size:1.1rem;opacity:.7;">🔍</span></div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="showOnMap('${r.spot.name.replace(/'/g,'\\\'')}')" style="margin-right:8px;">🗺️ 地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
+      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">📍 ${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}<span class="badge ${tempBadgeClass}">🌡️ ${r.tempMin}°-${r.tempMax}°C</span></div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini" onclick="openTideModal('${spotName}','${tidesJson}','${cardDate}')" style="cursor:pointer;position:relative;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=''">${tideHtml}<span style="position:absolute;bottom:5px;right:7px;font-size:1.1rem;opacity:.7;">🔍</span></div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="showOnMap('${r.spot.name.replace(/'/g,'\\\'')}')" style="margin-right:8px;">📍 檢視地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     const MAP_PER_PAGE = window.innerWidth <= 768 ? 999 : 6; // 手機顯示全部，電腦每頁6
     function renderRecommendationPage(pool){
@@ -1227,18 +1230,11 @@
       const tabMap  = document.getElementById('tab-map');
       if(tabList){ tabList.style.background='var(--card)';   tabList.style.color='var(--text2)'; }
       if(tabMap){  tabMap.style.background='var(--accent2)'; tabMap.style.color='#fff'; }
-      // resize 確保地圖正常顯示
+      // resize 確保地圖正常顯示（不做 fitBounds，避免覆蓋 showOnMap 的縮放）
       if(typeof _gmap !== 'undefined' && _gmap){
         setTimeout(()=>{
           google.maps.event.trigger(_gmap,'resize');
-          if(_gmapMarkers.length > 0){
-            const bounds = new google.maps.LatLngBounds();
-            _gmapMarkers.forEach(m => bounds.extend(m.getPosition()));
-            _gmap.fitBounds(bounds);
-          } else {
-            _gmap.setCenter({lat:25.09, lng:121.76});
-          }
-        }, 1000);
+        }, 400);
       }
     }
 
@@ -1291,28 +1287,32 @@
       if(!_gmap || !_gmapInfoWindow) return;
       hideCardsOverlay();
       const pos = {lat: r.spot.lat, lng: r.spot.lng};
+      const navUrl = `https://maps.google.com/?q=${r.spot.lat},${r.spot.lng}`;
+      const note = r.spot.note ? `<div class="icard-desc">${r.spot.note}</div>` : '';
+      // 區域與類型 badge（同小卡樣式）
+      const areaBadge = r.spot.area ? `<span class="badge badge-area">📍 ${r.spot.area}</span>` : '';
+      const typeBadge = r.spot.type ? `<span class="badge badge-${r.spot.type}">🎣 ${r.spot.type}</span>` : '';
+      const content = `
+        <div class="gmap-infocard">
+          <div class="icard-name">${r.spot.name}</div>
+          <div class="icard-sub" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">${areaBadge}${typeBadge}</div>
+          ${note}
+          <button class="icard-close" onclick="window._gmapIW&&window._gmapIW.close()">✕</button>
+          <button class="icard-nav" onclick="window.open('${navUrl}','_blank')">
+            🗺️ Google Maps 導航
+          </button>
+        </div>`;
+      _gmapInfoWindow.setContent(content);
+      const marker = _gmapMarkers.find(m=>m.getTitle()===r.spot.name);
+      // 等 overlay slide-out 動畫結束 + resize，再 pan/zoom，不再做第二次 fitBounds
       setTimeout(()=>{
+        google.maps.event.trigger(_gmap,'resize');
         _gmap.panTo(pos);
         _gmap.setZoom(15);
-        const navUrl = `https://maps.google.com/?q=${r.spot.lat},${r.spot.lng}`;
-        const note = r.spot.note ? `<div class="icard-desc">${r.spot.note}</div>` : '';
-        const content = `
-          <div class="gmap-infocard">
-            <div class="icard-time">${r.spot.type}</div>
-            <div class="icard-name">${r.spot.name}</div>
-            <div class="icard-sub">${r.spot.area || ''}</div>
-            ${note}
-            <button class="icard-close" onclick="window._gmapIW&&window._gmapIW.close()">✕</button>
-            <button class="icard-nav" onclick="window.open('${navUrl}','_blank')">
-              🗺️ Google Maps 導航
-            </button>
-          </div>`;
-        _gmapInfoWindow.setContent(content);
-        const marker = _gmapMarkers.find(m=>m.getTitle()===r.spot.name);
         if(marker) _gmapInfoWindow.open(_gmap, marker);
         else { _gmapInfoWindow.setPosition(pos); _gmapInfoWindow.open(_gmap); }
         window._gmapIW = _gmapInfoWindow;
-      }, 380); // 等滑動動畫完成再 pan
+      }, 420);
     }
 
     // 小卡上的「地圖」按鈕觸發
