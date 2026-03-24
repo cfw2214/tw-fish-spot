@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Google Maps -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-ehW-BkEv97rpwU7bdVBPYbwcmsDaUeI&callback=initGoogleMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-ehW-BkEv97rpwU7bdVBPYbwcmsDaUeI&libraries=marker&callback=initGoogleMap" async defer></script>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y01FJW2GGW"></script>
@@ -395,6 +395,8 @@
           <div id="map-frame">
             <!-- 底層：Google Maps 永遠顯示 -->
             <div id="google-map"></div>
+            <!-- 我的位置標籤（左下角，在小卡下方） -->
+            <div id="my-location-label" style="display:none;position:absolute;left:10px;bottom:10px;z-index:6;background:#fff;color:#1a73e8;font-size:.78rem;font-weight:700;padding:5px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap;"></div>
             <!-- 浮層：釣點小卡（左右滑動） -->
             <div id="map-cards-overlay">
               <div id="map-cards-inner">
@@ -1219,6 +1221,7 @@
       _gmap = new google.maps.Map(mapEl, {
         center: {lat: 25.09, lng: 121.76}, // 預設基隆
         zoom: 11,
+        mapId: 'tw_fish_spot_map',
         mapTypeId: 'roadmap',
         mapTypeControl: true,
         mapTypeControlOptions: {
@@ -1231,14 +1234,70 @@
         zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_CENTER}
       });
       _gmapInfoWindow = new google.maps.InfoWindow();
-      // 嘗試移動到使用者位置
+      // 嘗試移動到使用者位置並放置標記
       if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(pos=>{
-          _gmap.setCenter({lat:pos.coords.latitude, lng:pos.coords.longitude});
+          const userPos = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+          _gmap.setCenter(userPos);
           _gmap.setZoom(12);
+          placeUserMarker(userPos);
         }, ()=>{});
       }
     }
+
+    let _userMarker = null;
+
+    function getUserEmoji(){
+      const cb = document.getElementById('show-forbidden');
+      return cb && cb.checked ? '🥷' : '🙋‍♂️';
+    }
+
+    function placeUserMarker(pos){
+      if(!_gmap) return;
+      const { AdvancedMarkerElement } = google.maps.marker;
+
+      // 移除舊標記
+      if(_userMarker){ _userMarker.map = null; _userMarker = null; }
+
+      const emoji = getUserEmoji();
+      const el = document.createElement('div');
+      el.style.cssText = 'font-size:28px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));cursor:default;';
+      el.textContent = emoji;
+
+      _userMarker = new AdvancedMarkerElement({
+        position: pos,
+        map: _gmap,
+        title: '我的位置',
+        content: el,
+      });
+
+      // 更新左下角標籤
+      const label = document.getElementById('my-location-label');
+      if(label){
+        label.textContent = emoji + ' 我的位置';
+        label.style.display = 'block';
+      }
+    }
+
+    // 監聽「顯示禁釣區」勾選變化，即時更新 emoji
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const cb = document.getElementById('show-forbidden');
+      if(cb){
+        cb.addEventListener('change', ()=>{
+          if(_userMarker){
+            const emoji = getUserEmoji();
+            // 更新 marker content
+            const el = document.createElement('div');
+            el.style.cssText = 'font-size:28px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));cursor:default;';
+            el.textContent = emoji;
+            _userMarker.content = el;
+            // 更新標籤
+            const label = document.getElementById('my-location-label');
+            if(label) label.textContent = emoji + ' 我的位置';
+          }
+        });
+      }
+    });
 
     function setMapInner(html){
       const el = document.getElementById('map-cards-inner');
@@ -1256,6 +1315,8 @@
       const tabMap  = document.getElementById('tab-map');
       if(tabList){ tabList.style.background='var(--accent2)'; tabList.style.color='#fff'; }
       if(tabMap){  tabMap.style.background='var(--card)';     tabMap.style.color='var(--text2)'; }
+      // 小卡顯示時，把「我的位置」標籤移到小卡下方
+      updateLocationLabelPos(true);
     }
 
     function hideCardsOverlay(){
@@ -1269,11 +1330,24 @@
       const tabMap  = document.getElementById('tab-map');
       if(tabList){ tabList.style.background='var(--card)';   tabList.style.color='var(--text2)'; }
       if(tabMap){  tabMap.style.background='var(--accent2)'; tabMap.style.color='#fff'; }
+      // 地圖全螢幕時，標籤移回左下角
+      updateLocationLabelPos(false);
       // resize 確保地圖正常顯示（不做 fitBounds，避免覆蓋 showOnMap 的縮放）
       if(typeof _gmap !== 'undefined' && _gmap){
         setTimeout(()=>{
           google.maps.event.trigger(_gmap,'resize');
         }, 400);
+      }
+    }
+
+    function updateLocationLabelPos(cardsVisible){
+      const label = document.getElementById('my-location-label');
+      if(!label || label.style.display === 'none') return;
+      if(cardsVisible){
+        // 小卡浮層高度約佔上半部，標籤移到最底
+        label.style.bottom = '10px';
+      } else {
+        label.style.bottom = '10px';
       }
     }
 
@@ -1293,25 +1367,23 @@
     function updateMapMarkers(pool){
       if(!_gmap) return;
       // 清除舊大頭針
-      _gmapMarkers.forEach(m=>m.setMap(null));
+      _gmapMarkers.forEach(m=>m.map=null);
       _gmapMarkers = [];
       if(!pool.length) return;
 
+      const { AdvancedMarkerElement } = google.maps.marker;
       const bounds = new google.maps.LatLngBounds();
       pool.forEach(r=>{
         const pos = {lat: r.spot.lat, lng: r.spot.lng};
-        const marker = new google.maps.Marker({
+        // 自訂 SVG 圓點（同原本樣式）
+        const dot = document.createElement('div');
+        const color = markerColor(r.spot.type);
+        dot.style.cssText = `width:20px;height:20px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4);cursor:pointer;`;
+        const marker = new AdvancedMarkerElement({
           position: pos,
           map: _gmap,
           title: r.spot.name,
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 10,
-            fillColor: markerColor(r.spot.type),
-            fillOpacity: 1,
-            strokeColor: '#fff',
-            strokeWeight: 2,
-          }
+          content: dot,
         });
         marker.addListener('click', ()=>{
           showSpotOnMap(r);
@@ -1342,7 +1414,7 @@
           </button>
         </div>`;
       _gmapInfoWindow.setContent(content);
-      const marker = _gmapMarkers.find(m=>m.getTitle()===r.spot.name);
+      const marker = _gmapMarkers.find(m=>m.title===r.spot.name);
       // 等 overlay slide-out 動畫結束 + resize，再 pan/zoom，不再做第二次 fitBounds
       setTimeout(()=>{
         google.maps.event.trigger(_gmap,'resize');
