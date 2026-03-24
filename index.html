@@ -1740,25 +1740,57 @@ https://cfw2214.github.io/tw-fish-spot/`;
       const isIOS = /iphone|ipad|ipod/.test(ua);
       const isSafari = /safari/.test(ua) && !/chrome/.test(ua);
 
-      let msg = '';
-      if(isIOS && isSafari){
-        msg = '點下方「分享」按鈕（方框加箭頭）\n→ 選「加入主畫面」\n→ 點右上角「新增」';
-      } else if(isIOS && !isSafari){
-        msg = '點網址列右側「分享」圖示\n→ 選「加入主畫面」\n→ 點「新增」';
-      } else {
-        msg = '瀏覽器右上角選單\n→ 點「加入主畫面」或「安裝應用程式」';
-      }
-
       const modal = document.createElement('div');
       modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:20px;';
-      modal.innerHTML = `
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;max-width:310px;width:100%;position:relative;">
-          <div style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:14px;">📲 加入主畫面</div>
-          <div style="font-size:.88rem;color:var(--text2);line-height:2;white-space:pre-line;">${msg}</div>
-          <button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top:18px;width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:25px;padding:10px;font-size:.9rem;font-weight:700;cursor:pointer;">✅ 了解了</button>
-        </div>`;
+
+      if(isIOS){
+        // iOS（不管 Safari 或 Chrome）：統一顯示 Safari 引導 + 複製連結
+        modal.innerHTML = `
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;max-width:310px;width:100%;position:relative;">
+            <div style="font-size:.98rem;font-weight:700;color:var(--text);margin-bottom:14px;line-height:1.5;">📲 iPhone/iPad 加入主畫面，需使用 iOS 原廠瀏覽器 Safari 加入桌面</div>
+            <div style="font-size:.84rem;color:var(--text2);line-height:1.8;margin-bottom:16px;">Safari 瀏覽器 → 點下方「分享」按鈕<br>→ 選「加入主畫面」→ 點「新增」</div>
+            <div onclick="copyUrlAndToast(this)" style="font-size:.85rem;color:var(--accent);font-weight:700;text-align:center;padding:10px 14px;border:1px dashed rgba(0,180,216,.5);border-radius:10px;cursor:pointer;margin-bottom:14px;line-height:1.5;">👆 點擊複製本站連結，再貼上 Safari 瀏覽器</div>
+            <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:25px;padding:10px;font-size:.9rem;font-weight:700;cursor:pointer;">✅ 了解了</button>
+          </div>`;
+      } else {
+        // 桌面 / Android 無 deferredPrompt
+        modal.innerHTML = `
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;max-width:310px;width:100%;position:relative;">
+            <div style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:14px;">📲 加入主畫面</div>
+            <div style="font-size:.88rem;color:var(--text2);line-height:2;">瀏覽器右上角選單<br>→ 點「加入主畫面」或「安裝應用程式」</div>
+            <button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top:18px;width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:25px;padding:10px;font-size:.9rem;font-weight:700;cursor:pointer;">✅ 了解了</button>
+          </div>`;
+      }
+
       document.body.appendChild(modal);
       modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+    }
+
+    function copyUrlAndToast(el){
+      const url = window.location.href;
+      const doToast = ()=>{
+        // 跳出提示框
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;';
+        toast.innerHTML = `
+          <div style="background:var(--card);border:1px solid var(--accent);border-radius:16px;padding:22px 20px;max-width:290px;width:100%;text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:10px;">✅</div>
+            <div style="font-size:.92rem;font-weight:700;color:var(--text);line-height:1.7;">網址已複製<br><span style="color:var(--text2);font-size:.82rem;font-weight:400;">請再貼上 Safari 原廠瀏覽器</span></div>
+            <button onclick="this.closest('div[style*=fixed]').remove()" style="margin-top:16px;width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:25px;padding:9px;font-size:.9rem;font-weight:700;cursor:pointer;">好的！</button>
+          </div>`;
+        document.body.appendChild(toast);
+        toast.addEventListener('click', e=>{ if(e.target===toast) toast.remove(); });
+      };
+
+      navigator.clipboard.writeText(url).then(doToast).catch(()=>{
+        // 降級
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch(e){}
+        document.body.removeChild(ta);
+        doToast();
+      });
     }
 
     window.addEventListener('load', ()=>{
