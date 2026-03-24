@@ -230,7 +230,6 @@
       #sidebar.open{left:0}
       .filter-grid{grid-template-columns:1fr}
       .filter-group{width:100%!important;justify-self:auto!important}  /* 手機版拉寬輸入框 */
-      .filter-group input[type="date"]{width:100%!important;min-width:0!important;max-width:100%!important;display:block!important;-webkit-appearance:none;appearance:none;}
       #recommend-grid{grid-template-columns:1fr}  /* 手機版 1 欄 × 6 行 = 6 張 */
       #view-tabs{margin-left:0 !important;width:100% !important;}  /* 手機版 tab 獨立一行 */
       .sponsor-banner{min-height:108px;padding:16px 12px}
@@ -281,7 +280,6 @@
         <a href="https://www.facebook.com/uncle.sblack" target="_blank" rel="noopener noreferrer" style="display:block;width:100%;text-align:center;padding:6px 10px;background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.35);color:var(--accent);font-weight:700;font-size:.85rem;border-radius:8px;text-decoration:none;margin-top:8px;">❤️ 私訊.廣告合作 > FB我是黑叔</a>
       </div>
     </aside>
-    </main>
     <div id="right-col" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
       <main id="main-content" style="flex:1;">
       <div class="filter-box">
@@ -572,21 +570,8 @@
         document.body.removeChild(textArea);
       }
     }
-    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const btn=document.getElementById('install-btn');if(btn)btn.style.display='inline-flex';});
-    async function installApp(){
-      if(deferredPrompt){
-        deferredPrompt.prompt();
-        const choice=await deferredPrompt.userChoice;
-        deferredPrompt=null;
-        if(choice.outcome==='accepted') showToast('已送出新增到桌面提示');
-        else showToast('已取消新增到桌面');
-      }else{
-        const ua=navigator.userAgent.toLowerCase();
-        if(/iphone|ipad|ipod/.test(ua)) showToast('iPhone/iPad 請按分享後選「加入主畫面」');
-        else showToast('請使用瀏覽器安裝功能新增到桌面');
-      }
-    }
-    window.addEventListener('appinstalled',()=>{showToast('已安裝到桌面');const btn=document.getElementById('install-btn');if(btn)btn.style.display='none';});
+    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const btn=document.getElementById('install-app-btn');if(btn)btn.style.display='inline-flex';});
+    window.addEventListener('appinstalled',()=>{showToast('已安裝到桌面');const btn=document.getElementById('install-app-btn');if(btn)btn.style.display='none';});
     function showToast(msg,isError=false){const t=document.createElement('div');t.textContent=msg;t.style.cssText=`position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:${isError?'var(--red)':'var(--accent2)'};color:#fff;padding:10px 20px;border-radius:20px;font-size:.85rem;z-index:999`;document.body.appendChild(t);setTimeout(()=>t.remove(),2500)}
     function degToDir(deg){return['北','東北','東','東南','南','西南','西','西北'][Math.round(deg/45)%8]}
     function msToBeaufort(ms){const scale=[0.3,1.6,3.4,5.5,8.0,10.8,13.9,17.2,20.8,24.5,28.5,32.7];for(let i=0;i<scale.length;i++){if(ms<scale[i])return i}return 12}
@@ -1610,8 +1595,7 @@
     }
 
     // ── Service Worker 註冊 ──
-    if('serviceWorker' in navigator){
-      // ── 分享釣點天氣到剪貼簿 ──
+    // ── 分享釣點天氣到剪貼簿 ──
     window.shareSpotToLine = function(spotName, dateStr){
       const r = recommendationPool.find(x => x.spot.name === spotName);
       if(!r){ showToast('找不到釣點資料', true); return; }
@@ -1686,7 +1670,9 @@ https://cfw2214.github.io/tw-fish-spot/`;
       modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
     }
 
-    window.addEventListener('load', ()=>{
+    // ── Service Worker 註冊 ──
+    if('serviceWorker' in navigator){
+      window.addEventListener('load', ()=>{
         navigator.serviceWorker.register('./sw.js').then(reg=>{
           console.log('SW 已註冊:', reg.scope);
         }).catch(err=>{
