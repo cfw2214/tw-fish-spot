@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V0.8.1</title>
+  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V0.8.5</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Google Maps -->
@@ -396,7 +396,7 @@
             <!-- 底層：Google Maps 永遠顯示 -->
             <div id="google-map"></div>
             <!-- 我的位置標籤（左下角，在小卡下方） -->
-            <div id="my-location-label" style="display:none;position:absolute;left:10px;bottom:10px;z-index:6;background:#fff;color:#1a73e8;font-size:.78rem;font-weight:700;padding:5px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap;"></div>
+            <div id="my-location-label" onclick="flyToUserLocation()" style="display:none;position:absolute;left:10px;bottom:10px;z-index:6;background:#fff;color:#1a73e8;font-size:.78rem;font-weight:700;padding:5px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:auto;white-space:nowrap;cursor:pointer;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.35)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.25)'"></div>
             <!-- 浮層：釣點小卡（左右滑動） -->
             <div id="map-cards-overlay">
               <div id="map-cards-inner">
@@ -440,7 +440,7 @@
     </div>
   </div>
 
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V0.8.1
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V0.8.5
     <div style="font-size:.65rem;margin-top:2px;opacity:0.8">天氣數據皆來源自網路公開資料，僅供大致參考，精確數據請再自行查驗</div>
   </footer>
   <script>
@@ -1252,22 +1252,25 @@
       return cb && cb.checked ? '🥷' : '🙋‍♂️';
     }
 
+    let _userPos = null; // 儲存使用者位置供飛回使用
+
     function placeUserMarker(pos){
       if(!_gmap) return;
       const { AdvancedMarkerElement } = google.maps.marker;
+      _userPos = pos; // 記住位置
 
       // 移除舊標記
       if(_userMarker){ _userMarker.map = null; _userMarker = null; }
 
       const emoji = getUserEmoji();
       const el = document.createElement('div');
-      el.style.cssText = 'font-size:28px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));cursor:default;';
+      el.style.cssText = 'font-size:28px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));cursor:pointer;';
       el.textContent = emoji;
+      el.onclick = ()=>{ flyToUserLocation(); };
 
       _userMarker = new AdvancedMarkerElement({
         position: pos,
         map: _gmap,
-        title: '我的位置',
         content: el,
       });
 
@@ -1277,6 +1280,12 @@
         label.textContent = emoji + ' 我的位置';
         label.style.display = 'block';
       }
+    }
+
+    function flyToUserLocation(){
+      if(!_gmap || !_userPos) return;
+      _gmap.panTo(_userPos);
+      _gmap.setZoom(15);
     }
 
     // 監聽「顯示禁釣區」勾選變化，即時更新 emoji
