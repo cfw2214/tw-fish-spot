@@ -226,7 +226,7 @@
       #hamburger{display:block}
       .header-actions{display:flex}
       header h1{font-size:1.1rem;left:0;transform:none;margin-left:50px;margin-right:120px;text-align:left}
-      #sidebar{position:fixed;left:-290px;top:0;height:100vh;z-index:150;transition:left .3s;padding-top:70px}
+      #sidebar{position:fixed;left:-290px;top:0;height:100vh;z-index:150;transition:left .3s;padding-top:70px;overflow-y:auto;padding-bottom:30px;}
       #sidebar.open{left:0}
       .filter-grid{grid-template-columns:1fr}
       .filter-group{width:100%!important;justify-self:auto!important}  /* 手機版拉寬輸入框 */
@@ -248,8 +248,8 @@
   <div id="sb-overlay" style="display:none;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.5)" onclick="toggleSidebar()"></div>
   <div class="main-wrap">
     <aside id="sidebar">
-      <div class="sidebar-section">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div class="sidebar-section" style="margin-top:0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
           <img src="icon.png" alt="北台灣海釣點神器" style="width:50px;height:50px;border-radius:10px;flex-shrink:0;">
           <h3 style="margin-bottom:0;border-bottom:none;padding-bottom:0;font-size:1.05rem;">⭐ 我的最愛釣點</h3>
         </div>
@@ -277,7 +277,7 @@
         <div style="font-size:.7rem;color:var(--text2);text-align:center;">
           感謝您的支持 ❤️
         </div>
-        <a href="https://www.facebook.com/uncle.sblack" target="_blank" rel="noopener noreferrer" style="display:block;width:100%;text-align:center;padding:6px 10px;background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.35);color:var(--accent);font-weight:700;font-size:.85rem;border-radius:8px;text-decoration:none;margin-top:8px;">❤️ 私訊＆廣告合作 > FB我是黑叔</a>
+        <a href="https://www.facebook.com/uncle.sblack" target="_blank" rel="noopener noreferrer" style="display:block;width:100%;text-align:center;padding:6px 10px;background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.35);color:var(--accent);font-weight:700;font-size:.85rem;border-radius:8px;text-decoration:none;margin-top:8px;">❤️ 私訊.廣告合作 > FB我是黑叔</a>
       </div>
     </aside>
     </main>
