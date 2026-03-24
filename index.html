@@ -92,7 +92,7 @@
     .filter-box h2{font-size:.9rem;color:var(--accent);margin-bottom:14px;letter-spacing:1px}
     .filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .filter-group{display:flex;flex-direction:column;gap:5px;width:75%;justify-self:start}.filter-group label{font-size:.78rem;color:var(--text2)}
-    .filter-group input,.filter-group select{background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:.85rem;font-family:inherit;outline:none;width:100%}
+    .filter-group input,.filter-group select{background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:.85rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;}
     .filter-row-full{grid-column:1/-1}
     .chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.78rem;cursor:pointer;transition:all .2s;user-select:none}
     .chip.active{background:var(--accent2);border-color:var(--accent);color:#fff}
@@ -292,7 +292,7 @@
             <input type="date" id="input-date">
           </div>
           <div class="filter-group">
-            <label>🕐 作釣開始時間</label>
+            <label>🕐 開始作釣時間</label>
             <select id="input-time-start"></select>
           </div>
           <div class="filter-group">
@@ -369,8 +369,8 @@
                 <input type="checkbox" id="show-forbidden" style="accent-color:var(--accent);width:16px;height:16px;cursor:pointer;"> 顯示禁釣區
               </label>
             </div>
-            <div style="font-size:.75rem;color:var(--text);margin-top:6px;">
-              當浪高超過1.2m就不顯示野場，港區內做釣則不受浪高限制，作釣建議著安全裝備
+            <div style="font-size:.68rem;color:var(--text);margin-top:6px;">
+              當浪高超過1.2m則不顯示野場，港區內則不受浪高限制，風力4級以上則顯示合適的風向釣點，建議穿著防滑鞋救生衣等安全裝備！
             </div>
           </div>
         </div>
