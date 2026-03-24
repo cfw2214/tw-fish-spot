@@ -879,7 +879,7 @@
         (Number.isFinite(r.distance) ?
           `<div class="rec-stat"><span style="color:var(--text2)">🚗 距離</span><strong style="color:${waveColor} !important">${Math.round(r.distance)} km</strong></div>` : '');
 
-      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name">${r.spot.name}</div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}<span class="badge ${tempBadgeClass}">🌡️ ${r.tempMin}°-${r.tempMax}°C</span></div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini" onclick="openTideModal('${spotName}','${tidesJson}','${cardDate}')" style="cursor:pointer;position:relative;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=''">${tideHtml}<span style="position:absolute;bottom:5px;right:7px;font-size:1.1rem;opacity:.7;">🔍</span></div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="showOnMap('${r.spot.name.replace(/'/g,'\\\'')}')" style="margin-right:8px;">📍 檢視地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
+      return `<div class="rec-card type-${r.spot.type}"><div class="rec-rank">${rank}</div><div class="rec-name" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">${r.spot.name}<button class="btn-share-line" onclick="shareSpotToLine('${r.spot.name.replace(/'/g,"\\'")}','${r.date||''}')" style="flex-shrink:0;background:rgba(6,199,85,.15);border:1px solid #06c755;color:#06c755;border-radius:6px;padding:3px 8px;font-size:.7rem;font-weight:700;cursor:pointer;white-space:nowrap;">🟢 分享釣點天氣</button></div><div class="rec-meta"><span class="badge badge-${r.spot.type}">${typeLabel}</span><span class="badge badge-area">${r.spot.area}</span>${forbiddenBadge}${getSuitabilityLabel(r.score)}<span class="badge ${tempBadgeClass}">🌡️ ${r.tempMin}°-${r.tempMax}°C</span></div><div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div><div class="rec-stats">${statsHtml}</div><div class="tide-mini" onclick="openTideModal('${spotName}','${tidesJson}','${cardDate}')" style="cursor:pointer;position:relative;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=''">${tideHtml}<span style="position:absolute;bottom:5px;right:7px;font-size:1.1rem;opacity:.7;">🔍</span></div><div class="rec-note">📝 ${r.spot.note}</div><div class="rec-footer"><span style="font-size:.72rem;color:var(--text2)">浪高上限：${r.spot.max_wave_height===99?'不限':r.spot.max_wave_height+'m'}</span><button class="btn-mini" onclick="showOnMap('${r.spot.name.replace(/'/g,'\\\'')}')" style="margin-right:8px;">📍 檢視地圖</button><button class="btn-mini ${isFav?'active':''}" onclick="toggleFav('${r.spot.name}',this)">${isFav?'⭐ 已收藏':'☆ 收藏'}</button></div></div>`;
     }
     const MAP_PER_PAGE = window.innerWidth <= 768 ? 999 : 6; // 手機顯示全部，電腦每頁6
     function renderRecommendationPage(pool){
@@ -1528,7 +1528,82 @@
 
     // ── Service Worker 註冊 ──
     if('serviceWorker' in navigator){
-      window.addEventListener('load', ()=>{
+      // ── 分享釣點天氣到剪貼簿 ──
+    window.shareSpotToLine = function(spotName, dateStr){
+      const r = recommendationPool.find(x => x.spot.name === spotName);
+      if(!r){ showToast('找不到釣點資料', true); return; }
+      const spot = r.spot;
+      const beaufort = msToBeaufort(r.ws);
+
+      // 日期格式：X月X號
+      let dateLabel = '';
+      const dateSource = dateStr || r.date || '';
+      if(dateSource){
+        const parts = dateSource.split('-');
+        if(parts.length === 3) dateLabel = `${parseInt(parts[1])}月${parseInt(parts[2])}號`;
+      }
+
+      // 適釣標籤
+      const suitText = r.score >= 4 ? '✅ 適合作釣' : r.score >= 3 ? '⚠️ 尚可' : '❌ 不建議';
+
+      // 潮汐前兩筆
+      const tideLines = (r.tides || []).slice(0, 4).map(t =>
+        `  ${t.type === '高潮' ? '滿頂⬆️' : '潮底⬇️'} ${t.time}`
+      ).join('\n');
+
+      // 潮差
+      const tideRangeText = r.tideType ? r.tideType.replace(/^潮差：/, '') : '';
+
+      const text =
+`🎣 釣點推薦：【${spot.name}】
+📍 ${spot.area}｜${spot.type}
+──────────────────
+${suitText}
+💨 風力 ${beaufort}級（${r.wd}風）
+🌊 浪高 ${r.wave}m
+🌧️ 降雨率 ${r.rain !== undefined ? r.rain : 0}%
+🌡️ 氣溫 ${r.tempMin}°~${r.tempMax}°C
+⬆️⬇️ 潮差：${tideRangeText}
+${tideLines}
+──────────────────
+👉 查看更多釣點天氣：
+https://cfw2214.github.io/tw-fish-spot/`;
+
+      navigator.clipboard.writeText(text).then(()=>{
+        showShareConfirm(spot.name, dateLabel);
+      }).catch(()=>{
+        // 降級方案
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showShareConfirm(spot.name, dateLabel); }
+        catch(e){ showToast('複製失敗，請手動複製', true); }
+        document.body.removeChild(ta);
+      });
+    }
+
+    function showShareConfirm(spotName, dateLabel){
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:20px;';
+      modal.innerHTML = `
+        <div style="background:var(--card);border:1px solid #06c755;border-radius:16px;padding:24px 22px;max-width:320px;width:100%;text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:10px;">🟢</div>
+          <div style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:10px;">
+            <span style="color:#06c755;">【${spotName}】</span><br>${dateLabel}的釣點天氣
+          </div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.7;margin-bottom:18px;">
+            風向、浪況、潮汐、降雨資訊<br>已複製到你的剪貼簿！<br><br>
+            快去聊天室貼上<br>分享給你的好釣友 🎣
+          </div>
+          <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:linear-gradient(135deg,#05a847,#06c755);color:#fff;border:none;border-radius:25px;padding:10px;font-size:.9rem;font-weight:700;cursor:pointer;">✅ 好的！</button>
+        </div>`;
+      document.body.appendChild(modal);
+      modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+    }
+
+    window.addEventListener('load', ()=>{
         navigator.serviceWorker.register('./sw.js').then(reg=>{
           console.log('SW 已註冊:', reg.scope);
         }).catch(err=>{
