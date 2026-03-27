@@ -1468,6 +1468,7 @@
 
       if(tab==='list'){
         // 釣點列表：顯示小卡浮層，隱藏面板，地圖正常
+        clearCatchMapMarkers();
         showCardsOverlay();
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
@@ -1475,6 +1476,7 @@
 
       } else if(tab==='map'){
         // 地圖：隱藏小卡，隱藏面板，地圖正常
+        clearCatchMapMarkers();
         hideCardsOverlay();
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
@@ -1486,6 +1488,8 @@
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
         if(tabCatch){tabCatch.style.background='var(--accent2)';tabCatch.style.color='#fff';}
+        // 清除釣點圖釘，釣獲地圖獨立顯示
+        _gmapMarkers.forEach(m=>m.map=null);
 
         if(!CATCH_RECORDS.length){
           // 無記錄：彈提示框
@@ -1968,9 +1972,9 @@ https://cfw2214.github.io/tw-fish-spot/`;
         <div class="photo-placeholder" id="catch-photo-placeholder"><span>🐡</span><div>點擊上傳釣獲照片</div></div>
         <img id="catch-photo-preview" src="" alt="" style="display:none;">
       </div>
-      <input type="file" id="catch-photo-input" accept="image/*" capture="environment">
-      <div class="catch-field"><label>📅 日期</label><input type="date" id="c-date"></div>
-      <div class="catch-field"><label>⏰ 時間</label><input type="time" id="c-time" style="width:100%;"></div>
+      <input type="file" id="catch-photo-input" accept="image/*">
+      <div class="catch-field"><label>📅 日期</label><input type="date" id="c-date" style="width:auto;min-width:160px;max-width:100%;"></div>
+      <div class="catch-field"><label>⏰ 時間</label><input type="time" id="c-time" style="width:auto;min-width:120px;max-width:100%;"></div>
       <div class="catch-field"><label>地點</label><button id="catch-location-btn" onclick="openCatchMapPicker()">📍 釣獲地點<span class="catch-loc-text" id="catch-loc-text">預設為當前位置</span></button><input type="hidden" id="c-lat"><input type="hidden" id="c-lng"></div>
       <div class="catch-field" id="field-fish"><label>🐟 魚種</label><input type="text" id="c-fish" placeholder="請填寫魚種（必填）"></div>
       <div class="catch-row-2"><div class="catch-field"><label>📏 尺寸</label><input type="number" id="c-len" placeholder="cm"></div><div class="catch-field"><label>⚖️ 重量</label><input type="number" id="c-weight" placeholder="g"></div></div>
@@ -2092,8 +2096,10 @@ https://cfw2214.github.io/tw-fish-spot/`;
       rec.tideRange ? rec.tideRange+'潮' : '',
       rec.windDir ? rec.windDir+'風' : '',
       rec.wind ? rec.wind+'級' : '',
+      rec.wave ? rec.wave+'m浪' : '',
       rec.temp ? rec.temp+'°C' : '',
       rec.pressure ? rec.pressure+'hPa' : '',
+      rec.note||'',
     ].filter(Boolean).join(' · ');
     return `<div class="catch-row" onclick="openCatchModal('${rec.id}')">${photoHtml}<div class="catch-row-info"><div class="cr-main">${dateStr}　${rec.fish}</div><div class="cr-meta">${meta||'—'}</div></div></div>`;
   }
@@ -2357,12 +2363,31 @@ https://cfw2214.github.io/tw-fish-spot/`;
   function showCatchInfoCard(rec,marker){
     if(!_gmapInfoWindow)return;
     const d=new Date(rec.datetime);
-    const dateStr=`${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
-    const photoHtml=rec.photo?`<img class="ci-photo" src="${rec.photo}" alt="釣獲照片">`:'';
-    const content=`<div class="catch-infocard"><button class="ci-close" onclick="window._gmapIW&&window._gmapIW.close()">✕</button><div class="ci-fish">${rec.fish}</div>${photoHtml}<div class="ci-row">📅 ${dateStr}</div>${rec.tideStatus?`<div class="ci-row">🌊 ${rec.tideStatus}${rec.tideHeight?' '+rec.tideHeight+'m':''}</div>`:''}${rec.tideRange?`<div class="ci-row">潮差：${rec.tideRange}潮</div>`:''}${rec.len?`<div class="ci-row">📏 ${rec.len} cm</div>`:''}${rec.weight?`<div class="ci-row">⚖️ ${rec.weight} g</div>`:''}${rec.note?`<div class="ci-row">📝 ${rec.note}</div>`:''}</div>`;
+    const dateStr=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const photoHtml=rec.photo?`<img class="ci-photo" src="${rec.photo}" alt="">`:'' ;
+    const infoRows=[
+      (rec.tideStatus||rec.tideRange)?`<div class="ci-row">🌊 ${[rec.tideStatus,rec.tideRange?rec.tideRange+'潮':''].filter(Boolean).join(' · ')}</div>`:'',
+      (rec.temp||rec.pressure)?`<div class="ci-row">🌡 ${[rec.temp?rec.temp+'°C':'',rec.pressure?rec.pressure+'hPa':''].filter(Boolean).join(' · ')}</div>`:'',
+      (rec.len||rec.weight)?`<div class="ci-row">📏 ${[rec.len?rec.len+'cm':'',rec.weight?rec.weight+'g':''].filter(Boolean).join(' · ')}</div>`:'',
+    ].join('');
+    const content=`<div class="catch-infocard" style="cursor:pointer;" onclick="openCatchFromMap('${rec.id}')"><button class="ci-close" onclick="event.stopPropagation();window._gmapIW&&window._gmapIW.close()">✕</button><div class="ci-fish">${rec.fish}</div>${photoHtml}<div class="ci-row" style="color:rgba(255,255,255,.5);font-size:.7rem;">📅 ${dateStr}</div>${infoRows}<div style="font-size:.68rem;color:rgba(0,180,216,.7);margin-top:6px;text-align:center;">點擊查看完整記錄 →</div></div>`;
     _gmapInfoWindow.setContent(content);
     _gmapInfoWindow.open(_gmap,marker);
     window._gmapIW=_gmapInfoWindow;
+  }
+
+  function openCatchFromMap(recordId){
+    if(window._gmapIW) window._gmapIW.close();
+    if(!_catchMode){
+      _catchMode=true;
+      const btn=document.getElementById('btn-my-catch');
+      if(btn) btn.classList.add('active');
+      toggleFilterBox(true);
+      const viewTabs=document.getElementById('view-tabs');
+      if(viewTabs) viewTabs.style.display='flex';
+    }
+    switchTab('catchPanel');
+    setTimeout(()=>openCatchModal(recordId),350);
   }
 
   // CSV 下載
