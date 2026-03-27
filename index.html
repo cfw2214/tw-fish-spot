@@ -2050,12 +2050,12 @@ https://cfw2214.github.io/tw-fish-spot/`;
         const used = new Blob([localStorage.getItem('fishing_catches')||'']).size;
         const LIMIT = 5 * 1024 * 1024; // 5MB
         const current = CATCH_RECORDS.length;
-        const avgPerRec = current > 0 ? used / current : 50000; // 預設每筆 50KB（含照片）
-        const remaining = Math.max(0, Math.floor((LIMIT - used) / avgPerRec));
-        const total = current + remaining;
+        // 固定用 50KB/筆估算（含照片的悲觀值），避免筆數少時嚴重低估
+        const AVG_PER_REC = 50 * 1024;
         const usedKB = Math.round(used / 1024);
+        const totalEst = Math.floor(LIMIT / AVG_PER_REC); // 約 102 筆
         const el = document.getElementById('catch-storage-est');
-        if(el) el.textContent = `預估可儲存筆數 ${current} / ${total} 筆（已用 ${usedKB}KB / 5120KB）`;
+        if(el) el.textContent = `預估可儲存約 ${totalEst} 筆（已用 ${usedKB}KB / 5120KB，目前 ${current} 筆）`;
       }catch(e){}
     })();
     const wrap = document.getElementById('catch-list-wrap');
@@ -2216,7 +2216,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
 
   function compressCatchImage(file){
     return new Promise((resolve,reject)=>{
-      const MIN_SIDE=500,MAX_BYTE=100*1024;
+      const MIN_SIDE=400,MAX_BYTE=60*1024;
       const reader=new FileReader();
       reader.onload=e=>{
         const img=new Image();
