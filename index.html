@@ -2297,8 +2297,8 @@ https://cfw2214.github.io/tw-fish-spot/`;
     if(!tides||!tides.length)return'';
     const nowMin=now.getHours()*60+now.getMinutes();
     for(const t of tides){
-      if(t.type==='高潮'&&Math.abs(nowMin-t.totalMin)<=180)return'滿頂前後';
-      if(t.type==='低潮'&&Math.abs(nowMin-t.totalMin)<=180)return'流底前後';
+      if(t.type==='高潮'&&Math.abs(nowMin-t.totalMin)<=90)return'滿頂前後';
+      if(t.type==='低潮'&&Math.abs(nowMin-t.totalMin)<=90)return'潮底前後';
     }
     const sorted=[...tides].sort((a,b)=>a.totalMin-b.totalMin);
     const prev=[...sorted].reverse().find(t=>t.totalMin<=nowMin);
