@@ -1468,9 +1468,6 @@
 
       if(tab==='list'){
         // 釣點列表：顯示小卡浮層，隱藏面板，地圖正常
-        _catchMode=false;
-        const btnMyCatch=document.getElementById('btn-my-catch');
-        if(btnMyCatch) btnMyCatch.classList.remove('active');
         clearCatchMapMarkers();
         showCardsOverlay();
         hideCatchPanel();
@@ -1479,9 +1476,6 @@
 
       } else if(tab==='map'){
         // 地圖：隱藏小卡，隱藏面板，地圖正常
-        _catchMode=false;
-        const btnMyCatch2=document.getElementById('btn-my-catch');
-        if(btnMyCatch2) btnMyCatch2.classList.remove('active');
         clearCatchMapMarkers();
         hideCardsOverlay();
         hideCatchPanel();
@@ -1490,9 +1484,6 @@
 
       } else if(tab==='catch'){
         // 釣獲地圖：沒有記錄就彈提示，有記錄才顯示地圖釣獲點
-        _catchMode=false;
-        const btnMyCatch3=document.getElementById('btn-my-catch');
-        if(btnMyCatch3) btnMyCatch3.classList.remove('active');
         hideCardsOverlay();
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
@@ -1982,16 +1973,18 @@ https://cfw2214.github.io/tw-fish-spot/`;
         <img id="catch-photo-preview" src="" alt="" style="display:none;">
       </div>
       <input type="file" id="catch-photo-input" accept="image/*">
-      <div class="catch-row-2"><div class="catch-field"><label>📅 日期</label><input type="date" id="c-date"></div><div class="catch-field"><label>⏰ 時間</label><input type="time" id="c-time"></div></div>
+      <div class="catch-field">
+        <label>📅 日期 &nbsp;⏰ 時間</label>
+        <div style="display:flex;gap:8px;">
+          <input type="date" id="c-date" style="flex:1;min-width:0;">
+          <input type="time" id="c-time" style="flex:1;min-width:0;">
+        </div>
+      </div>
       <div class="catch-field"><label>地點</label><button id="catch-location-btn" onclick="openCatchMapPicker()">📍 釣獲地點<span class="catch-loc-text" id="catch-loc-text">預設為當前位置</span></button><input type="hidden" id="c-lat"><input type="hidden" id="c-lng"></div>
       <div class="catch-field" id="field-fish"><label>🐟 魚種</label><input type="text" id="c-fish" placeholder="請填寫魚種（必填）"></div>
       <div class="catch-row-2"><div class="catch-field"><label>📏 尺寸</label><input type="number" id="c-len" placeholder="cm"></div><div class="catch-field"><label>⚖️ 重量</label><input type="number" id="c-weight" placeholder="g"></div></div>
       <div class="catch-field"><label>🎣 釣法 / 餌種</label><input type="text" id="c-method" placeholder="路亞,木蝦,浮標,磯釣,打沉底,手竿"></div>
       <div class="catch-field"><label>📝 備註</label><textarea id="c-note" placeholder="釣點特徵、心得、天候狀況..."></textarea></div>
-      <div id="catch-env-panel" style="display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px;margin-bottom:12px;">
-        <div style="font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:8px;">🌊 環境數據</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;" id="catch-env-grid"></div>
-      </div>
       <div id="catch-env-status" style="font-size:.72rem;color:rgba(255,255,255,.45);text-align:center;margin-bottom:8px;min-height:1.2em;"></div>
       <div class="catch-btn-row">
         <button class="catch-btn-del" id="catch-del-btn" onclick="deleteCatchRecord()" style="display:none;">🗑 刪除</button>
@@ -2020,14 +2013,14 @@ https://cfw2214.github.io/tw-fish-spot/`;
   let _catchMode = false;
 
   function toggleCatchMode(){
-    // 如果已經在漁獲模式，再次點擊仍然直接切到 catchPanel（不再 toggle off）
+    _catchMode = !_catchMode;
     const btn = document.getElementById('btn-my-catch');
-    if(!_catchMode){
-      _catchMode = true;
+    if(_catchMode){
       btn.classList.add('active');
       toggleFilterBox(true);
       const viewTabs = document.getElementById('view-tabs');
       if(viewTabs) viewTabs.style.display='flex';
+      switchTab('catchPanel');
       // 立即抓 GPS 供新增時預設
       if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(pos=>{
@@ -2035,12 +2028,13 @@ https://cfw2214.github.io/tw-fish-spot/`;
           _catchCurrentLng=pos.coords.longitude;
         },()=>{});
       }
+    } else {
+      btn.classList.remove('active');
+      const googleMap = document.getElementById('google-map');
+      if(googleMap) googleMap.classList.remove('catch-mode');
+      clearCatchMapMarkers();
+      switchTab('list');
     }
-    // 每次點擊都直接切到 catchPanel
-    switchTab('catchPanel');
-    // 手機版自動關閉 sidebar
-    const sb=document.getElementById('sidebar');
-    if(sb&&sb.classList.contains('open')) toggleSidebar();
   }
 
   let _catchPage = 0;
@@ -2166,7 +2160,6 @@ https://cfw2214.github.io/tw-fish-spot/`;
     document.getElementById('catch-photo-placeholder').style.display='flex';
     document.getElementById('field-fish').classList.remove('error');
     document.getElementById('catch-env-status').textContent='';
-    hideCatchEnvPanel();
     window._catchPhotoB64=null;
   }
 
@@ -2187,15 +2180,6 @@ https://cfw2214.github.io/tw-fish-spot/`;
     if(rec.photo){const img=document.getElementById('catch-photo-preview');img.src=rec.photo;img.style.display='block';document.getElementById('catch-photo-placeholder').style.display='none';window._catchPhotoB64=rec.photo;}
     else{document.getElementById('catch-photo-preview').style.display='none';document.getElementById('catch-photo-placeholder').style.display='flex';window._catchPhotoB64=null;}
     document.getElementById('catch-env-status').textContent=rec.envNote||'';
-    // 回看時也顯示環境面板
-    const envData={
-      tideStatus:rec.tideStatus||'',tideHeight:rec.tideHeight||'',
-      tideMax:rec.tideMax||'',tideMin:rec.tideMin||'',tideRange:rec.tideRange||'',
-      temp:rec.temp||'',wind:rec.wind||'',windDir:rec.windDir||'',
-      wave:rec.wave||'',humid:rec.humid||'',rain:rec.rain||'',pressure:rec.pressure||'',
-    };
-    if(Object.values(envData).some(v=>v!=='')) renderCatchEnvPanel(envData);
-    else hideCatchEnvPanel();
     document.getElementById('field-fish').classList.remove('error');
   }
 
@@ -2235,60 +2219,35 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const lat=parseFloat(document.getElementById('c-lat').value)||_catchCurrentLat;
     const lng=parseFloat(document.getElementById('c-lng').value)||_catchCurrentLng;
     if(!lat||!lng){statusEl.textContent='⚠️ 無法取得位置，環境資料將留空';return;}
-    const dateVal=document.getElementById('c-date').value||getTWDateString();
-    const timeVal=document.getElementById('c-time').value||'';
-    const hour=timeVal?parseInt(timeVal.split(':')[0],10):new Date().getHours();
+    const date=getTWDateString();
+    const now=new Date();
+    const hour=now.getHours();
     const fakeSpot={lat,lng,name:'釣獲點',type:'野場',area:'',note:'',max_wave_height:99,allowed:true};
     try{
-      // 額外查濕度
-      const humidRes=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=relative_humidity_2m&timezone=Asia%2FTaipei&start_date=${dateVal}&end_date=${dateVal}`,{cache:'no-store'});
-      const humidData=await humidRes.json();
-      const humidVal=Math.round(humidData.hourly?.relative_humidity_2m?.[hour]??0);
-      const result=await getWeather(fakeSpot,dateVal,hour,hour);
+      const result=await getWeather(fakeSpot,date,hour,hour);
       window._catchEnvData={
         temp:result.temp,
         wind:typeof msToBeaufort==='function'?msToBeaufort(result.ws):'',
         windDir:result.wd,
         wave:result.wave,
         pressure:result.pressure||'',
-        humid:humidVal||'',
+        humid:'',
         rain:result.rain,
-        tideStatus:calcCatchTideStatus(result.tides,new Date()),
-        tideHeight:calcCatchTideHeight(result.tides,new Date()),
+        tideStatus:calcCatchTideStatus(result.tides,now),
+        tideHeight:calcCatchTideHeight(result.tides,now),
         tideMax:result.tides.filter(t=>t.type==='高潮').map(t=>parseFloat(t.height)).sort((a,b)=>b-a)[0]||'',
         tideMin:result.tides.filter(t=>t.type==='低潮').map(t=>parseFloat(t.height)).sort((a,b)=>a-b)[0]||'',
-        tideRange:result.tideType?result.tideType.replace('潮差：',''):'',
+        tideRange:(()=>{
+          if(result.tideType) return result.tideType.replace('潮差：','');
+          const hi=result.tides.filter(t=>t.type==='高潮').map(t=>parseFloat(t.height)).sort((a,b)=>b-a)[0];
+          const lo=result.tides.filter(t=>t.type==='低潮').map(t=>parseFloat(t.height)).sort((a,b)=>a-b)[0];
+          if(!hi||!lo) return '';
+          const diff=hi-lo;
+          return diff>1.5?'大潮':diff>0.8?'中潮':'小潮';
+        })(),
       };
-      renderCatchEnvPanel(window._catchEnvData);
       statusEl.textContent=`✅ 環境資料已帶入 ${result.tideType||''}`;
-    }catch(e){statusEl.textContent='⚠️ 環境資料讀取失敗，將留空';window._catchEnvData=null;hideCatchEnvPanel();}
-  }
-
-  function renderCatchEnvPanel(env){
-    const panel=document.getElementById('catch-env-panel');
-    const grid=document.getElementById('catch-env-grid');
-    if(!panel||!grid)return;
-    const items=[
-      {label:'潮汐狀態',val:env.tideStatus||'—',icon:'🌊'},
-      {label:'中魚潮水高度',val:env.tideHeight?(env.tideHeight+'m'):'—',icon:'📐'},
-      {label:'當日最高潮汐',val:env.tideMax?(env.tideMax+'cm'):'—',icon:'⬆️'},
-      {label:'當日最低潮汐',val:env.tideMin?(env.tideMin+'cm'):'—',icon:'⬇️'},
-      {label:'當日潮差',val:env.tideRange||'—',icon:'↕️'},
-      {label:'溫度',val:env.temp?(env.temp+'°C'):'—',icon:'🌡️'},
-      {label:'風力',val:env.wind?(env.wind+'級'):'—',icon:'💨'},
-      {label:'風向',val:env.windDir||'—',icon:'🧭'},
-      {label:'浪高',val:env.wave?(env.wave+'m'):'—',icon:'🌊'},
-      {label:'濕度',val:env.humid?(env.humid+'%'):'—',icon:'💧'},
-      {label:'降雨',val:(env.rain!==undefined&&env.rain!=='')?(env.rain+'%'):'—',icon:'🌧️'},
-      {label:'氣壓',val:env.pressure?(env.pressure+'hPa'):'—',icon:'🔵'},
-    ];
-    grid.innerHTML=items.map(it=>`<div style="font-size:.75rem;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:4px;"><span>${it.icon}</span><span style="color:rgba(255,255,255,.5)">${it.label}：</span><strong style="color:#fff;">${it.val}</strong></div>`).join('');
-    panel.style.display='block';
-  }
-
-  function hideCatchEnvPanel(){
-    const panel=document.getElementById('catch-env-panel');
-    if(panel) panel.style.display='none';
+    }catch(e){statusEl.textContent='⚠️ 環境資料讀取失敗，將留空';window._catchEnvData=null;}
   }
 
   function calcCatchTideStatus(tides,now){
@@ -2301,6 +2260,8 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const sorted=[...tides].sort((a,b)=>a.totalMin-b.totalMin);
     const prev=[...sorted].reverse().find(t=>t.totalMin<=nowMin);
     const next=sorted.find(t=>t.totalMin>nowMin);
+    if(!prev&&next)return next.type==='高潮'?'正在漲潮':'正在退潮';
+    if(prev&&!next)return prev.type==='高潮'?'正在退潮':'正在漲潮';
     if(!prev||!next)return'';
     return prev.type==='低潮'?'正在漲潮':'正在退潮';
   }
