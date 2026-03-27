@@ -238,15 +238,17 @@
       .sponsor-banner div{font-size:.95rem}
     }
 
-/* ── 釣獲記錄系統 ── */
+/* ── 我的釣獲記錄：sidebar 按鈕 ── */
 #btn-my-catch{display:block;width:100%;text-align:center;padding:8px 10px;margin-top:10px;background:rgba(244,162,97,.15);border:1px solid rgba(244,162,97,.5);color:var(--gold);font-weight:700;font-size:.88rem;border-radius:8px;cursor:pointer;transition:background .2s,border-color .2s;}
 #btn-my-catch:hover{background:rgba(244,162,97,.28);border-color:var(--gold);}
 #btn-my-catch.active{background:rgba(244,162,97,.3);border-color:var(--gold);box-shadow:0 0 0 1px var(--gold);}
-#google-map.catch-mode{filter:blur(3px) brightness(.55) saturate(1.4);transition:filter .4s;}
+/* ── 漁獲模式：地圖背景模糊淡藍 ── */
+#google-map.catch-mode{filter:blur(3px) brightness(.55) saturate(1.4) hue-rotate(10deg);transition:filter .4s;}
 #google-map{transition:filter .4s;}
-#catch-panel{display:none;position:absolute;inset:0;z-index:7;background:rgba(10,22,40,.6);backdrop-filter:blur(2px);padding:14px;overflow-y:auto;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .3s;transform:translateX(0);opacity:1;}
-#catch-panel.catch-visible{display:block;}
-#catch-panel.catch-slide-out{transform:translateX(-100%);opacity:0;pointer-events:none;}
+/* ── 漁獲面板 ── */
+#catch-panel{display:block;position:absolute;inset:0;z-index:7;background:rgba(10,22,40,.6);backdrop-filter:blur(2px);padding:14px;overflow-y:auto;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .3s;transform:translateX(0);opacity:1;}
+#catch-panel.slide-out{transform:translateX(-100%);opacity:0;pointer-events:none;}
+#catch-panel.hidden{display:none;}
 #catch-panel .catch-add-btn{display:block;width:100%;padding:13px 0;margin-bottom:14px;background:#fff;color:#0a1628;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;letter-spacing:.5px;transition:opacity .15s,transform .1s;box-shadow:0 2px 12px rgba(0,0,0,.25);}
 #catch-panel .catch-add-btn:hover{opacity:.9;}
 #catch-panel .catch-add-btn:active{transform:scale(.98);}
@@ -257,6 +259,7 @@
 .catch-row-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden;}
 .catch-row-info .cr-main{font-size:.92rem;font-weight:700;color:#fff;white-space:nowrap;flex-shrink:0;}
 .catch-row-info .cr-meta{font-size:.72rem;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+/* 分頁 */
 #catch-pager{display:none;justify-content:center;align-items:center;gap:12px;margin-top:10px;}
 #catch-pager button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:6px 16px;cursor:pointer;font-size:.82rem;transition:background .15s;}
 #catch-pager button:hover{background:rgba(255,255,255,.22);}
@@ -265,7 +268,7 @@
 #catch-dl-btn{display:none;width:100%;padding:10px 0;margin-top:12px;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-size:.85rem;font-weight:700;border-radius:10px;cursor:pointer;transition:background .15s;}
 #catch-dl-btn:hover{background:rgba(255,255,255,.1);}
 .catch-backup-note{font-size:.68rem;color:rgba(255,255,255,.45);text-align:center;margin-top:8px;line-height:1.5;}
-/* 大卡 Modal */
+/* ── 大卡 Modal ── */
 #catch-modal-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.65);align-items:center;justify-content:center;padding:14px;}
 #catch-modal-overlay.active{display:flex;}
 #catch-modal{background:linear-gradient(160deg,#0d2850,#0a1f42);border:1px solid rgba(0,180,216,.35);border-radius:18px;padding:20px 18px 18px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 8px 40px rgba(0,0,0,.6);}
@@ -283,36 +286,35 @@
 .catch-field input,.catch-field select,.catch-field textarea{width:100%;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;color:#fff;padding:9px 11px;font-size:.88rem;font-family:inherit;outline:none;transition:border-color .2s;box-sizing:border-box;}
 .catch-field input:focus,.catch-field textarea:focus{border-color:var(--accent);}
 .catch-field input::placeholder,.catch-field textarea::placeholder{color:rgba(255,255,255,.3);}
+.catch-field select option{background:#0d2850;color:#fff;}
 .catch-field textarea{height:70px;resize:vertical;}
-.catch-field.error input{border-color:var(--red)!important;}
-.catch-field.error label{color:#ff8fa3!important;}
+.catch-field.error input{border-color:var(--red) !important;}
+.catch-field.error label{color:#ff8fa3 !important;}
 .catch-field.error label::after{content:' ← 請填寫魚種';color:#ff8fa3;}
 .catch-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 #catch-location-btn{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;color:#fff;font-size:.88rem;cursor:pointer;transition:border-color .2s;text-align:left;}
 #catch-location-btn:hover{border-color:var(--accent);}
 .catch-loc-text{color:rgba(255,255,255,.5);font-size:.75rem;margin-left:auto;}
 .catch-btn-row{display:flex;gap:10px;margin-top:16px;}
-.catch-btn-del{flex:1;padding:10px 0;background:rgba(230,57,70,.2);border:1px solid rgba(230,57,70,.5);color:#ff8fa3;border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;}
+.catch-btn-del{flex:1;padding:10px 0;background:rgba(230,57,70,.2);border:1px solid rgba(230,57,70,.5);color:#ff8fa3;border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .15s;}
 .catch-btn-del:hover{background:rgba(230,57,70,.35);}
-.catch-btn-save{flex:2;padding:10px 0;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;color:#fff;border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;}
+.catch-btn-save{flex:2;padding:10px 0;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;color:#fff;border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;transition:opacity .15s;}
 .catch-btn-save:hover{opacity:.9;}
 .catch-modal-note{font-size:.65rem;color:rgba(255,255,255,.35);text-align:center;margin-top:10px;line-height:1.6;}
-/* 地點選擇地圖 */
+/* ── 地點選擇地圖 Modal ── */
 #catch-map-modal{display:none;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:16px;}
 #catch-map-modal.active{display:flex;}
 #catch-map-modal-inner{width:100%;max-width:540px;height:420px;position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);}
 #catch-pick-map{width:100%;height:100%;}
 #catch-map-confirm{position:absolute;bottom:14px;right:14px;z-index:10;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:.9rem;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.4);}
 #catch-map-pin-hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;font-size:.78rem;padding:5px 14px;border-radius:20px;pointer-events:none;white-space:nowrap;z-index:10;}
-/* 地圖標記 & 小卡 */
+/* ── 釣獲地圖標記 & 小卡 ── */
 .catch-map-marker{width:28px;height:28px;background:#f4a261;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.45);cursor:pointer;}
 .catch-infocard{background:linear-gradient(160deg,#0d2850,#0a1f42);border-radius:14px;padding:12px 14px 10px;min-width:200px;max-width:260px;border:1px solid rgba(0,180,216,.3);box-shadow:0 6px 24px rgba(0,0,0,.5);position:relative;}
 .catch-infocard .ci-fish{font-size:1rem;font-weight:700;color:#fff;margin-bottom:6px;padding-right:20px;}
 .catch-infocard .ci-photo{width:100%;height:90px;object-fit:cover;border-radius:8px;margin-bottom:8px;}
 .catch-infocard .ci-row{font-size:.75rem;color:rgba(255,255,255,.7);margin-bottom:3px;}
 .catch-infocard .ci-close{position:absolute;top:8px;right:10px;background:none;border:none;color:rgba(255,255,255,.5);font-size:1rem;cursor:pointer;}
-/* view-tabs 三格 */
-#view-tabs button{transition:all .2s;}
   </style>
 </head>
 <body>
@@ -334,7 +336,7 @@
         <button class="btn-mini" onclick="searchFavorites()" style="width:100%;margin-bottom:8px;">🌤️ 一鍵查詢最愛釣點天氣</button>
         <ul id="fav-list"><li class="fav-empty">尚未收藏任何釣點</li></ul>
         <div style="font-size:.7rem;color:var(--text2);margin-top:8px">最多收藏 12 個</div>
-        <button id="btn-my-catch" onclick="window.toggleCatchMode()">🎣 我的釣獲記錄</button>
+        <button id="btn-my-catch" onclick="toggleCatchMode()">🎣 我的釣獲記錄</button>
       </div>
       <div class="sidebar-section">
         <div style="font-size:.75rem;color:var(--gold);line-height:1.6;background:rgba(244,162,97,.08);border:1px solid rgba(244,162,97,.25);border-radius:8px;padding:8px 10px;">
@@ -459,9 +461,9 @@
           <div class="section-title">🎯 <span id="section-title-text">推薦釣點</span> <span class="badge-new">LIVE</span></div>
           <!-- Tab 切換：釣點列表 / 地圖 -->
           <div id="view-tabs" style="display:none;width:420px;border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-left:auto;flex-shrink:0;">
-            <button id="tab-list"  onclick="window.switchTab('list')"  style="width:33.33%;padding:7px 0;font-size:.78rem;font-weight:700;border:none;cursor:pointer;background:var(--accent2);color:#fff;">📋 釣點列表</button>
-            <button id="tab-map"   onclick="window.switchTab('map')"   style="width:33.33%;padding:7px 0;font-size:.78rem;font-weight:700;border:none;cursor:pointer;background:var(--card);color:var(--text2);">🗺️ 地圖</button>
-            <button id="tab-catch" onclick="window.switchTab('catch')" style="width:33.33%;padding:7px 0;font-size:.78rem;font-weight:700;border:none;cursor:pointer;background:var(--card);color:var(--text2);">🗺 釣獲地圖</button>
+            <button id="tab-list"  onclick="switchTab('list')"  style="width:33.33%;padding:7px 0;font-size:.78rem;font-weight:700;border:none;cursor:pointer;background:var(--accent2);color:#fff;transition:all .2s;">📋 釣點列表</button>
+            <button id="tab-map"   onclick="switchTab('map')"   style="width:33.33%;padding:7px 0;font-size:.78rem;font-weight:700;border:none;cursor:pointer;background:var(--card);color:var(--text2);transition:all .2s;">🗺️ 地圖</button>
+            <button id="tab-catch" onclick="switchTab('catch')" style="width:33.33%;padding:7px 0;font-size:.78rem;font-weight:700;border:none;cursor:pointer;background:var(--card);color:var(--text2);transition:all .2s;">🗺 釣獲地圖</button>
           </div>
         </div>
         <div id="wave-alert" class="wave-alert" style="display:none;">🌊 <span id="wave-message"></span></div>
@@ -473,16 +475,18 @@
             <div id="google-map"></div>
             <!-- 我的位置標籤（左下角，在小卡下方） -->
             <div id="my-location-label" onclick="flyToUserLocation()" style="display:none;position:absolute;left:10px;bottom:10px;z-index:6;background:#fff;color:#1a73e8;font-size:.78rem;font-weight:700;padding:5px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:auto;white-space:nowrap;cursor:pointer;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.35)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.25)'"></div>
-            <!-- 漁獲面板 -->
-            <div id="catch-panel">
-              <button class="catch-add-btn" onclick="window.openCatchModal(null)">＋ 新增我的釣獲記錄</button>
-              <div id="catch-list-wrap"><div id="catch-empty">目前沒有釣獲記錄喔，請新增你的釣獲記錄</div></div>
-              <div id="catch-pager">
-                <button id="catch-prev" onclick="window.changeCatchPage(-1)">◀ 上一頁</button>
-                <span id="catch-page-info"></span>
-                <button id="catch-next" onclick="window.changeCatchPage(1)">下一頁 ▶</button>
+            <!-- 漁獲面板（蓋在地圖上） -->
+            <div id="catch-panel" class="hidden slide-out">
+              <button class="catch-add-btn" onclick="openCatchModal(null)">＋ 新增我的釣獲記錄</button>
+              <div id="catch-list-wrap">
+                <div id="catch-empty">目前沒有釣獲記錄喔，請新增你的釣獲記錄</div>
               </div>
-              <button id="catch-dl-btn" onclick="window.downloadCatchCSV()">⬇ 下載釣獲記錄 CSV</button>
+              <div id="catch-pager">
+                <button id="catch-prev" onclick="changeCatchPage(-1)">◀ 上一頁</button>
+                <span id="catch-page-info"></span>
+                <button id="catch-next" onclick="changeCatchPage(1)">下一頁 ▶</button>
+              </div>
+              <button id="catch-dl-btn" onclick="downloadCatchCSV()">⬇ 下載釣獲記錄 CSV</button>
               <div class="catch-backup-note">本釣獲資料僅保存在當下個人的瀏覽器內，並無雲端備份，<br>如要備份請自行點擊下載備份</div>
             </div>
             <!-- 浮層：釣點小卡（左右滑動） -->
@@ -827,13 +831,14 @@
         const weatherEndDate = endDate && endDate !== date ? endDate : date;
         const [marineRes,weatherRes]=await Promise.all([
           fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=${date}&end_date=${weatherEndDate}`,noCache),
-          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m&timezone=Asia%2FTaipei&start_date=${date}&end_date=${weatherEndDate}`,noCache)
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m,surface_pressure&timezone=Asia%2FTaipei&start_date=${date}&end_date=${weatherEndDate}`,noCache)
         ]);
         const m=await marineRes.json(); const w=await weatherRes.json();
         const wave=parseFloat(((m.hourly?.wave_height?.[startHour]??0.8)).toFixed(1));
         const wsKm=w.hourly?.windspeed_10m?.[startHour]??0; const ws=parseFloat((wsKm/3.6).toFixed(1));
         const wdDeg=w.hourly?.winddirection_10m?.[startHour]??0;
         const rain=Math.round(w.hourly?.precipitation_probability?.[startHour]??0);
+        const pressure=Math.round(w.hourly?.surface_pressure?.[startHour]??1013);
 
         // 計算時間範圍內的溫度區間（支援跨夜）
         const temps = [];
@@ -893,7 +898,7 @@
           ).toFixed(1));
         }
 
-        return {spot,wave,ws,wd,temp,rain,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live',distance,tempMin,tempMax,date};
+        return {spot,wave,ws,wd,temp,rain,pressure,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live',distance,tempMin,tempMax,date};
       }catch(e){
         let distance = Infinity;
         if (userLocation) {
@@ -1436,47 +1441,90 @@
     }
 
     window.switchTab = function(tab){
-      var tl=document.getElementById('tab-list'),tm=document.getElementById('tab-map'),tc=document.getElementById('tab-catch');
-      [tl,tm,tc].forEach(function(t){if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}});
-      var gmap=document.getElementById('google-map');
-      var cp=document.getElementById('catch-panel');
-      function showCP(){if(!cp)return;cp.classList.add('catch-visible');cp.classList.remove('catch-slide-out');}
-      function hideCP(){if(!cp)return;cp.classList.add('catch-slide-out');setTimeout(function(){cp.classList.remove('catch-visible');},360);}
-      if(tab==='list'){
-        showCardsOverlay();hideCP();
-        if(gmap)gmap.classList.remove('catch-mode');
-        if(_catchMapMarkers){_catchMapMarkers.forEach(function(m){m.map=null;});_catchMapMarkers=[];}
-        if(tl){tl.style.background='var(--accent2)';tl.style.color='#fff';}
-      } else if(tab==='map'){
-        hideCardsOverlay();hideCP();
-        if(gmap)gmap.classList.remove('catch-mode');
-        if(_catchMapMarkers){_catchMapMarkers.forEach(function(m){m.map=null;});_catchMapMarkers=[];}
-        if(tm){tm.style.background='var(--accent2)';tm.style.color='#fff';}
-      } else if(tab==='catch'){
-        hideCardsOverlay();hideCP();
-        if(gmap)gmap.classList.remove('catch-mode');
-        if(_gmapMarkers){_gmapMarkers.forEach(function(m){m.map=null;});}
-        if(tc){tc.style.background='var(--accent2)';tc.style.color='#fff';}
-        if(!_catchRecords||!_catchRecords.length){
-          var d=document.createElement('div');
-          d.style.cssText='position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;';
-          d.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;max-width:300px;width:100%;text-align:center;"><div style="font-size:1.5rem;margin-bottom:12px;">🎣</div><div style="font-size:.92rem;font-weight:700;color:var(--text);line-height:1.7;margin-bottom:16px;">目前您沒有輸入釣獲記錄，<br>可至「🎣 我的釣獲記錄輸入」</div><button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:25px;padding:10px;font-size:.9rem;font-weight:700;cursor:pointer;">確認</button></div>';
-          document.body.appendChild(d);d.addEventListener('click',function(e){if(e.target===d)d.remove();});
-          if(tc){tc.style.background='var(--card)';tc.style.color='var(--text2)';}
-          if(tm){tm.style.background='var(--accent2)';tm.style.color='#fff';}
-        } else {
-          _showCatchMapMarkers();
-          setTimeout(function(){if(_gmap)google.maps.event.trigger(_gmap,'resize');},400);
-        }
-      } else if(tab==='catchPanel'){
-        hideCardsOverlay();
-        if(gmap)gmap.classList.add('catch-mode');
-        if(_catchMapMarkers){_catchMapMarkers.forEach(function(m){m.map=null;});_catchMapMarkers=[];}
-        [tl,tm,tc].forEach(function(t){if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}});
-        showCP();
-        _renderCatchList();
+      const tabList  = document.getElementById('tab-list');
+      const tabMap   = document.getElementById('tab-map');
+      const tabCatch = document.getElementById('tab-catch');
+      const catchPanel = document.getElementById('catch-panel');
+      const googleMap  = document.getElementById('google-map');
+
+      // 重設所有 tab 樣式
+      [tabList,tabMap,tabCatch].forEach(t=>{
+        if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}
+      });
+
+      // 隱藏漁獲面板的輔助函式
+      function hideCatchPanel(){
+        if(!catchPanel) return;
+        catchPanel.classList.add('slide-out');
+        setTimeout(()=>catchPanel.classList.add('hidden'),360);
       }
-    };
+      function showCatchPanel(){
+        if(!catchPanel) return;
+        catchPanel.classList.remove('hidden');
+        // 強制 reflow 讓動畫觸發
+        catchPanel.offsetHeight;
+        catchPanel.classList.remove('slide-out');
+      }
+
+      if(tab==='list'){
+        // 釣點列表：顯示小卡浮層，隱藏面板，地圖正常
+        clearCatchMapMarkers();
+        showCardsOverlay();
+        hideCatchPanel();
+        if(googleMap) googleMap.classList.remove('catch-mode');
+        if(tabList){tabList.style.background='var(--accent2)';tabList.style.color='#fff';}
+
+      } else if(tab==='map'){
+        // 地圖：隱藏小卡，隱藏面板，地圖正常
+        clearCatchMapMarkers();
+        hideCardsOverlay();
+        hideCatchPanel();
+        if(googleMap) googleMap.classList.remove('catch-mode');
+        if(tabMap){tabMap.style.background='var(--accent2)';tabMap.style.color='#fff';}
+
+      } else if(tab==='catch'){
+        // 釣獲地圖：沒有記錄就彈提示，有記錄才顯示地圖釣獲點
+        hideCardsOverlay();
+        hideCatchPanel();
+        if(googleMap) googleMap.classList.remove('catch-mode');
+        if(tabCatch){tabCatch.style.background='var(--accent2)';tabCatch.style.color='#fff';}
+        // 清除釣點圖釘，釣獲地圖獨立顯示
+        _gmapMarkers.forEach(m=>m.map=null);
+
+        if(!CATCH_RECORDS.length){
+          // 無記錄：彈提示框
+          const toast = document.createElement('div');
+          toast.style.cssText='position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;';
+          toast.innerHTML=`
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;max-width:300px;width:100%;text-align:center;">
+              <div style="font-size:1.5rem;margin-bottom:12px;">🎣</div>
+              <div style="font-size:.92rem;font-weight:700;color:var(--text);line-height:1.7;margin-bottom:16px;">目前您沒有輸入釣獲記錄，<br>可至「🎣 我的釣獲記錄輸入」</div>
+              <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:25px;padding:10px;font-size:.9rem;font-weight:700;cursor:pointer;">確認</button>
+            </div>`;
+          document.body.appendChild(toast);
+          toast.addEventListener('click',e=>{if(e.target===toast)toast.remove();});
+          // tab 回到地圖狀態
+          if(tabCatch){tabCatch.style.background='var(--card)';tabCatch.style.color='var(--text2)';}
+          if(tabMap){tabMap.style.background='var(--accent2)';tabMap.style.color='#fff';}
+        } else {
+          // 有記錄：地圖顯示釣獲圖釘
+          showCatchMapMarkers();
+          setTimeout(()=>{ if(_gmap) google.maps.event.trigger(_gmap,'resize'); },400);
+        }
+
+      } else if(tab==='catchPanel'){
+        // 漁獲面板（由 sidebar 按鈕觸發，非 tab）
+        hideCardsOverlay();
+        if(googleMap) googleMap.classList.add('catch-mode');
+        clearCatchMapMarkers();
+        showCatchPanel();
+        renderCatchList();
+        // sidebar 按鈕亮起，tab 全部暗掉
+        [tabList,tabMap,tabCatch].forEach(t=>{
+          if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}
+        });
+      }
+    }
 
     // 大頭針顏色依類型
     function markerColor(type){
@@ -1915,11 +1963,10 @@ https://cfw2214.github.io/tw-fish-spot/`;
     });
 
   </script>
-
-  <!-- 漁獲記錄大卡 Modal -->
-  <div id="catch-modal-overlay" onclick="window.closeCatchModalIfOutside(event)">
+  <!-- ── 漁獲記錄大卡 Modal ── -->
+  <div id="catch-modal-overlay" onclick="closeCatchModalIfOutside(event)">
     <div id="catch-modal">
-      <button class="modal-close" onclick="window.closeCatchModal()">✕</button>
+      <button class="modal-close" onclick="closeCatchModal()">✕</button>
       <div class="modal-title" id="catch-modal-title">🐟 新增釣獲記錄</div>
       <div id="catch-photo-area" onclick="document.getElementById('catch-photo-input').click()">
         <div class="photo-placeholder" id="catch-photo-placeholder"><span>🐡</span><div>點擊上傳釣獲照片</div></div>
@@ -1933,318 +1980,363 @@ https://cfw2214.github.io/tw-fish-spot/`;
           <input type="time" id="c-time" style="flex:1;min-width:0;">
         </div>
       </div>
-      <div class="catch-field"><label>地點</label><button id="catch-location-btn" onclick="window.openCatchMapPicker()">📍 釣獲地點<span class="catch-loc-text" id="catch-loc-text">預設為當前位置</span></button><input type="hidden" id="c-lat"><input type="hidden" id="c-lng"></div>
+      <div class="catch-field"><label>地點</label><button id="catch-location-btn" onclick="openCatchMapPicker()">📍 釣獲地點<span class="catch-loc-text" id="catch-loc-text">預設為當前位置</span></button><input type="hidden" id="c-lat"><input type="hidden" id="c-lng"></div>
       <div class="catch-field" id="field-fish"><label>🐟 魚種</label><input type="text" id="c-fish" placeholder="請填寫魚種（必填）"></div>
       <div class="catch-row-2"><div class="catch-field"><label>📏 尺寸</label><input type="number" id="c-len" placeholder="cm"></div><div class="catch-field"><label>⚖️ 重量</label><input type="number" id="c-weight" placeholder="g"></div></div>
       <div class="catch-field"><label>🎣 釣法 / 餌種</label><input type="text" id="c-method" placeholder="路亞,木蝦,浮標,磯釣,打沉底,手竿"></div>
-      <div class="catch-field"><label>📝 備註</label><textarea id="c-note" placeholder="釣點特徵、心得..."></textarea></div>
+      <div class="catch-field"><label>📝 備註</label><textarea id="c-note" placeholder="釣點特徵、心得、天候狀況..."></textarea></div>
       <div id="catch-env-status" style="font-size:.72rem;color:rgba(255,255,255,.45);text-align:center;margin-bottom:4px;min-height:1.2em;"></div>
-      <div id="catch-env-grid" style="display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;margin-bottom:10px;grid-template-columns:1fr 1fr;gap:4px 12px;"></div>
+      <div id="catch-env-grid" style="display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;"></div>
       <div class="catch-btn-row">
-        <button class="catch-btn-del" id="catch-del-btn" onclick="window.deleteCatchRecord()" style="display:none;">🗑 刪除</button>
-        <button class="catch-btn-save" onclick="window.saveCatchRecord()">✅ 確認儲存</button>
+        <button class="catch-btn-del" id="catch-del-btn" onclick="deleteCatchRecord()" style="display:none;">🗑 刪除</button>
+        <button class="catch-btn-save" onclick="saveCatchRecord()">✅ 確認儲存</button>
       </div>
       <div class="catch-modal-note">本釣獲資料僅保存在當下個人的瀏覽器內，如要備份，請自行點擊下載備份</div>
     </div>
   </div>
-  <!-- 地點選擇地圖 -->
-  <div id="catch-map-modal" onclick="window.closeCatchMapModalIfOutside(event)">
+  <!-- ── 釣獲地點地圖選擇器 Modal ── -->
+  <div id="catch-map-modal" onclick="closeCatchMapModalIfOutside(event)">
     <div id="catch-map-modal-inner">
       <div id="catch-map-pin-hint">拖動地圖或點擊選擇釣獲地點</div>
       <div id="catch-pick-map"></div>
-      <button id="catch-map-confirm" onclick="window.confirmCatchLocation()">✅ 確定</button>
+      <button id="catch-map-confirm" onclick="confirmCatchLocation()">✅ 確定</button>
     </div>
   </div>
 
   <script>
-  // ════════════════════════════════════════
-  // 釣獲記錄系統（全部在此 script 內）
-  // ════════════════════════════════════════
-  var _catchRecords = JSON.parse(localStorage.getItem('fishing_catches')||'[]');
-  var _catchEditId = null;
-  var _catchPickLat = null, _catchPickLng = null;
-  var _catchPickMap = null, _catchPickMarker = null;
-  var _catchCurrentLat = null, _catchCurrentLng = null;
-  var _catchMapMarkers = [];
-  var _catchIsOpen = false;
-  var _catchPage = 0;
-  var CATCH_PER_PAGE = 6;
+  // ── 漁獲記錄系統 ──
+  let CATCH_RECORDS = JSON.parse(localStorage.getItem('fishing_catches')||'[]');
+  let _catchEditId = null;
+  let _catchPickLat = null, _catchPickLng = null;
+  let _catchPickMap = null, _catchPickMarker = null;
+  let _catchCurrentLat = null, _catchCurrentLng = null;
+  let _catchMapMarkers = [];
+  let _catchMode = false;
 
-  // ── 照片壓縮 ─────────────────────────────
-  document.addEventListener('DOMContentLoaded', function(){
-    var pi = document.getElementById('catch-photo-input');
-    if(pi) pi.addEventListener('change', function(e){
-      var file = e.target.files[0]; if(!file) return;
-      _compressImg(file, function(b64){
-        window._catchPhotoB64 = b64;
-        var img = document.getElementById('catch-photo-preview');
-        img.src = b64; img.style.display = 'block';
-        document.getElementById('catch-photo-placeholder').style.display = 'none';
-      });
-    });
-  });
-
-  function _compressImg(file, cb){
-    var MIN=600, MAX=100*1024;
-    var r = new FileReader();
-    r.onload = function(e){
-      var img = new Image();
-      img.onload = function(){
-        var w=img.width, h=img.height;
-        if(Math.min(w,h)>MIN){ if(w<h){h=Math.round(h*MIN/w);w=MIN;}else{w=Math.round(w*MIN/h);h=MIN;} }
-        var c=document.createElement('canvas'); c.width=w; c.height=h;
-        c.getContext('2d').drawImage(img,0,0,w,h);
-        var q=0.85, b=c.toDataURL('image/jpeg',q);
-        while(b.length>MAX*1.37&&q>0.2){q-=0.05;b=c.toDataURL('image/jpeg',q);}
-        cb(b);
-      };
-      img.src = e.target.result;
-    };
-    r.readAsDataURL(file);
-  }
-
-  // ── toggleCatchMode ──────────────────────
-  window.toggleCatchMode = function(){
-    _catchIsOpen = !_catchIsOpen;
-    var btn = document.getElementById('btn-my-catch');
-    var cp  = document.getElementById('catch-panel');
-    var gmap= document.getElementById('google-map');
-    var vt  = document.getElementById('view-tabs');
-    if(_catchIsOpen){
+  function toggleCatchMode(){
+    _catchMode = !_catchMode;
+    const btn = document.getElementById('btn-my-catch');
+    if(_catchMode){
       btn.classList.add('active');
-      if(typeof toggleFilterBox==='function') toggleFilterBox(true);
-      if(vt) vt.style.display='flex';
-      // 暗掉所有 tab
-      ['tab-list','tab-map','tab-catch'].forEach(function(id){
-        var t=document.getElementById(id);
+      toggleFilterBox(true);
+      const viewTabs = document.getElementById('view-tabs');
+      if(viewTabs) viewTabs.style.display='flex';
+      // 先把所有 tab 暗掉，再直接切漁獲面板（不透過 switchTab 避免競態）
+      ['tab-list','tab-map','tab-catch'].forEach(id=>{
+        const t=document.getElementById(id);
         if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}
       });
-      // 隱藏小卡
-      var ov=document.getElementById('map-cards-overlay');
-      if(ov) ov.classList.add('slide-out');
-      // 模糊地圖
-      if(gmap) gmap.classList.add('catch-mode');
-      // 清除釣獲圖釘
-      _catchMapMarkers.forEach(function(m){m.map=null;}); _catchMapMarkers=[];
-      // 顯示面板
-      if(cp){ cp.classList.add('catch-visible'); cp.classList.remove('catch-slide-out'); }
-      _renderCatchList();
-      // GPS
+      const googleMap=document.getElementById('google-map');
+      if(googleMap) googleMap.classList.add('catch-mode');
+      clearCatchMapMarkers();
+      // 隱藏小卡浮層
+      const overlay=document.getElementById('map-cards-overlay');
+      if(overlay) overlay.classList.add('slide-out');
+      // 直接顯示漁獲面板
+      const catchPanel=document.getElementById('catch-panel');
+      if(catchPanel){
+        catchPanel.classList.remove('hidden');
+        catchPanel.offsetHeight; // reflow
+        catchPanel.classList.remove('slide-out');
+      }
+      renderCatchList();
+      // 抓 GPS
       if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(function(pos){
-          _catchCurrentLat=pos.coords.latitude; _catchCurrentLng=pos.coords.longitude;
-        }, function(){});
+        navigator.geolocation.getCurrentPosition(pos=>{
+          _catchCurrentLat=pos.coords.latitude;
+          _catchCurrentLng=pos.coords.longitude;
+        },()=>{});
       }
     } else {
       btn.classList.remove('active');
-      if(gmap) gmap.classList.remove('catch-mode');
-      _catchMapMarkers.forEach(function(m){m.map=null;}); _catchMapMarkers=[];
-      if(cp){ cp.classList.add('catch-slide-out'); setTimeout(function(){cp.classList.remove('catch-visible');},360); }
-      if(typeof showCardsOverlay==='function') showCardsOverlay();
-      var tl=document.getElementById('tab-list');
-      ['tab-list','tab-map','tab-catch'].forEach(function(id){var t=document.getElementById(id);if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}});
-      if(tl){tl.style.background='var(--accent2)';tl.style.color='#fff';}
+      _catchMode=false;
+      const googleMap=document.getElementById('google-map');
+      if(googleMap) googleMap.classList.remove('catch-mode');
+      clearCatchMapMarkers();
+      // 直接隱藏面板
+      const catchPanel=document.getElementById('catch-panel');
+      if(catchPanel){catchPanel.classList.add('slide-out');setTimeout(()=>catchPanel.classList.add('hidden'),360);}
+      // 恢復釣點列表
+      showCardsOverlay();
+      const tabList=document.getElementById('tab-list');
+      const tabMap=document.getElementById('tab-map');
+      const tabCatch=document.getElementById('tab-catch');
+      [tabList,tabMap,tabCatch].forEach(t=>{if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}});
+      if(tabList){tabList.style.background='var(--accent2)';tabList.style.color='#fff';}
     }
-  };
+  }
 
-  // ── 清單渲染 ─────────────────────────────
-  function _renderCatchList(){
-    var wrap=document.getElementById('catch-list-wrap');
-    var dlBtn=document.getElementById('catch-dl-btn');
-    var pager=document.getElementById('catch-pager');
+  let _catchPage = 0;
+  const CATCH_PER_PAGE = 6;
+
+  function isMobile(){ return window.innerWidth <= 768; }
+
+  function renderCatchList(){
+    const wrap = document.getElementById('catch-list-wrap');
     if(!wrap) return;
-    var sorted=[].concat(_catchRecords).sort(function(a,b){return new Date(b.datetime)-new Date(a.datetime);});
+    const sorted = [...CATCH_RECORDS].sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
+    const dlBtn  = document.getElementById('catch-dl-btn');
+    const pager  = document.getElementById('catch-pager');
+
     if(!sorted.length){
       wrap.innerHTML='<div id="catch-empty">目前沒有釣獲記錄喔，請新增你的釣獲記錄</div>';
-      if(dlBtn)dlBtn.style.display='none'; if(pager)pager.style.display='none'; return;
+      if(dlBtn) dlBtn.style.display='none';
+      if(pager) pager.style.display='none';
+      return;
     }
-    if(dlBtn)dlBtn.style.display='block';
-    var isMob=window.innerWidth<=768;
-    var list=isMob?sorted:sorted.slice(_catchPage*CATCH_PER_PAGE,(_catchPage+1)*CATCH_PER_PAGE);
-    wrap.innerHTML=list.map(function(rec){return _catchRowHtml(rec);}).join('');
-    if(!isMob){
-      var tp=Math.ceil(sorted.length/CATCH_PER_PAGE);
-      if(tp>1&&pager){
-        pager.style.display='flex';
-        var info=document.getElementById('catch-page-info');
-        var prev=document.getElementById('catch-prev');
-        var next=document.getElementById('catch-next');
-        if(info)info.textContent='第'+(+_catchPage+1)+'頁 / 共'+tp+'頁';
-        if(prev)prev.disabled=(_catchPage===0);
-        if(next)next.disabled=(_catchPage>=tp-1);
-      } else { if(pager)pager.style.display='none'; }
-    } else { if(pager)pager.style.display='none'; }
-  }
+    if(dlBtn) dlBtn.style.display='block';
 
-  window.changeCatchPage=function(dir){
-    var tp=Math.ceil(_catchRecords.length/CATCH_PER_PAGE);
-    _catchPage=Math.max(0,Math.min(_catchPage+dir,tp-1));
-    _renderCatchList();
-  };
-
-  function _catchRowHtml(rec){
-    var d=new Date(rec.datetime);
-    var ds=(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-    var ph=rec.photo
-      ?'<img src="'+rec.photo+'" style="width:50px;height:50px;object-fit:cover;border-radius:7px;flex-shrink:0;">'
-      :'<div style="width:50px;height:50px;background:rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🐡</div>';
-    var meta=[
-      rec.tideStatus?rec.tideStatus:'',
-      rec.tideRange?rec.tideRange+'潮':'',
-      rec.windDir?rec.windDir+'風':'',
-      rec.wind?rec.wind+'級':'',
-      rec.wave?rec.wave+'m浪':'',
-      rec.temp?rec.temp+'°C':'',
-      rec.pressure?rec.pressure+'hPa':'',
-      rec.note?rec.note:'',
-    ].filter(Boolean).join(' · ');
-    return '<div class="catch-row" onclick="window.openCatchModal(''+rec.id+'')">'+ph+'<div class="catch-row-info"><div class="cr-main">'+ds+'&nbsp;&nbsp;'+rec.fish+'</div><div class="cr-meta">'+(meta||'—')+'</div></div></div>';
-  }
-
-  // ── 開啟 Modal ───────────────────────────
-  window.openCatchModal=function(recordId){
-    _catchEditId=recordId;
-    var ov=document.getElementById('catch-modal-overlay');
-    var title=document.getElementById('catch-modal-title');
-    var delBtn=document.getElementById('catch-del-btn');
-    ov.classList.add('active');
-    if(recordId){
-      var rec=_catchRecords.find(function(r){return r.id===recordId;});
-      if(!rec)return;
-      title.textContent='📝 編輯釣獲記錄'; delBtn.style.display='block';
-      _fillCatchModal(rec);
+    // 手機/平板：全部顯示，不分頁
+    if(isMobile()){
+      if(pager) pager.style.display='none';
+      wrap.innerHTML = sorted.map(rec=>catchRowHtml(rec)).join('');
     } else {
-      title.textContent='🐟 新增釣獲記錄'; delBtn.style.display='none';
-      _clearCatchModal();
-      var now=new Date();
-      document.getElementById('c-date').value=now.toISOString().split('T')[0];
-      document.getElementById('c-time').value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-      if(_catchCurrentLat){
-        document.getElementById('c-lat').value=_catchCurrentLat;
-        document.getElementById('c-lng').value=_catchCurrentLng;
-        document.getElementById('catch-loc-text').textContent=_catchCurrentLat.toFixed(4)+', '+_catchCurrentLng.toFixed(4);
+      // 電腦：每頁 6 筆
+      const total = sorted.length;
+      const totalPages = Math.ceil(total/CATCH_PER_PAGE);
+      _catchPage = Math.max(0, Math.min(_catchPage, totalPages-1));
+      const slice = sorted.slice(_catchPage*CATCH_PER_PAGE, (_catchPage+1)*CATCH_PER_PAGE);
+      wrap.innerHTML = slice.map(rec=>catchRowHtml(rec)).join('');
+
+      if(totalPages > 1){
+        if(pager) pager.style.display='flex';
+        const info = document.getElementById('catch-page-info');
+        const prev = document.getElementById('catch-prev');
+        const next = document.getElementById('catch-next');
+        if(info) info.textContent=`第 ${_catchPage+1} 頁 / 共 ${totalPages} 頁`;
+        if(prev) prev.disabled=(_catchPage===0);
+        if(next) next.disabled=(_catchPage>=totalPages-1);
+      } else {
+        if(pager) pager.style.display='none';
       }
-      // 即時抓 GPS
+    }
+  }
+
+  function changeCatchPage(dir){
+    const sorted = [...CATCH_RECORDS].sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
+    const totalPages = Math.ceil(sorted.length/CATCH_PER_PAGE);
+    _catchPage = Math.max(0, Math.min(_catchPage+dir, totalPages-1));
+    renderCatchList();
+  }
+
+  function catchRowHtml(rec){
+    const d = new Date(rec.datetime);
+    const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const photoHtml = rec.photo
+      ? `<img src="${rec.photo}" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:7px;flex-shrink:0;">`
+      : `<div class="catch-no-photo" style="width:50px;height:50px;background:rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🐡</div>`;
+    const meta = [
+      rec.tideStatus ? rec.tideStatus : '',
+      rec.tideRange  ? rec.tideRange+'潮' : '',
+      rec.windDir    ? rec.windDir+'風'   : '',
+      rec.wind       ? rec.wind+'級'      : '',
+      rec.wave       ? rec.wave+'m浪'     : '',
+      rec.temp       ? rec.temp+'°C'      : '',
+      rec.pressure   ? rec.pressure+'hPa' : '',
+      rec.note       ? rec.note           : '',
+    ].filter(Boolean).join(' · ');
+    return `<div class="catch-row" onclick="openCatchModal('${rec.id}')">${photoHtml}<div class="catch-row-info"><div class="cr-main">${dateStr}　${rec.fish}</div><div class="cr-meta">${meta||'—'}</div></div></div>`;
+  }
+
+  async function openCatchModal(recordId){
+    _catchEditId = recordId;
+    const overlay = document.getElementById('catch-modal-overlay');
+    const title   = document.getElementById('catch-modal-title');
+    const delBtn  = document.getElementById('catch-del-btn');
+    overlay.classList.add('active');
+    if(recordId){
+      const rec = CATCH_RECORDS.find(r=>r.id===recordId);
+      if(!rec) return;
+      title.textContent = '📝 編輯釣獲記錄';
+      delBtn.style.display = 'block';
+      fillCatchModal(rec);
+    } else {
+      title.textContent = '🐟 新增釣獲記錄';
+      delBtn.style.display = 'none';
+      clearCatchModal();
+      const now = new Date();
+      document.getElementById('c-date').value  = now.toISOString().split('T')[0];
+      const hh=String(now.getHours()).padStart(2,'0');
+      const mm=String(now.getMinutes()).padStart(2,'0');
+      document.getElementById('c-time').value  = `${hh}:${mm}`;
+      // 先用已知座標預填，同時非同步抓最新 GPS
+      if(_catchCurrentLat){
+        document.getElementById('c-lat').value = _catchCurrentLat;
+        document.getElementById('c-lng').value = _catchCurrentLng;
+        document.getElementById('catch-loc-text').textContent = `${_catchCurrentLat.toFixed(4)}, ${_catchCurrentLng.toFixed(4)}`;
+      }
+      // 非同步再抓一次最新位置
       if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(function(pos){
-          _catchCurrentLat=pos.coords.latitude; _catchCurrentLng=pos.coords.longitude;
+        navigator.geolocation.getCurrentPosition(pos=>{
+          _catchCurrentLat=pos.coords.latitude;
+          _catchCurrentLng=pos.coords.longitude;
           document.getElementById('c-lat').value=_catchCurrentLat;
           document.getElementById('c-lng').value=_catchCurrentLng;
-          document.getElementById('catch-loc-text').textContent=_catchCurrentLat.toFixed(4)+', '+_catchCurrentLng.toFixed(4);
-        },function(){});
+          document.getElementById('catch-loc-text').textContent=`${_catchCurrentLat.toFixed(4)}, ${_catchCurrentLng.toFixed(4)}`;
+        },()=>{});
       }
-      _fetchCatchEnv();
+      fetchCatchEnv();
     }
-  };
+  }
 
-  window.closeCatchModal=function(){document.getElementById('catch-modal-overlay').classList.remove('active');_catchEditId=null;};
-  window.closeCatchModalIfOutside=function(e){if(e.target===document.getElementById('catch-modal-overlay'))window.closeCatchModal();};
+  function closeCatchModal(){document.getElementById('catch-modal-overlay').classList.remove('active');_catchEditId=null;}
+  function closeCatchModalIfOutside(e){if(e.target===document.getElementById('catch-modal-overlay'))closeCatchModal();}
 
-  function _clearCatchModal(){
-    ['c-date','c-time','c-lat','c-lng','c-fish','c-len','c-weight','c-method','c-note'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  function clearCatchModal(){
+    ['c-date','c-time','c-lat','c-lng','c-fish','c-len','c-weight','c-method','c-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     document.getElementById('catch-loc-text').textContent='預設為當前位置';
     document.getElementById('catch-photo-preview').style.display='none';
     document.getElementById('catch-photo-placeholder').style.display='flex';
     document.getElementById('field-fish').classList.remove('error');
     document.getElementById('catch-env-status').textContent='';
-    var g=document.getElementById('catch-env-grid'); if(g)g.style.display='none';
-    window._catchPhotoB64=null; window._catchEnvData=null;
+    const g=document.getElementById('catch-env-grid');if(g)g.style.display='none';
+    window._catchPhotoB64=null;
   }
 
-  function _fillCatchModal(rec){
-    var d=new Date(rec.datetime);
-    document.getElementById('c-date').value=d.toISOString().split('T')[0];
-    document.getElementById('c-time').value=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-    document.getElementById('c-lat').value=rec.lat||'';
-    document.getElementById('c-lng').value=rec.lng||'';
-    document.getElementById('c-fish').value=rec.fish||'';
-    document.getElementById('c-len').value=rec.len||'';
-    document.getElementById('c-weight').value=rec.weight||'';
-    document.getElementById('c-method').value=rec.method||'';
-    document.getElementById('c-note').value=rec.note||'';
-    if(rec.lat&&rec.lng) document.getElementById('catch-loc-text').textContent=parseFloat(rec.lat).toFixed(4)+', '+parseFloat(rec.lng).toFixed(4);
-    if(rec.photo){var img=document.getElementById('catch-photo-preview');img.src=rec.photo;img.style.display='block';document.getElementById('catch-photo-placeholder').style.display='none';window._catchPhotoB64=rec.photo;}
+  function fillCatchModal(rec){
+    const d=new Date(rec.datetime);
+    document.getElementById('c-date').value   = d.toISOString().split('T')[0];
+    const fhh=String(d.getHours()).padStart(2,'0');
+    const fmm=String(d.getMinutes()).padStart(2,'0');
+    document.getElementById('c-time').value   = `${fhh}:${fmm}`;
+    document.getElementById('c-lat').value    = rec.lat||'';
+    document.getElementById('c-lng').value    = rec.lng||'';
+    document.getElementById('c-fish').value   = rec.fish||'';
+    document.getElementById('c-len').value    = rec.len||'';
+    document.getElementById('c-weight').value = rec.weight||'';
+    document.getElementById('c-method').value = rec.method||'';
+    document.getElementById('c-note').value   = rec.note||'';
+    if(rec.lat&&rec.lng) document.getElementById('catch-loc-text').textContent=`${parseFloat(rec.lat).toFixed(4)}, ${parseFloat(rec.lng).toFixed(4)}`;
+    if(rec.photo){const img=document.getElementById('catch-photo-preview');img.src=rec.photo;img.style.display='block';document.getElementById('catch-photo-placeholder').style.display='none';window._catchPhotoB64=rec.photo;}
     else{document.getElementById('catch-photo-preview').style.display='none';document.getElementById('catch-photo-placeholder').style.display='flex';window._catchPhotoB64=null;}
     document.getElementById('catch-env-status').textContent=rec.envNote||'';
+    // 從已存記錄重建環境資料物件並顯示
+    const savedEnv={temp:rec.temp,wind:rec.wind,windDir:rec.windDir,wave:rec.wave,humid:rec.humid,rain:rec.rain,tideStatus:rec.tideStatus,tideHeight:rec.tideHeight,tideMax:rec.tideMax,tideMin:rec.tideMin,tideRange:rec.tideRange,pressure:rec.pressure};
+    window._catchEnvData=savedEnv;
+    renderEnvGrid(savedEnv);
     document.getElementById('field-fish').classList.remove('error');
-    var saved={temp:rec.temp,wind:rec.wind,windDir:rec.windDir,wave:rec.wave,humid:rec.humid,rain:rec.rain,tideStatus:rec.tideStatus,tideHeight:rec.tideHeight,tideMax:rec.tideMax,tideMin:rec.tideMin,tideRange:rec.tideRange,pressure:rec.pressure};
-    window._catchEnvData=saved; _renderEnvGrid(saved);
   }
 
-  function _renderEnvGrid(env){
-    var g=document.getElementById('catch-env-grid'); if(!g)return;
-    if(!env){g.style.display='none';return;}
-    var rows=[['溫度','temp','°C'],['風力','wind','級'],['風向','windDir',''],['浪高','wave','m'],['濕度','humid','%'],['降雨','rain','%'],['潮汐狀態','tideStatus',''],['中魚潮高','tideHeight','m'],['當日最高','tideMax','m'],['當日最低','tideMin','m'],['當日潮差','tideRange',''],['氣壓','pressure','hPa']];
-    g.innerHTML=rows.map(function(r){var v=env[r[1]];if(v===''||v===null||v===undefined)return'<div style="font-size:.7rem;color:rgba(255,255,255,.3);">'+r[0]+'：—</div>';return'<div style="font-size:.7rem;color:rgba(255,255,255,.7);"><span style="color:rgba(255,255,255,.45);">'+r[0]+'：</span>'+v+r[2]+'</div>';}).join('');
-    g.style.display='grid';
+  // 照片壓縮
+  document.addEventListener('DOMContentLoaded',()=>{
+    const pi=document.getElementById('catch-photo-input');
+    if(pi){pi.addEventListener('change',async e=>{
+      const file=e.target.files[0];if(!file)return;
+      try{const b64=await compressCatchImage(file);window._catchPhotoB64=b64;const img=document.getElementById('catch-photo-preview');img.src=b64;img.style.display='block';document.getElementById('catch-photo-placeholder').style.display='none';}
+      catch(err){showToast('照片壓縮失敗',true);}
+    });}
+  });
+
+  function compressCatchImage(file){
+    return new Promise((resolve,reject)=>{
+      const MIN_SIDE=600,MAX_BYTE=100*1024;
+      const reader=new FileReader();
+      reader.onload=e=>{
+        const img=new Image();
+        img.onload=()=>{
+          let{width,height}=img;
+          if(Math.min(width,height)>MIN_SIDE){if(width<height){height=Math.round(height*MIN_SIDE/width);width=MIN_SIDE;}else{width=Math.round(width*MIN_SIDE/height);height=MIN_SIDE;}}
+          const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+          canvas.getContext('2d').drawImage(img,0,0,width,height);
+          let quality=0.85,b64=canvas.toDataURL('image/jpeg',quality);
+          while(b64.length>MAX_BYTE*1.37&&quality>0.2){quality-=0.05;b64=canvas.toDataURL('image/jpeg',quality);}
+          resolve(b64);
+        };img.onerror=reject;img.src=e.target.result;
+      };reader.onerror=reject;reader.readAsDataURL(file);
+    });
   }
 
-  // ── 環境資料 ─────────────────────────────
-  function _fetchCatchEnv(){
-    var statusEl=document.getElementById('catch-env-status');
+  // 環境資料
+  async function fetchCatchEnv(){
+    const statusEl=document.getElementById('catch-env-status');
     statusEl.textContent='🌐 讀取天氣 / 潮汐中...';
-    var lat=parseFloat(document.getElementById('c-lat').value)||_catchCurrentLat;
-    var lng=parseFloat(document.getElementById('c-lng').value)||_catchCurrentLng;
+    const lat=parseFloat(document.getElementById('c-lat').value)||_catchCurrentLat;
+    const lng=parseFloat(document.getElementById('c-lng').value)||_catchCurrentLng;
     if(!lat||!lng){statusEl.textContent='⚠️ 無法取得位置，環境資料將留空';return;}
-    var date=typeof getTWDateString==='function'?getTWDateString():new Date().toISOString().split('T')[0];
-    var now=new Date(); var hour=now.getHours();
-    var fakeSpot={lat:lat,lng:lng,name:'釣獲點',type:'野場',area:'',note:'',max_wave_height:99,allowed:true};
-    getWeather(fakeSpot,date,hour,hour).then(function(result){
-      var env={
-        temp:result.temp, wind:typeof msToBeaufort==='function'?msToBeaufort(result.ws):'', windDir:result.wd, wave:result.wave, pressure:result.pressure||'', humid:'', rain:result.rain,
-        tideStatus:_calcTideStatus(result.tides,now), tideHeight:_calcTideHeight(result.tides,now),
-        tideMax:result.tides.filter(function(t){return t.type==='高潮';}).map(function(t){return parseFloat(t.height);}).sort(function(a,b){return b-a;})[0]||'',
-        tideMin:result.tides.filter(function(t){return t.type==='低潮';}).map(function(t){return parseFloat(t.height);}).sort(function(a,b){return a-b;})[0]||'',
+    const date=getTWDateString();
+    const now=new Date();
+    const hour=now.getHours();
+    const fakeSpot={lat,lng,name:'釣獲點',type:'野場',area:'',note:'',max_wave_height:99,allowed:true};
+    try{
+      const result=await getWeather(fakeSpot,date,hour,hour);
+      window._catchEnvData={
+        temp:result.temp,
+        wind:typeof msToBeaufort==='function'?msToBeaufort(result.ws):'',
+        windDir:result.wd,
+        wave:result.wave,
+        pressure:result.pressure||'',
+        humid:'',
+        rain:result.rain,
+        tideStatus:calcCatchTideStatus(result.tides,now),
+        tideHeight:calcCatchTideHeight(result.tides,now),
+        tideMax:result.tides.filter(t=>t.type==='高潮').map(t=>parseFloat(t.height)).sort((a,b)=>b-a)[0]||'',
+        tideMin:result.tides.filter(t=>t.type==='低潮').map(t=>parseFloat(t.height)).sort((a,b)=>a-b)[0]||'',
         tideRange:result.tideType?result.tideType.replace('潮差：',''):'',
       };
-      window._catchEnvData=env;
-      statusEl.textContent='✅ 環境資料已帶入 '+(result.tideType||'');
-      _renderEnvGrid(env);
-    }).catch(function(){statusEl.textContent='⚠️ 環境資料讀取失敗';window._catchEnvData=null;});
+      statusEl.textContent=`✅ 環境資料已帶入 ${result.tideType||''}`;
+      renderEnvGrid(window._catchEnvData);
+    }catch(e){statusEl.textContent='⚠️ 環境資料讀取失敗，將留空';window._catchEnvData=null;}
   }
 
-  function _calcTideStatus(tides,now){
+  function renderEnvGrid(env){
+    const grid=document.getElementById('catch-env-grid');
+    if(!grid) return;
+    if(!env){grid.style.display='none';return;}
+    const rows=[
+      ['溫度','temp','°C'],['風力','wind','級'],['風向','windDir',''],['浪高','wave','m'],
+      ['濕度','humid','%'],['降雨','rain','%'],['潮汐狀態','tideStatus',''],
+      ['中魚潮高','tideHeight','m'],['當日最高','tideMax','m'],['當日最低','tideMin','m'],
+      ['當日潮差','tideRange',''],['氣壓','pressure','hPa'],
+    ];
+    const items=rows.map(([label,key,unit])=>{
+      const val=env[key];
+      if(val===''||val===null||val===undefined) return `<div style="font-size:.7rem;color:rgba(255,255,255,.3);">${label}：—</div>`;
+      return `<div style="font-size:.7rem;color:rgba(255,255,255,.7);"><span style="color:rgba(255,255,255,.45);">${label}：</span>${val}${unit}</div>`;
+    });
+    grid.innerHTML=items.join('');
+    grid.style.display='grid';
+  }
     if(!tides||!tides.length)return'';
-    var nm=now.getHours()*60+now.getMinutes();
-    for(var i=0;i<tides.length;i++){
-      if(tides[i].type==='高潮'&&Math.abs(nm-tides[i].totalMin)<=180)return'滿頂前後';
-      if(tides[i].type==='低潮'&&Math.abs(nm-tides[i].totalMin)<=180)return'流底前後';
+    const nowMin=now.getHours()*60+now.getMinutes();
+    for(const t of tides){
+      if(t.type==='高潮'&&Math.abs(nowMin-t.totalMin)<=180)return'滿頂前後';
+      if(t.type==='低潮'&&Math.abs(nowMin-t.totalMin)<=180)return'流底前後';
     }
-    var s=[].concat(tides).sort(function(a,b){return a.totalMin-b.totalMin;});
-    var prev=null,next=null;
-    for(var j=s.length-1;j>=0;j--){if(s[j].totalMin<=nm){prev=s[j];break;}}
-    for(var k=0;k<s.length;k++){if(s[k].totalMin>nm){next=s[k];break;}}
+    const sorted=[...tides].sort((a,b)=>a.totalMin-b.totalMin);
+    const prev=[...sorted].reverse().find(t=>t.totalMin<=nowMin);
+    const next=sorted.find(t=>t.totalMin>nowMin);
     if(!prev||!next)return'';
     return prev.type==='低潮'?'正在漲潮':'正在退潮';
   }
 
-  function _calcTideHeight(tides,now){
+  function calcCatchTideHeight(tides,now){
     if(!tides||tides.length<2)return'';
-    var nm=now.getHours()*60+now.getMinutes();
-    var s=[].concat(tides).sort(function(a,b){return a.totalMin-b.totalMin;});
-    var prev=null,next=null;
-    for(var j=s.length-1;j>=0;j--){if(s[j].totalMin<=nm){prev=s[j];break;}}
-    for(var k=0;k<s.length;k++){if(s[k].totalMin>nm){next=s[k];break;}}
-    if(!prev||!next)return tides[0]?tides[0].height:'';
-    var ratio=(nm-prev.totalMin)/(next.totalMin-prev.totalMin);
+    const nowMin=now.getHours()*60+now.getMinutes();
+    const sorted=[...tides].sort((a,b)=>a.totalMin-b.totalMin);
+    const prev=[...sorted].reverse().find(t=>t.totalMin<=nowMin);
+    const next=sorted.find(t=>t.totalMin>nowMin);
+    if(!prev||!next)return tides[0]?.height||'';
+    const ratio=(nowMin-prev.totalMin)/(next.totalMin-prev.totalMin);
     return(parseFloat(prev.height)+ratio*(parseFloat(next.height)-parseFloat(prev.height))).toFixed(2);
   }
 
-  // ── 儲存 ─────────────────────────────────
-  window.saveCatchRecord=function(){
-    var fishEl=document.getElementById('c-fish');
-    if(!fishEl.value.trim()){document.getElementById('field-fish').classList.add('error');fishEl.focus();return;}
+  function saveCatchRecord(){
+    const fishEl=document.getElementById('c-fish');
+    const fish=fishEl.value.trim();
+    if(!fish){document.getElementById('field-fish').classList.add('error');fishEl.focus();return;}
     document.getElementById('field-fish').classList.remove('error');
-    var dv=document.getElementById('c-date').value;
-    var tv=document.getElementById('c-time').value||'00:00';
-    var h=tv.split(':')[0]||'00', m=tv.split(':')[1]||'00';
-    var dt=new Date(dv+'T'+h+':'+m+':00');
-    var env=window._catchEnvData||{};
-    var rec={
+    const dateVal=document.getElementById('c-date').value;
+    const timeVal=document.getElementById('c-time').value||'00:00';
+    const [hour,min]=[timeVal.split(':')[0]||'00', timeVal.split(':')[1]||'00'];
+    const dt=new Date(`${dateVal}T${hour}:${min}:00`);
+    const photoName=`${dt.getFullYear()}-${dt.getMonth()+1}-${dt.getDate()}-${hour}-${min}-${dt.getSeconds()}`;
+    const env=window._catchEnvData||{};
+    const rec={
       id:_catchEditId||String(Date.now()),
       datetime:dt.toISOString(),
+      photoName,
       photo:window._catchPhotoB64||null,
-      fish:fishEl.value.trim(),
+      fish,
       len:document.getElementById('c-len').value||'',
       weight:document.getElementById('c-weight').value||'',
       method:document.getElementById('c-method').value||'',
@@ -2257,110 +2349,121 @@ https://cfw2214.github.io/tw-fish-spot/`;
       tideMax:env.tideMax||'',tideMin:env.tideMin||'',tideRange:env.tideRange||'',
       envNote:document.getElementById('catch-env-status').textContent,
     };
-    if(_catchEditId){var idx=_catchRecords.findIndex(function(r){return r.id===_catchEditId;});if(idx>=0)_catchRecords[idx]=rec;}
-    else _catchRecords.unshift(rec);
-    localStorage.setItem('fishing_catches',JSON.stringify(_catchRecords));
-    window.closeCatchModal(); _renderCatchList(); _showCatchMapMarkers();
-    if(typeof showToast==='function') showToast(_catchEditId?'✅ 已更新釣獲記錄':'✅ 已新增釣獲記錄');
-  };
+    if(_catchEditId){const idx=CATCH_RECORDS.findIndex(r=>r.id===_catchEditId);if(idx>=0)CATCH_RECORDS[idx]=rec;}
+    else CATCH_RECORDS.unshift(rec);
+    localStorage.setItem('fishing_catches',JSON.stringify(CATCH_RECORDS));
+    closeCatchModal();renderCatchList();showCatchMapMarkers();
+    showToast(_catchEditId?'✅ 已更新釣獲記錄':'✅ 已新增釣獲記錄');
+  }
 
-  window.deleteCatchRecord=function(){
+  function deleteCatchRecord(){
     if(!_catchEditId)return;
     if(!confirm('確定要刪除這筆釣獲記錄嗎？'))return;
-    _catchRecords=_catchRecords.filter(function(r){return r.id!==_catchEditId;});
-    localStorage.setItem('fishing_catches',JSON.stringify(_catchRecords));
-    window.closeCatchModal(); _renderCatchList(); _showCatchMapMarkers();
-    if(typeof showToast==='function') showToast('已刪除');
-  };
+    CATCH_RECORDS=CATCH_RECORDS.filter(r=>r.id!==_catchEditId);
+    localStorage.setItem('fishing_catches',JSON.stringify(CATCH_RECORDS));
+    closeCatchModal();renderCatchList();showCatchMapMarkers();showToast('已刪除');
+  }
 
-  // ── 地點選擇 ─────────────────────────────
-  window.openCatchMapPicker=function(){
-    var modal=document.getElementById('catch-map-modal'); modal.classList.add('active');
-    var lat=parseFloat(document.getElementById('c-lat').value)||_catchCurrentLat||25.09;
-    var lng=parseFloat(document.getElementById('c-lng').value)||_catchCurrentLng||121.76;
-    _catchPickLat=lat; _catchPickLng=lng;
-    setTimeout(function(){
+  // 地點選擇器
+  function openCatchMapPicker(){
+    const modal=document.getElementById('catch-map-modal');
+    modal.classList.add('active');
+    const lat=parseFloat(document.getElementById('c-lat').value)||_catchCurrentLat||25.09;
+    const lng=parseFloat(document.getElementById('c-lng').value)||_catchCurrentLng||121.76;
+    _catchPickLat=lat;_catchPickLng=lng;
+    setTimeout(()=>{
       if(!_catchPickMap){
-        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat:lat,lng:lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:false,streetViewControl:false,fullscreenControl:false,mapId:'catch_pick'});
-        var el=document.createElement('div'); el.style.cssText='font-size:32px;line-height:1;transform:translateY(-50%);'; el.textContent='📍';
-        _catchPickMarker=new google.maps.marker.AdvancedMarkerElement({position:{lat:lat,lng:lng},map:_catchPickMap,content:el});
-        _catchPickMap.addListener('center_changed',function(){var c=_catchPickMap.getCenter();_catchPickLat=c.lat();_catchPickLng=c.lng();_catchPickMarker.position={lat:_catchPickLat,lng:_catchPickLng};});
-        _catchPickMap.addListener('click',function(e){_catchPickLat=e.latLng.lat();_catchPickLng=e.latLng.lng();_catchPickMarker.position={lat:_catchPickLat,lng:_catchPickLng};_catchPickMap.panTo({lat:_catchPickLat,lng:_catchPickLng});});
+        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat,lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:false,streetViewControl:false,fullscreenControl:false,mapId:'catch_pick_map'});
+        const markerEl=document.createElement('div');
+        markerEl.style.cssText='font-size:32px;line-height:1;transform:translateY(-50%);filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));';
+        markerEl.textContent='📍';
+        _catchPickMarker=new google.maps.marker.AdvancedMarkerElement({position:{lat,lng},map:_catchPickMap,content:markerEl});
+        _catchPickMap.addListener('center_changed',()=>{const c=_catchPickMap.getCenter();_catchPickLat=c.lat();_catchPickLng=c.lng();_catchPickMarker.position={lat:_catchPickLat,lng:_catchPickLng};});
+        _catchPickMap.addListener('click',e=>{_catchPickLat=e.latLng.lat();_catchPickLng=e.latLng.lng();_catchPickMarker.position={lat:_catchPickLat,lng:_catchPickLng};_catchPickMap.panTo({lat:_catchPickLat,lng:_catchPickLng});});
       } else {
-        _catchPickMap.setCenter({lat:lat,lng:lng}); _catchPickMarker.position={lat:lat,lng:lng};
+        _catchPickMap.setCenter({lat,lng});_catchPickMarker.position={lat,lng};
         google.maps.event.trigger(_catchPickMap,'resize');
       }
     },200);
-  };
+  }
 
-  window.closeCatchMapModalIfOutside=function(e){if(e.target===document.getElementById('catch-map-modal'))document.getElementById('catch-map-modal').classList.remove('active');};
+  function closeCatchMapModalIfOutside(e){if(e.target===document.getElementById('catch-map-modal'))document.getElementById('catch-map-modal').classList.remove('active');}
 
-  window.confirmCatchLocation=function(){
+  function confirmCatchLocation(){
     if(!_catchPickLat)return;
     document.getElementById('c-lat').value=_catchPickLat.toFixed(6);
     document.getElementById('c-lng').value=_catchPickLng.toFixed(6);
-    document.getElementById('catch-loc-text').textContent=_catchPickLat.toFixed(4)+', '+_catchPickLng.toFixed(4);
+    document.getElementById('catch-loc-text').textContent=`${_catchPickLat.toFixed(4)}, ${_catchPickLng.toFixed(4)}`;
     document.getElementById('catch-map-modal').classList.remove('active');
-    _fetchCatchEnv();
-  };
+    fetchCatchEnv();
+  }
 
-  // ── 地圖釣獲圖釘 ─────────────────────────
-  function _showCatchMapMarkers(){
+  // 地圖釣獲圖釘
+  function clearCatchMapMarkers(){_catchMapMarkers.forEach(m=>m.map=null);_catchMapMarkers=[];}
+
+  function showCatchMapMarkers(){
     if(!_gmap)return;
-    _catchMapMarkers.forEach(function(m){m.map=null;}); _catchMapMarkers=[];
-    if(!_catchRecords.length)return;
-    var AME=google.maps.marker.AdvancedMarkerElement;
-    _catchRecords.forEach(function(rec){
+    clearCatchMapMarkers();
+    if(!CATCH_RECORDS.length)return;
+    const{AdvancedMarkerElement}=google.maps.marker;
+    CATCH_RECORDS.forEach(rec=>{
       if(!rec.lat||!rec.lng)return;
-      var pos={lat:parseFloat(rec.lat),lng:parseFloat(rec.lng)};
-      var el=document.createElement('div'); el.className='catch-map-marker'; el.textContent='★';
-      var marker=new AME({position:pos,map:_gmap,content:el,title:rec.fish});
-      marker.addListener('click',function(){_showCatchInfoCard(rec,marker);});
+      const pos={lat:parseFloat(rec.lat),lng:parseFloat(rec.lng)};
+      const el=document.createElement('div');
+      el.className='catch-map-marker';el.textContent='★';
+      const marker=new AdvancedMarkerElement({position:pos,map:_gmap,content:el,title:rec.fish});
+      marker.addListener('click',()=>showCatchInfoCard(rec,marker));
       _catchMapMarkers.push(marker);
     });
   }
 
-  function _showCatchInfoCard(rec,marker){
+  function showCatchInfoCard(rec,marker){
     if(!_gmapInfoWindow)return;
-    var d=new Date(rec.datetime);
-    var ds=(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-    var ph=rec.photo?'<img class="ci-photo" src="'+rec.photo+'" alt="">':'';
-    var infoRows=[
-      (rec.tideStatus||rec.tideRange)?'<div class="ci-row">🌊 '+[rec.tideStatus,rec.tideRange?rec.tideRange+'潮':''].filter(Boolean).join(' · ')+'</div>':'',
-      (rec.temp||rec.pressure)?'<div class="ci-row">🌡 '+[rec.temp?rec.temp+'°C':'',rec.pressure?rec.pressure+'hPa':''].filter(Boolean).join(' · ')+'</div>':'',
-      (rec.len||rec.weight)?'<div class="ci-row">📏 '+[rec.len?rec.len+'cm':'',rec.weight?rec.weight+'g':''].filter(Boolean).join(' · ')+'</div>':'',
+    const d=new Date(rec.datetime);
+    const dateStr=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const photoHtml=rec.photo?`<img class="ci-photo" src="${rec.photo}" alt="">`:'' ;
+    const infoRows=[
+      (rec.tideStatus||rec.tideRange)?`<div class="ci-row">🌊 ${[rec.tideStatus,rec.tideRange?rec.tideRange+'潮':''].filter(Boolean).join(' · ')}</div>`:'',
+      (rec.temp||rec.pressure)?`<div class="ci-row">🌡 ${[rec.temp?rec.temp+'°C':'',rec.pressure?rec.pressure+'hPa':''].filter(Boolean).join(' · ')}</div>`:'',
+      (rec.len||rec.weight)?`<div class="ci-row">📏 ${[rec.len?rec.len+'cm':'',rec.weight?rec.weight+'g':''].filter(Boolean).join(' · ')}</div>`:'',
     ].join('');
-    var cid=rec.id;
-    var content='<div class="catch-infocard" style="cursor:pointer;" onclick="window.openCatchFromMap(''+cid+'')"><button class="ci-close" onclick="event.stopPropagation();window._gmapIW&&window._gmapIW.close()">✕</button><div class="ci-fish">'+rec.fish+'</div>'+ph+'<div class="ci-row" style="color:rgba(255,255,255,.5);font-size:.7rem;">📅 '+ds+'</div>'+infoRows+'<div style="font-size:.68rem;color:rgba(0,180,216,.7);margin-top:6px;text-align:center;">點擊查看完整記錄 →</div></div>';
+    const content=`<div class="catch-infocard" style="cursor:pointer;" onclick="openCatchFromMap('${rec.id}')"><button class="ci-close" onclick="event.stopPropagation();window._gmapIW&&window._gmapIW.close()">✕</button><div class="ci-fish">${rec.fish}</div>${photoHtml}<div class="ci-row" style="color:rgba(255,255,255,.5);font-size:.7rem;">📅 ${dateStr}</div>${infoRows}<div style="font-size:.68rem;color:rgba(0,180,216,.7);margin-top:6px;text-align:center;">點擊查看完整記錄 →</div></div>`;
     _gmapInfoWindow.setContent(content);
     _gmapInfoWindow.open(_gmap,marker);
     window._gmapIW=_gmapInfoWindow;
   }
 
-  window.openCatchFromMap=function(recordId){
-    if(window._gmapIW)window._gmapIW.close();
-    if(!_catchIsOpen){ _catchIsOpen=true; window.toggleCatchMode(); _catchIsOpen=true; }
-    window.switchTab('catchPanel');
-    setTimeout(function(){window.openCatchModal(recordId);},350);
-  };
+  function openCatchFromMap(recordId){
+    if(window._gmapIW) window._gmapIW.close();
+    if(!_catchMode){
+      _catchMode=true;
+      const btn=document.getElementById('btn-my-catch');
+      if(btn) btn.classList.add('active');
+      toggleFilterBox(true);
+      const viewTabs=document.getElementById('view-tabs');
+      if(viewTabs) viewTabs.style.display='flex';
+    }
+    switchTab('catchPanel');
+    setTimeout(()=>openCatchModal(recordId),350);
+  }
 
-  // ── CSV 下載 ─────────────────────────────
-  window.downloadCatchCSV=function(){
-    if(!_catchRecords.length){if(typeof showToast==='function')showToast('沒有記錄可匯出',true);return;}
-    var headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
-    var sorted=[].concat(_catchRecords).sort(function(a,b){return new Date(b.datetime)-new Date(a.datetime);});
-    var rows=sorted.map(function(r){
-      var d=new Date(r.datetime);
-      var ds=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
-      return[ds,r.fish,r.len||'',r.weight||'',r.method||'',r.lat||'',r.lng||'',r.temp||'',r.wind||'',r.windDir||'',r.wave||'',r.pressure||'',r.humid||'',r.rain||'',r.tideStatus||'',r.tideHeight||'',r.tideMax||'',r.tideMin||'',r.tideRange||'',r.note||''];
+  // CSV 下載
+  function downloadCatchCSV(){
+    if(!CATCH_RECORDS.length){showToast('沒有記錄可匯出',true);return;}
+    const headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
+    const sorted=[...CATCH_RECORDS].sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
+    const rows=sorted.map(r=>{
+      const d=new Date(r.datetime);
+      const dtStr=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+      return[dtStr,r.fish,r.len||'',r.weight||'',r.method||'',r.lat||'',r.lng||'',r.temp||'',r.wind||'',r.windDir||'',r.wave||'',r.pressure||'',r.humid||'',r.rain||'',r.tideStatus||'',r.tideHeight||'',r.tideMax||'',r.tideMin||'',r.tideRange||'',r.note||''];
     });
-    var csv='\uFEFF'+[headers].concat(rows).map(function(row){return row.map(function(v){return'"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
-    var today=typeof getTWDateString==='function'?getTWDateString():new Date().toISOString().split('T')[0];
-    var a=document.createElement('a');
+    const csv='\uFEFF'+[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const today=getTWDateString();
+    const a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
-    a.download='釣獲記錄_'+today+'.csv'; a.click();
-    if(typeof showToast==='function')showToast('✅ 已下載 CSV');
-  };
+    a.download=`釣獲記錄_${today}.csv`;a.click();
+    showToast('✅ 已下載 CSV');
+  }
   </script>
 </body>
 </html>
