@@ -2020,7 +2020,6 @@ https://cfw2214.github.io/tw-fish-spot/`;
       toggleFilterBox(true);
       const viewTabs = document.getElementById('view-tabs');
       if(viewTabs) viewTabs.style.display='flex';
-      // 先把所有 tab 暗掉，再直接切漁獲面板（不透過 switchTab 避免競態）
       ['tab-list','tab-map','tab-catch'].forEach(id=>{
         const t=document.getElementById(id);
         if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}
@@ -2028,17 +2027,14 @@ https://cfw2214.github.io/tw-fish-spot/`;
       const googleMap=document.getElementById('google-map');
       if(googleMap) googleMap.classList.add('catch-mode');
       clearCatchMapMarkers();
-      // 隱藏小卡浮層
       const overlay=document.getElementById('map-cards-overlay');
       if(overlay) overlay.classList.add('slide-out');
-      // 直接顯示漁獲面板
       const catchPanel=document.getElementById('catch-panel');
       if(catchPanel){
-        catchPanel.classList.add('visible');   // display:block
-        catchPanel.classList.remove('slide-out'); // 滑入
+        catchPanel.classList.add('visible');
+        catchPanel.classList.remove('slide-out');
       }
       renderCatchList();
-      // 抓 GPS
       if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(pos=>{
           _catchCurrentLat=pos.coords.latitude;
@@ -2051,13 +2047,11 @@ https://cfw2214.github.io/tw-fish-spot/`;
       const googleMap=document.getElementById('google-map');
       if(googleMap) googleMap.classList.remove('catch-mode');
       clearCatchMapMarkers();
-      // 直接隱藏面板
       const catchPanel=document.getElementById('catch-panel');
       if(catchPanel){
         catchPanel.classList.add('slide-out');
         setTimeout(()=>catchPanel.classList.remove('visible'),360);
       }
-      // 恢復釣點列表
       showCardsOverlay();
       const tabList=document.getElementById('tab-list');
       const tabMap=document.getElementById('tab-map');
@@ -2465,6 +2459,20 @@ https://cfw2214.github.io/tw-fish-spot/`;
     a.download=`釣獲記錄_${today}.csv`;a.click();
     showToast('✅ 已下載 CSV');
   }
+
+  // 掛載所有函式到 window，確保 HTML onclick 能呼叫到
+  window.toggleCatchMode        = toggleCatchMode;
+  window.openCatchModal         = openCatchModal;
+  window.closeCatchModal        = closeCatchModal;
+  window.closeCatchModalIfOutside = closeCatchModalIfOutside;
+  window.saveCatchRecord        = saveCatchRecord;
+  window.deleteCatchRecord      = deleteCatchRecord;
+  window.openCatchMapPicker     = openCatchMapPicker;
+  window.closeCatchMapModalIfOutside = closeCatchMapModalIfOutside;
+  window.confirmCatchLocation   = confirmCatchLocation;
+  window.downloadCatchCSV       = downloadCatchCSV;
+  window.changeCatchPage        = changeCatchPage;
+  window.openCatchFromMap       = openCatchFromMap;
   </script>
 </body>
 </html>
