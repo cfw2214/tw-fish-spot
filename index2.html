@@ -246,9 +246,9 @@
 #google-map.catch-mode{filter:blur(3px) brightness(.55) saturate(1.4) hue-rotate(10deg);transition:filter .4s;}
 #google-map{transition:filter .4s;}
 /* ── 漁獲面板 ── */
-#catch-panel{display:block;position:absolute;inset:0;z-index:7;background:rgba(10,22,40,.6);backdrop-filter:blur(2px);padding:14px;overflow-y:auto;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .3s;transform:translateX(0);opacity:1;}
+#catch-panel{display:none;position:absolute;inset:0;z-index:7;background:rgba(10,22,40,.6);backdrop-filter:blur(2px);padding:14px;overflow-y:auto;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .3s;transform:translateX(0);opacity:1;}
 #catch-panel.slide-out{transform:translateX(-100%);opacity:0;pointer-events:none;}
-#catch-panel.hidden{display:none;}
+#catch-panel.visible{display:block;}
 #catch-panel .catch-add-btn{display:block;width:100%;padding:13px 0;margin-bottom:14px;background:#fff;color:#0a1628;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;letter-spacing:.5px;transition:opacity .15s,transform .1s;box-shadow:0 2px 12px rgba(0,0,0,.25);}
 #catch-panel .catch-add-btn:hover{opacity:.9;}
 #catch-panel .catch-add-btn:active{transform:scale(.98);}
@@ -476,7 +476,7 @@
             <!-- 我的位置標籤（左下角，在小卡下方） -->
             <div id="my-location-label" onclick="flyToUserLocation()" style="display:none;position:absolute;left:10px;bottom:10px;z-index:6;background:#fff;color:#1a73e8;font-size:.78rem;font-weight:700;padding:5px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:auto;white-space:nowrap;cursor:pointer;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.35)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.25)'"></div>
             <!-- 漁獲面板（蓋在地圖上） -->
-            <div id="catch-panel" class="hidden slide-out">
+            <div id="catch-panel">
               <button class="catch-add-btn" onclick="openCatchModal(null)">＋ 新增我的釣獲記錄</button>
               <div id="catch-list-wrap">
                 <div id="catch-empty">目前沒有釣獲記錄喔，請新增你的釣獲記錄</div>
@@ -1456,13 +1456,12 @@
       function hideCatchPanel(){
         if(!catchPanel) return;
         catchPanel.classList.add('slide-out');
-        setTimeout(()=>catchPanel.classList.add('hidden'),360);
+        setTimeout(()=>catchPanel.classList.remove('visible'),360);
       }
       function showCatchPanel(){
         if(!catchPanel) return;
-        catchPanel.classList.remove('hidden');
-        // 強制 reflow 讓動畫觸發
-        catchPanel.offsetHeight;
+        catchPanel.classList.add('visible');   // 先 display:block
+        catchPanel.offsetHeight;               // reflow 觸發動畫
         catchPanel.classList.remove('slide-out');
       }
 
@@ -2035,9 +2034,8 @@ https://cfw2214.github.io/tw-fish-spot/`;
       // 直接顯示漁獲面板
       const catchPanel=document.getElementById('catch-panel');
       if(catchPanel){
-        catchPanel.classList.remove('hidden');
-        catchPanel.offsetHeight; // reflow
-        catchPanel.classList.remove('slide-out');
+        catchPanel.classList.add('visible');   // display:block
+        catchPanel.classList.remove('slide-out'); // 滑入
       }
       renderCatchList();
       // 抓 GPS
@@ -2055,7 +2053,10 @@ https://cfw2214.github.io/tw-fish-spot/`;
       clearCatchMapMarkers();
       // 直接隱藏面板
       const catchPanel=document.getElementById('catch-panel');
-      if(catchPanel){catchPanel.classList.add('slide-out');setTimeout(()=>catchPanel.classList.add('hidden'),360);}
+      if(catchPanel){
+        catchPanel.classList.add('slide-out');
+        setTimeout(()=>catchPanel.classList.remove('visible'),360);
+      }
       // 恢復釣點列表
       showCardsOverlay();
       const tabList=document.getElementById('tab-list');
