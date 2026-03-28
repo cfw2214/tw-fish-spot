@@ -2378,7 +2378,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     _catchPickLat=lat;_catchPickLng=lng;
     setTimeout(()=>{
       if(!_catchPickMap){
-        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat,lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:false,streetViewControl:false,fullscreenControl:false,mapId:'catch_pick_map'});
+        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat,lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:false,streetViewControl:false,fullscreenControl:false,mapId:'catch_pick_map',gestureHandling:'greedy'});
         const markerEl=document.createElement('div');
         markerEl.style.cssText='font-size:32px;line-height:1;transform:translateY(-50%);filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));';
         markerEl.textContent='📍';
