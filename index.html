@@ -2616,6 +2616,155 @@ https://cfw2214.github.io/tw-fish-spot/`;
     return /iphone|ipad|ipod/i.test(navigator.userAgent);
   }
 
+  // ── Canvas 繪製分享卡片 ──
+  function renderShareCard(rec){
+    return new Promise((resolve)=>{
+      const W = 720, PAD = 36;
+      const hasPhoto = !!rec.photo;
+
+      // 預載照片（如有）
+      const loadPhoto = () => new Promise(res => {
+        if(!hasPhoto){ res(null); return; }
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => res(img);
+        img.onerror = () => res(null);
+        img.src = rec.photo;
+      });
+
+      loadPhoto().then(photoImg => {
+        // 計算照片區高度
+        const PHOTO_H = photoImg ? Math.min(Math.round(W * photoImg.height / photoImg.width), 540) : 0;
+        const INFO_START = PAD + 70 + (PHOTO_H ? PHOTO_H + 16 : 0);
+
+        // 準備資訊行
+        const d = new Date(rec.datetime);
+        const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+        const fishLine = rec.fish + (rec.len ? '  '+rec.len+'cm' : '') + (rec.weight ? '  '+rec.weight+'g' : '');
+        const infoLines = [
+          rec.method ? '🎯 ' + rec.method : null,
+          rec.tideStatus ? '🌊 ' + rec.tideStatus + (rec.tideRange ? ' · 潮差' + rec.tideRange : '') + (rec.tideHeight ? ' · 潮高' + rec.tideHeight + 'm' : '') : null,
+          rec.waterTemp ? '💧 水溫 ' + rec.waterTemp + '°C' : null,
+          (rec.wind || rec.windDir || rec.wave) ? '🌬️ ' + [rec.windDir?rec.windDir+'風':'', rec.wind?rec.wind+'級':'', rec.wave?rec.wave+'m浪':''].filter(Boolean).join(' · ') : null,
+          rec.temp ? '🌡️ 氣溫 ' + rec.temp + '°C' + (rec.pressure ? ' · ' + rec.pressure + 'hPa' : '') : null,
+          rec.note ? '📝 ' + rec.note : null,
+        ].filter(Boolean);
+
+        const LINE_H = 34;
+        const FOOTER_H = 50;
+        const H = INFO_START + 60 + infoLines.length * LINE_H + 20 + FOOTER_H + PAD;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = W;
+        canvas.height = H;
+        const ctx = canvas.getContext('2d');
+
+        // 背景漸層
+        const bg = ctx.createLinearGradient(0, 0, W, H);
+        bg.addColorStop(0, '#0a1628');
+        bg.addColorStop(0.5, '#0f2040');
+        bg.addColorStop(1, '#0a1f42');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, W, H);
+
+        // 頂部裝飾線
+        const topLine = ctx.createLinearGradient(0, 0, W, 0);
+        topLine.addColorStop(0, '#0077b6');
+        topLine.addColorStop(1, '#00b4d8');
+        ctx.fillStyle = topLine;
+        ctx.fillRect(0, 0, W, 4);
+
+        // 標題
+        ctx.fillStyle = '#f4a261';
+        ctx.font = 'bold 28px "Noto Sans TC", sans-serif';
+        ctx.fillText('🎣 我的釣獲戰報', PAD, PAD + 34);
+
+        // 日期
+        ctx.fillStyle = 'rgba(255,255,255,0.5)';
+        ctx.font = '18px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(dateStr, W - PAD, PAD + 34);
+        ctx.textAlign = 'left';
+
+        let y = PAD + 70;
+
+        // 照片
+        if(photoImg){
+          const imgW = W - PAD * 2;
+          ctx.save();
+          const radius = 14;
+          ctx.beginPath();
+          ctx.moveTo(PAD + radius, y);
+          ctx.lineTo(PAD + imgW - radius, y);
+          ctx.quadraticCurveTo(PAD + imgW, y, PAD + imgW, y + radius);
+          ctx.lineTo(PAD + imgW, y + PHOTO_H - radius);
+          ctx.quadraticCurveTo(PAD + imgW, y + PHOTO_H, PAD + imgW - radius, y + PHOTO_H);
+          ctx.lineTo(PAD + radius, y + PHOTO_H);
+          ctx.quadraticCurveTo(PAD, y + PHOTO_H, PAD, y + PHOTO_H - radius);
+          ctx.lineTo(PAD, y + radius);
+          ctx.quadraticCurveTo(PAD, y, PAD + radius, y);
+          ctx.closePath();
+          ctx.clip();
+          // 等比填滿
+          const scale = Math.max(imgW / photoImg.width, PHOTO_H / photoImg.height);
+          const sw = imgW / scale, sh = PHOTO_H / scale;
+          const sx = (photoImg.width - sw) / 2, sy = (photoImg.height - sh) / 2;
+          ctx.drawImage(photoImg, sx, sy, sw, sh, PAD, y, imgW, PHOTO_H);
+          ctx.restore();
+          y += PHOTO_H + 16;
+        }
+
+        // 魚種大字
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 36px "Noto Sans TC", sans-serif';
+        ctx.fillText(fishLine, PAD, y + 36);
+        y += 60;
+
+        // 分隔線
+        ctx.strokeStyle = 'rgba(0,180,216,0.3)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(PAD, y);
+        ctx.lineTo(W - PAD, y);
+        ctx.stroke();
+        y += 16;
+
+        // 資訊行
+        ctx.font = '20px "Noto Sans TC", sans-serif';
+        infoLines.forEach(line => {
+          ctx.fillStyle = 'rgba(224,240,255,0.8)';
+          ctx.fillText(line, PAD + 4, y + 22);
+          y += LINE_H;
+        });
+
+        y += 10;
+
+        // 底部分隔線
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.beginPath();
+        ctx.moveTo(PAD, y);
+        ctx.lineTo(W - PAD, y);
+        ctx.stroke();
+        y += 16;
+
+        // 底部品牌
+        ctx.fillStyle = 'rgba(0,180,216,0.6)';
+        ctx.font = '16px "Noto Sans TC", sans-serif';
+        ctx.fillText('🎣 北台灣海釣點神器 by 我是黑叔', PAD, y + 20);
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.font = '14px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('cfw2214.github.io/tw-fish-spot', W - PAD, y + 20);
+        ctx.textAlign = 'left';
+
+        // 輸出
+        canvas.toBlob(blob => {
+          resolve({ blob, dataUrl: canvas.toDataURL('image/png') });
+        }, 'image/png');
+      });
+    });
+  }
+
   function openShareModal(recId){
     const rec = CATCH_RECORDS.find(r=>r.id===recId);
     if(!rec) return;
@@ -2623,12 +2772,30 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const fishLabel = [rec.fish, rec.len?rec.len+'cm':'', rec.weight?rec.weight+'g':''].filter(Boolean).join(' ');
 
     document.getElementById('sm-fish-label').textContent = fishLabel;
-    document.getElementById('sm-share-text').textContent = text;
 
     const btnsEl = document.getElementById('sm-btns');
     const hintEl = document.getElementById('sm-hint-text');
+    const previewEl = document.getElementById('sm-card-preview');
 
-    // 先複製文字到剪貼簿（所有裝置都做）
+    // 清空預覽
+    if(previewEl) previewEl.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,.4);padding:20px;font-size:.82rem;">⏳ 產生分享卡片中...</div>';
+    // 隱藏分享文字框（改用圖片卡片）
+    document.getElementById('sm-share-text').style.display = 'none';
+
+    // 儲存 rec 供按鈕使用
+    window._sharePendingText = text;
+    window._sharePendingRecId = recId;
+    window._sharePendingBlob = null;
+
+    // 產生卡片圖片
+    renderShareCard(rec).then(({ blob, dataUrl }) => {
+      window._sharePendingBlob = blob;
+      if(previewEl){
+        previewEl.innerHTML = `<img src="${dataUrl}" alt="分享卡片" style="width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.12);">`;
+      }
+    });
+
+    // 先複製文字到剪貼簿
     const doCopy = () => {
       if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(text).catch(()=>{});
@@ -2641,38 +2808,56 @@ https://cfw2214.github.io/tw-fish-spot/`;
       }
     };
 
-    const canShare = isIOS() && navigator.share && navigator.canShare;
+    const canShare = navigator.share && navigator.canShare;
 
     if(canShare){
-      hintEl.textContent = '中魚文字已準備好，點 LINE 分享按鈕傳給釣友！\n文字也已自動複製到剪貼簿 📋';
+      hintEl.textContent = '分享卡片已產生，點下方按鈕直接分享圖片＋文字給釣友！';
       btnsEl.innerHTML = `
-        <button class="sm-btn-line" onclick="doLineShare()">
+        <button class="sm-btn-line" onclick="doLineShareWithImage()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-          用 LINE 分享給釣友
+          分享圖片＋文字給釣友
         </button>
         <button class="sm-btn-copy" onclick="doCopyAndToast()">📋 複製分享文字</button>
         <button class="sm-btn-ok" onclick="closeShareModal()">確定</button>`;
       doCopy();
     } else {
-      // 安卓 / 電腦
-      hintEl.textContent = '中魚資料已複製到剪貼簿，快貼給你的好釣友！📋';
+      // 電腦 / 不支援 Web Share
+      hintEl.textContent = '分享文字已複製到剪貼簿，可長按卡片圖片另存後一起傳給釣友！📋';
       btnsEl.innerHTML = `
         <button class="sm-btn-copy" onclick="doCopyAndToast()">📋 再次複製分享文字</button>
         <button class="sm-btn-ok" onclick="closeShareModal()">確定</button>`;
       doCopy();
     }
 
-    // 儲存當下 text 供按鈕使用
-    window._sharePendingText = text;
     document.getElementById('share-modal-overlay').classList.add('active');
   }
 
-  function doLineShare(){
-    if(navigator.share){
-      navigator.share({
-        text: window._sharePendingText || ''
-      }).catch(()=>{});
+  async function doLineShareWithImage(){
+    const text = window._sharePendingText || '';
+    const blob = window._sharePendingBlob;
+
+    if(!navigator.share){ showToast('此裝置不支援分享功能',true); return; }
+
+    try {
+      if(blob){
+        const file = new File([blob], 'catch_share.png', { type: 'image/png' });
+        const shareData = { text: text, files: [file] };
+        if(navigator.canShare && navigator.canShare(shareData)){
+          await navigator.share(shareData);
+          return;
+        }
+      }
+      // fallback: 只分享文字
+      await navigator.share({ text: text });
+    } catch(e){
+      if(e.name !== 'AbortError'){
+        showToast('分享失敗，文字已複製到剪貼簿',true);
+      }
     }
+  }
+
+  function doLineShare(){
+    doLineShareWithImage();
   }
 
   function doCopyAndToast(){
@@ -2691,7 +2876,12 @@ https://cfw2214.github.io/tw-fish-spot/`;
 
   function closeShareModal(){
     document.getElementById('share-modal-overlay').classList.remove('active');
+    document.getElementById('sm-share-text').style.display = '';
+    const previewEl = document.getElementById('sm-card-preview');
+    if(previewEl) previewEl.innerHTML = '';
     window._sharePendingText = null;
+    window._sharePendingBlob = null;
+    window._sharePendingRecId = null;
   }
 
   function closeShareModalIfOutside(e){
@@ -2720,6 +2910,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     <div id="share-modal-box">
       <div class="sm-title">🎣 分享你的釣獲！</div>
       <div class="sm-fish" id="sm-fish-label"></div>
+      <div id="sm-card-preview" style="margin:10px 0;"></div>
       <div class="sm-text" id="sm-share-text"></div>
       <div class="sm-hint" id="sm-hint-text"></div>
       <div class="sm-btns" id="sm-btns"></div>
