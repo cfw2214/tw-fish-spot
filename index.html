@@ -2129,12 +2129,12 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const meta = [
       rec.tideStatus||'',
       rec.tideRange ? '潮差'+rec.tideRange : '',
+      rec.temp ? '氣溫'+rec.temp+'°C' : '',
+      rec.waterTemp ? '水溫'+rec.waterTemp+'°C' : '',
+      rec.pressure ? rec.pressure+'hPa' : '',
       rec.windDir ? rec.windDir+'風' : '',
       rec.wind ? rec.wind+'級' : '',
       rec.wave ? rec.wave+'m浪' : '',
-      rec.temp ? '氣溫'+rec.temp+'°C' : '',
-      rec.pressure ? rec.pressure+'hPa' : '',
-      rec.waterTemp ? '水溫'+rec.waterTemp+'°C' : '',
       rec.note||'',
     ].filter(Boolean).join(' · ');
     return `<div class="catch-row" onclick="openCatchModal('${rec.id}')">${photoHtml}<div class="catch-row-info"><div class="cr-main">${dateStr}　${rec.fish}</div><div class="cr-meta">${meta||'—'}</div></div></div>`;
