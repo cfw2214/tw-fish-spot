@@ -2698,6 +2698,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     if(e.target===document.getElementById('share-modal-overlay')) closeShareModal();
   }
 
+  function downloadCatchCSV(){
     if(!CATCH_RECORDS.length){showToast('沒有記錄可匯出',true);return;}
     const headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','水溫(°C)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
     const sorted=[...CATCH_RECORDS].sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
