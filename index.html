@@ -260,14 +260,18 @@
 .catch-row-info{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden;}
 .catch-row-info .cr-main{font-size:.92rem;font-weight:700;color:#fff;white-space:nowrap;flex-shrink:0;}
 .catch-row-info .cr-meta{font-size:.72rem;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+@media(max-width:768px){
+  .catch-row-info{flex-direction:column;align-items:flex-start;gap:3px;}
+  .catch-row-info .cr-meta{white-space:normal;overflow:visible;text-overflow:unset;line-height:1.5;}
+}
 /* 分頁 */
 #catch-pager{display:none;justify-content:center;align-items:center;gap:12px;margin-top:10px;}
 #catch-pager button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:6px 16px;cursor:pointer;font-size:.82rem;transition:background .15s;}
 #catch-pager button:hover{background:rgba(255,255,255,.22);}
 #catch-pager button:disabled{opacity:.3;cursor:default;}
 #catch-pager span{font-size:.8rem;color:rgba(255,255,255,.6);}
-#catch-btn-row{display:none;width:100%;margin-top:12px;gap:8px;}
-#catch-import-btn,#catch-dl-btn{flex:1;padding:10px 0;font-size:.85rem;font-weight:700;border-radius:10px;cursor:pointer;transition:background .15s;}
+#catch-btn-row{display:none;width:100%;margin-top:12px;gap:8px;box-sizing:border-box;}
+#catch-import-btn,#catch-dl-btn{flex:1;padding:10px 0;font-size:.85rem;font-weight:700;border-radius:10px;cursor:pointer;transition:background .15s;text-align:center;box-sizing:border-box;}
 #catch-import-btn{background:none;border:1px solid rgba(0,180,216,.5);color:var(--accent);}
 #catch-import-btn:hover{background:rgba(0,180,216,.12);}
 #catch-dl-btn{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;}
@@ -492,7 +496,7 @@
                 <button id="catch-next" onclick="changeCatchPage(1)">下一頁 ▶</button>
               </div>
               <input type="file" id="catch-csv-input" accept=".csv" style="display:none" onchange="importCatchCSV(this)">
-              <div id="catch-btn-row" style="display:flex">
+              <div id="catch-btn-row" style="display:flex;width:100%;">
                 <button id="catch-import-btn" onclick="document.getElementById('catch-csv-input').click()">📂 讀取記錄檔</button>
                 <button id="catch-dl-btn" onclick="downloadCatchCSV()">⬇ 下載釣獲記錄</button>
               </div>
@@ -2081,7 +2085,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
       if(pager) pager.style.display='none';
       return;
     }
-    if(dlBtn) dlBtn.style.display='block';
+    if(dlBtn) dlBtn.style.display='flex';
 
     // 手機/平板：全部顯示，不分頁
     if(isMobile()){
