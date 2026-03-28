@@ -2650,10 +2650,16 @@ https://cfw2214.github.io/tw-fish-spot/`;
         const d = new Date(rec.datetime);
         const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
         const spotName = findNearestSpotName(rec.lat, rec.lng);
-        const locationLine = spotName ? '📍 ' + spotName : (rec.lat && rec.lng ? '📍 ' + parseFloat(rec.lat).toFixed(4) + ', ' + parseFloat(rec.lng).toFixed(4) : '');
+        const locationText = spotName || (rec.lat && rec.lng ? parseFloat(rec.lat).toFixed(4) + ', ' + parseFloat(rec.lng).toFixed(4) : '');
         const fishLine = rec.fish + (rec.len ? '  '+rec.len+'cm' : '') + (rec.weight ? '  '+rec.weight+'g' : '');
 
+        // 地點+日期 放在潮汐上面
+        const locationDateLine = locationText
+          ? '📍 ' + locationText + '　📅 ' + dateStr
+          : '📅 ' + dateStr;
+
         const infoLines = [
+          locationDateLine,
           rec.method ? '🎯 ' + rec.method : null,
           rec.tideStatus ? '🌊 ' + rec.tideStatus + (rec.tideRange ? ' · 潮差' + rec.tideRange : '') + (rec.tideHeight ? ' · 潮高' + rec.tideHeight + 'm' : '') : null,
           rec.waterTemp ? '💧 水溫 ' + rec.waterTemp + '°C' : null,
@@ -2663,7 +2669,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
         ].filter(Boolean);
 
         // ── 計算版面高度 ──
-        const HEADER_H = 90;                           // 地點 + 日期
+        const HEADER_H = 50;                           // 只有標題
         const PHOTO_W = W - PAD * 2;
         const PHOTO_H = hasPhoto ? Math.round(PHOTO_W * 4 / 3) : 0; // 3:4 比例
         const PHOTO_GAP = hasPhoto ? 20 : 0;
@@ -2711,26 +2717,11 @@ https://cfw2214.github.io/tw-fish-spot/`;
 
         let y = PAD;
 
-        // ── ① 地點 + 日期時間 ──
-        // 標題
+        // ── ① 標題（只有標題，地點日期移到下方） ──
         ctx.fillStyle = '#f4a261';
         ctx.font = 'bold 28px "Noto Sans TC", sans-serif';
         ctx.textAlign = 'left';
         ctx.fillText('🎣 我的釣獲戰報', PAD, y + 32);
-
-        // 地點（第二行）
-        if(locationLine){
-          ctx.fillStyle = 'rgba(224,240,255,0.75)';
-          ctx.font = '20px "Noto Sans TC", sans-serif';
-          ctx.fillText(locationLine, PAD, y + 62);
-        }
-
-        // 日期時間（右上）
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.font = '18px "Noto Sans TC", sans-serif';
-        ctx.textAlign = 'right';
-        ctx.fillText('📅 ' + dateStr, W - PAD, y + 32);
-        ctx.textAlign = 'left';
 
         y += HEADER_H;
 
