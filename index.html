@@ -266,7 +266,11 @@
 #catch-pager button:hover{background:rgba(255,255,255,.22);}
 #catch-pager button:disabled{opacity:.3;cursor:default;}
 #catch-pager span{font-size:.8rem;color:rgba(255,255,255,.6);}
-#catch-dl-btn{display:none;width:100%;padding:10px 0;margin-top:12px;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-size:.85rem;font-weight:700;border-radius:10px;cursor:pointer;transition:background .15s;}
+#catch-btn-row{display:none;width:100%;margin-top:12px;gap:8px;}
+#catch-import-btn,#catch-dl-btn{flex:1;padding:10px 0;font-size:.85rem;font-weight:700;border-radius:10px;cursor:pointer;transition:background .15s;}
+#catch-import-btn{background:none;border:1px solid rgba(0,180,216,.5);color:var(--accent);}
+#catch-import-btn:hover{background:rgba(0,180,216,.12);}
+#catch-dl-btn{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;}
 #catch-dl-btn:hover{background:rgba(255,255,255,.1);}
 .catch-backup-note{font-size:.68rem;color:rgba(255,255,255,.45);text-align:center;margin-top:8px;line-height:1.5;}
 /* ── 大卡 Modal ── */
@@ -487,7 +491,11 @@
                 <span id="catch-page-info"></span>
                 <button id="catch-next" onclick="changeCatchPage(1)">下一頁 ▶</button>
               </div>
-              <button id="catch-dl-btn" onclick="downloadCatchCSV()">⬇ 下載釣獲記錄 CSV</button>
+              <input type="file" id="catch-csv-input" accept=".csv" style="display:none" onchange="importCatchCSV(this)">
+              <div id="catch-btn-row" style="display:flex">
+                <button id="catch-import-btn" onclick="document.getElementById('catch-csv-input').click()">📂 讀取記錄檔</button>
+                <button id="catch-dl-btn" onclick="downloadCatchCSV()">⬇ 下載釣獲記錄</button>
+              </div>
               <div class="catch-backup-note">本釣獲資料僅保存在當下個人的瀏覽器內，並無上傳雲端備份，<br>如要備份請自行點擊下載備份，CSV檔釣獲記錄檔下載備份不包含照片<br><span id="catch-storage-est" style="color:#ffb3c1;font-size:.66rem;"></span></div>
             </div>
             <!-- 浮層：釣點小卡（左右滑動） -->
@@ -2064,7 +2072,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const wrap = document.getElementById('catch-list-wrap');
     if(!wrap) return;
     const sorted = [...CATCH_RECORDS].sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
-    const dlBtn  = document.getElementById('catch-dl-btn');
+    const dlBtn  = document.getElementById('catch-btn-row');
     const pager  = document.getElementById('catch-pager');
 
     if(!sorted.length){
@@ -2453,7 +2461,104 @@ https://cfw2214.github.io/tw-fish-spot/`;
     setTimeout(()=>openCatchModal(recordId),350);
   }
 
-  // CSV 下載
+  // CSV 匯入（合併去重）
+  function importCatchCSV(input){
+    const file = input.files[0];
+    if(!file){ return; }
+    const reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        // 移除 BOM
+        let text = e.target.result.replace(/^\uFEFF/,'');
+        const lines = text.split(/\r?\n/).filter(l=>l.trim());
+        if(lines.length < 2){ showToast('CSV 檔案沒有資料',true); return; }
+
+        // 解析單行 CSV（處理引號包覆）
+        function parseRow(line){
+          const result=[];let cur='';let inQ=false;
+          for(let i=0;i<line.length;i++){
+            const c=line[i];
+            if(c==='"'){ if(inQ&&line[i+1]==='"'){cur+='"';i++;} else{inQ=!inQ;} }
+            else if(c===','&&!inQ){ result.push(cur);cur=''; }
+            else{ cur+=c; }
+          }
+          result.push(cur);
+          return result;
+        }
+
+        const headers = parseRow(lines[0]);
+        // 欄位索引
+        const iDT   = headers.indexOf('日期時間');
+        const iFish = headers.indexOf('魚種');
+        const iLat  = headers.indexOf('GPS緯度');
+        const iLng  = headers.indexOf('GPS經度');
+        if(iDT<0||iFish<0){ showToast('CSV 格式不符，無法匯入',true); return; }
+
+        // 建立現有記錄的 fingerprint Set
+        function makeKey(r){
+          const d=new Date(r.datetime);
+          return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}|${r.fish}|${r.lat||''}|${r.lng||''}`;
+        }
+        const existKeys = new Set(CATCH_RECORDS.map(makeKey));
+
+        let added=0, skipped=0;
+        for(let i=1;i<lines.length;i++){
+          const cols = parseRow(lines[i]);
+          if(cols.length < 2) continue;
+          const dt   = cols[iDT]  || '';
+          const fish = cols[iFish]|| '';
+          const lat  = iLat>=0 ? cols[iLat]||'' : '';
+          const lng  = iLng>=0 ? cols[iLng]||'' : '';
+          if(!fish) continue;
+          const key = `${dt}|${fish}|${lat}|${lng}`;
+          if(existKeys.has(key)){ skipped++; continue; }
+
+          // 組成記錄物件（欄位對應下載時的 headers 順序）
+          const h = headers;
+          function col(name){ const idx=h.indexOf(name); return idx>=0?(cols[idx]||''):''; }
+          const rec = {
+            id       : 'imp_'+Date.now()+'_'+i,
+            datetime : dt,
+            fish     : fish,
+            len      : col('長度(cm)'),
+            weight   : col('重量(g)'),
+            method   : col('釣法/餌料'),
+            lat      : lat,
+            lng      : lng,
+            temp     : col('溫度(°C)'),
+            wind     : col('風力(級)'),
+            windDir  : col('風向'),
+            wave     : col('浪高(m)'),
+            pressure : col('氣壓(hPa)'),
+            waterTemp: col('水溫(°C)'),
+            humid    : col('濕度(%)'),
+            rain     : col('降雨(%)'),
+            tideStatus : col('潮汐狀態'),
+            tideHeight : col('中魚潮水高度(m)'),
+            tideMax    : col('當日最高(m)'),
+            tideMin    : col('當日最低(m)'),
+            tideRange  : col('當日潮差'),
+            note     : col('備註'),
+            photo    : ''
+          };
+          CATCH_RECORDS.push(rec);
+          existKeys.add(key);
+          added++;
+        }
+
+        localStorage.setItem('fishing_catches', JSON.stringify(CATCH_RECORDS));
+        renderCatchList();
+        showCatchMapMarkers();
+        showToast(`✅ 匯入完成：新增 ${added} 筆，略過 ${skipped} 筆重複`);
+      } catch(err){
+        showToast('匯入失敗：' + err.message, true);
+      } finally {
+        input.value = ''; // 允許重複選同檔
+      }
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
   function downloadCatchCSV(){
     if(!CATCH_RECORDS.length){showToast('沒有記錄可匯出',true);return;}
     const headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','水溫(°C)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
