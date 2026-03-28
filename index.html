@@ -1464,7 +1464,7 @@
 
       // 重設所有 tab 樣式
       [tabList,tabMap,tabCatch].forEach(t=>{
-        if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}
+        if(t){t.style.background='var(--card)';t.style.color='var(--text2)';t.dataset.active='0';}
       });
 
       // 隱藏漁獲面板的輔助函式
@@ -1498,11 +1498,16 @@
         if(tabMap){tabMap.style.background='var(--accent2)';tabMap.style.color='#fff';}
 
       } else if(tab==='catch'){
+        // 如果釣獲地圖已亮燈，再點一次 → 回到釣獲列表
+        if(tabCatch && tabCatch.dataset.active==='1'){
+          switchTab('catchPanel');
+          return;
+        }
         // 釣獲地圖：沒有記錄就彈提示，有記錄才顯示地圖釣獲點
         hideCardsOverlay();
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
-        if(tabCatch){tabCatch.style.background='var(--accent2)';tabCatch.style.color='#fff';}
+        if(tabCatch){tabCatch.style.background='var(--accent2)';tabCatch.style.color='#fff';tabCatch.dataset.active='1';}
         // 清除釣點圖釘，釣獲地圖獨立顯示
         _gmapMarkers.forEach(m=>m.map=null);
 
