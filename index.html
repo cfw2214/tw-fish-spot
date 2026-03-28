@@ -2601,10 +2601,13 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const d = new Date(rec.datetime);
     const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     const fishLine = [rec.fish, rec.len?rec.len+'cm':'', rec.weight?rec.weight+'g':''].filter(Boolean).join(' ');
+    const spotName = findNearestSpotName(rec.lat, rec.lng);
+    const locationText = spotName || (rec.lat && rec.lng ? parseFloat(rec.lat).toFixed(4) + ', ' + parseFloat(rec.lng).toFixed(4) : '');
     const tideLine = [rec.tideStatus||'', rec.tideRange?'潮差'+rec.tideRange:''].filter(Boolean).join(' · ');
     const envLine  = [rec.waterTemp?'水溫'+rec.waterTemp+'°C':'', rec.wave?'浪高'+rec.wave+'m':'', rec.wind?'風力'+rec.wind+'級':'', rec.windDir?rec.windDir+'風':''].filter(Boolean).join(' · ');
     const lines = [
       `🎣 我剛中魚啦！${fishLine} — ${dateStr}`,
+      locationText ? `📍 ${locationText}` : null,
       tideLine ? `🌊 ${tideLine}` : null,
       envLine  ? `💧 ${envLine}` : null,
       `🔗 北台灣海釣點神器：https://cfw2214.github.io/tw-fish-spot/`
