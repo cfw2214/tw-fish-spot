@@ -831,11 +831,12 @@
         // 若有跨夜（endDate != date），天氣查詢用 endDate 當 end_date 以涵蓋完整時段
         const weatherEndDate = endDate && endDate !== date ? endDate : date;
         const [marineRes,weatherRes]=await Promise.all([
-          fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction&timezone=Asia%2FTaipei&start_date=${date}&end_date=${weatherEndDate}`,noCache),
+          fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_direction,sea_surface_temperature&timezone=Asia%2FTaipei&start_date=${date}&end_date=${weatherEndDate}`,noCache),
           fetch(`https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=temperature_2m,precipitation_probability,windspeed_10m,winddirection_10m,surface_pressure&timezone=Asia%2FTaipei&start_date=${date}&end_date=${weatherEndDate}`,noCache)
         ]);
         const m=await marineRes.json(); const w=await weatherRes.json();
         const wave=parseFloat(((m.hourly?.wave_height?.[startHour]??0.8)).toFixed(1));
+        const waterTemp=m.hourly?.sea_surface_temperature?.[startHour]!=null?parseFloat(m.hourly.sea_surface_temperature[startHour].toFixed(1)):'';
         const wsKm=w.hourly?.windspeed_10m?.[startHour]??0; const ws=parseFloat((wsKm/3.6).toFixed(1));
         const wdDeg=w.hourly?.winddirection_10m?.[startHour]??0;
         const rain=Math.round(w.hourly?.precipitation_probability?.[startHour]??0);
@@ -899,7 +900,7 @@
           ).toFixed(1));
         }
 
-        return {spot,wave,ws,wd,temp,rain,pressure,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live',distance,tempMin,tempMax,date};
+        return {spot,wave,waterTemp,ws,wd,temp,rain,pressure,tides,tideType,score:calcScore(spot,wave,msToBeaufort(ws),wd),source:'live',distance,tempMin,tempMax,date};
       }catch(e){
         let distance = Infinity;
         if (userLocation) {
@@ -2118,8 +2119,9 @@ https://cfw2214.github.io/tw-fish-spot/`;
       rec.windDir ? rec.windDir+'風' : '',
       rec.wind ? rec.wind+'級' : '',
       rec.wave ? rec.wave+'m浪' : '',
-      rec.temp ? rec.temp+'°C' : '',
+      rec.temp ? '氣溫'+rec.temp+'°C' : '',
       rec.pressure ? rec.pressure+'hPa' : '',
+      rec.waterTemp ? '水溫'+rec.waterTemp+'°C' : '',
       rec.note||'',
     ].filter(Boolean).join(' · ');
     return `<div class="catch-row" onclick="openCatchModal('${rec.id}')">${photoHtml}<div class="catch-row-info"><div class="cr-main">${dateStr}　${rec.fish}</div><div class="cr-meta">${meta||'—'}</div></div></div>`;
@@ -2198,7 +2200,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     else{document.getElementById('catch-photo-preview').style.display='none';document.getElementById('catch-photo-placeholder').style.display='flex';window._catchPhotoB64=null;}
     document.getElementById('catch-env-status').textContent=rec.envNote||'';
     if(rec.tideStatus||rec.temp||rec.wind){
-      const savedEnv={tideStatus:rec.tideStatus,tideHeight:rec.tideHeight,tideMax:rec.tideMax,tideMin:rec.tideMin,tideRange:rec.tideRange,temp:rec.temp,wind:rec.wind,windDir:rec.windDir,wave:rec.wave,rain:rec.rain,pressure:rec.pressure,humid:rec.humid};
+      const savedEnv={tideStatus:rec.tideStatus,tideHeight:rec.tideHeight,tideMax:rec.tideMax,tideMin:rec.tideMin,tideRange:rec.tideRange,temp:rec.temp,wind:rec.wind,windDir:rec.windDir,wave:rec.wave,rain:rec.rain,pressure:rec.pressure,waterTemp:rec.waterTemp||'',humid:rec.humid};
       window._catchEnvData=savedEnv;
       renderCatchEnvGrid(savedEnv);
     }
@@ -2253,6 +2255,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
         windDir:result.wd,
         wave:result.wave,
         pressure:result.pressure||'',
+        waterTemp:result.waterTemp||'',
         humid:'',
         rain:result.rain,
         tideStatus:calcCatchTideStatus(result.tides,now),
@@ -2289,6 +2292,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
       {icon:'🌊',label:'浪高',val:env.wave?(env.wave+'m'):''},
       {icon:'🌧',label:'降雨',val:env.rain!==undefined&&env.rain!==''?(env.rain+'%'):''},
       {icon:'🔵',label:'氣壓',val:env.pressure?(env.pressure+'hPa'):''},
+      {icon:'🌊',label:'水溫',val:env.waterTemp?(env.waterTemp+'°C'):''},
     ];
     g.innerHTML=rows.map(r=>`<div style="font-size:.72rem;color:rgba(255,255,255,.75);display:flex;gap:4px;align-items:center;"><span style="font-size:.8rem;">${r.icon}</span><span style="color:rgba(255,255,255,.45);">${r.label}：</span><span style="font-weight:500;">${r.val||'—'}</span></div>`).join('');
     g.style.display='grid';
@@ -2345,7 +2349,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
       lat:document.getElementById('c-lat').value||'',
       lng:document.getElementById('c-lng').value||'',
       temp:env.temp||'',wind:env.wind||'',windDir:env.windDir||'',wave:env.wave||'',
-      pressure:env.pressure||'',humid:env.humid||'',rain:env.rain||'',
+      pressure:env.pressure||'',waterTemp:env.waterTemp||'',humid:env.humid||'',rain:env.rain||'',
       tideStatus:env.tideStatus||'',tideHeight:env.tideHeight||'',
       tideMax:env.tideMax||'',tideMin:env.tideMin||'',tideRange:env.tideRange||'',
       envNote:document.getElementById('catch-env-status').textContent,
@@ -2425,7 +2429,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const photoHtml=rec.photo?`<img class="ci-photo" src="${rec.photo}" alt="">`:'' ;
     const infoRows=[
       (rec.tideStatus||rec.tideRange)?`<div class="ci-row">🌊 ${[rec.tideStatus,rec.tideRange?rec.tideRange+'潮':''].filter(Boolean).join(' · ')}</div>`:'',
-      (rec.temp||rec.pressure)?`<div class="ci-row">🌡 ${[rec.temp?rec.temp+'°C':'',rec.pressure?rec.pressure+'hPa':''].filter(Boolean).join(' · ')}</div>`:'',
+      (rec.temp||rec.pressure||rec.waterTemp)?`<div class="ci-row">🌡 ${[rec.temp?'氣溫'+rec.temp+'°C':'',rec.pressure?rec.pressure+'hPa':'',rec.waterTemp?'水溫'+rec.waterTemp+'°C':''].filter(Boolean).join(' · ')}</div>`:'',
       (rec.len||rec.weight)?`<div class="ci-row">📏 ${[rec.len?rec.len+'cm':'',rec.weight?rec.weight+'g':''].filter(Boolean).join(' · ')}</div>`:'',
     ].join('');
     const content=`<div class="catch-infocard" style="cursor:pointer;" onclick="openCatchFromMap('${rec.id}')"><button class="ci-close" onclick="event.stopPropagation();window._gmapIW&&window._gmapIW.close()">✕</button><div class="ci-fish">${rec.fish}</div>${photoHtml}<div class="ci-row" style="color:rgba(255,255,255,.5);font-size:.7rem;">📅 ${dateStr}</div>${infoRows}<div style="font-size:.68rem;color:rgba(0,180,216,.7);margin-top:6px;text-align:center;">點擊查看完整記錄 →</div></div>`;
@@ -2451,12 +2455,12 @@ https://cfw2214.github.io/tw-fish-spot/`;
   // CSV 下載
   function downloadCatchCSV(){
     if(!CATCH_RECORDS.length){showToast('沒有記錄可匯出',true);return;}
-    const headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
+    const headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','水溫(°C)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
     const sorted=[...CATCH_RECORDS].sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
     const rows=sorted.map(r=>{
       const d=new Date(r.datetime);
       const dtStr=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
-      return[dtStr,r.fish,r.len||'',r.weight||'',r.method||'',r.lat||'',r.lng||'',r.temp||'',r.wind||'',r.windDir||'',r.wave||'',r.pressure||'',r.humid||'',r.rain||'',r.tideStatus||'',r.tideHeight||'',r.tideMax||'',r.tideMin||'',r.tideRange||'',r.note||''];
+      return[dtStr,r.fish,r.len||'',r.weight||'',r.method||'',r.lat||'',r.lng||'',r.temp||'',r.wind||'',r.windDir||'',r.wave||'',r.pressure||'',r.waterTemp||'',r.humid||'',r.rain||'',r.tideStatus||'',r.tideHeight||'',r.tideMax||'',r.tideMin||'',r.tideRange||'',r.note||''];
     });
     const csv='\uFEFF'+[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
     const today=getTWDateString();
