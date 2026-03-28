@@ -2116,7 +2116,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
       : `<div class="catch-no-photo" style="width:50px;height:50px;background:rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🐡</div>`;
     const meta = [
       rec.tideStatus||'',
-      rec.tideRange ? rec.tideRange+'潮' : '',
+      rec.tideRange ? '潮差'+rec.tideRange : '',
       rec.windDir ? rec.windDir+'風' : '',
       rec.wind ? rec.wind+'級' : '',
       rec.wave ? rec.wave+'m浪' : '',
@@ -2429,7 +2429,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const dateStr=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     const photoHtml=rec.photo?`<img class="ci-photo" src="${rec.photo}" alt="">`:'' ;
     const infoRows=[
-      (rec.tideStatus||rec.tideRange)?`<div class="ci-row">🌊 ${[rec.tideStatus,rec.tideRange?rec.tideRange+'潮':''].filter(Boolean).join(' · ')}</div>`:'',
+      (rec.tideStatus||rec.tideRange)?`<div class="ci-row">🌊 ${[rec.tideStatus,rec.tideRange?'潮差'+rec.tideRange:''].filter(Boolean).join(' · ')}</div>`:'',
       (rec.temp||rec.pressure||rec.waterTemp)?`<div class="ci-row">🌡 ${[rec.temp?'氣溫'+rec.temp+'°C':'',rec.pressure?rec.pressure+'hPa':'',rec.waterTemp?'水溫'+rec.waterTemp+'°C':''].filter(Boolean).join(' · ')}</div>`:'',
       (rec.len||rec.weight)?`<div class="ci-row">📏 ${[rec.len?rec.len+'cm':'',rec.weight?rec.weight+'g':''].filter(Boolean).join(' · ')}</div>`:'',
     ].join('');
