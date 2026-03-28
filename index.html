@@ -1462,6 +1462,13 @@
       const catchPanel = document.getElementById('catch-panel');
       const googleMap  = document.getElementById('google-map');
 
+      // ★ 釣獲地圖 toggle：必須在重設 tab 之前判斷
+      if(tab==='catch' && tabCatch && tabCatch.dataset.active==='1'){
+        // 再次點「釣獲地圖」→ 回到釣獲列表面板
+        switchTab('catchPanel');
+        return;
+      }
+
       // 重設所有 tab 樣式
       [tabList,tabMap,tabCatch].forEach(t=>{
         if(t){t.style.background='var(--card)';t.style.color='var(--text2)';t.dataset.active='0';}
@@ -1498,11 +1505,6 @@
         if(tabMap){tabMap.style.background='var(--accent2)';tabMap.style.color='#fff';}
 
       } else if(tab==='catch'){
-        // 如果釣獲地圖已亮燈，再點一次 → 回到釣獲列表
-        if(tabCatch && tabCatch.dataset.active==='1'){
-          switchTab('catchPanel');
-          return;
-        }
         // 釣獲地圖：沒有記錄就彈提示，有記錄才顯示地圖釣獲點
         hideCardsOverlay();
         hideCatchPanel();
@@ -1524,7 +1526,7 @@
           document.body.appendChild(toast);
           toast.addEventListener('click',e=>{if(e.target===toast)toast.remove();});
           // tab 回到地圖狀態
-          if(tabCatch){tabCatch.style.background='var(--card)';tabCatch.style.color='var(--text2)';}
+          if(tabCatch){tabCatch.style.background='var(--card)';tabCatch.style.color='var(--text2)';tabCatch.dataset.active='0';}
           if(tabMap){tabMap.style.background='var(--accent2)';tabMap.style.color='#fff';}
         } else {
           // 有記錄：地圖顯示釣獲圖釘
@@ -1533,15 +1535,19 @@
         }
 
       } else if(tab==='catchPanel'){
-        // 漁獲面板（由 sidebar 按鈕觸發，非 tab）
+        // 漁獲面板（由 sidebar 按鈕或釣獲地圖 toggle 觸發）
         hideCardsOverlay();
         if(googleMap) googleMap.classList.add('catch-mode');
         clearCatchMapMarkers();
+        // 恢復釣點圖釘（如果之前被釣獲地圖清除了）
+        if(recommendationPool && recommendationPool.length){
+          updateMapMarkers(recommendationPool);
+        }
         showCatchPanel();
         renderCatchList();
-        // sidebar 按鈕亮起，tab 全部暗掉
+        // tab 全部暗掉（catchPanel 不對應任何 tab 按鈕）
         [tabList,tabMap,tabCatch].forEach(t=>{
-          if(t){t.style.background='var(--card)';t.style.color='var(--text2)';}
+          if(t){t.style.background='var(--card)';t.style.color='var(--text2)';t.dataset.active='0';}
         });
       }
     }
