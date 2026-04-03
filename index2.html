@@ -2069,7 +2069,8 @@ https://cfw2214.github.io/tw-fish-spot/`;
           <input type="time" id="c-time" style="flex:1;min-width:0;">
         </div>
       </div>
-      <div class="catch-field"><label>地點</label><button id="catch-location-btn" onclick="openCatchMapPicker()">📍 釣獲地點<span class="catch-loc-text" id="catch-loc-text">預設為當前位置</span></button><input type="hidden" id="c-lat"><input type="hidden" id="c-lng"></div>
+      <div class="catch-field"><label>地圖地點</label><button id="catch-location-btn" onclick="openCatchMapPicker()">📍 釣獲地點<span class="catch-loc-text" id="catch-loc-text">預設為當前位置</span></button><input type="hidden" id="c-lat"><input type="hidden" id="c-lng"></div>
+      <div class="catch-field"><label>📍 釣獲地點名稱</label><input type="text" id="c-location-name" placeholder="釣獲地點名稱可選填"></div>
       <div class="catch-field" id="field-fish"><label>🐟 魚種</label><input type="text" id="c-fish" placeholder="請填寫魚種（必填）"></div>
       <div class="catch-row-2"><div class="catch-field"><label>📏 尺寸</label><input type="number" id="c-len" placeholder="cm"></div><div class="catch-field"><label>⚖️ 重量</label><input type="number" id="c-weight" placeholder="g"></div></div>
       <div class="catch-field"><label>🎣 釣法 / 餌種</label><input type="text" id="c-method" placeholder="路亞,木蝦,浮標,磯釣,打沉底,手竿"></div>
@@ -2226,6 +2227,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
       ? `<img src="${rec.photo}" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:7px;flex-shrink:0;">`
       : `<div class="catch-no-photo" style="width:50px;height:50px;background:rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🐡</div>`;
     const meta = [
+      rec.locationName ? '📍 '+rec.locationName : '',
       rec.tideStatus||'',
       rec.tideRange ? '潮差'+rec.tideRange : '',
       rec.temp ? '氣溫'+rec.temp+'°C' : '',
@@ -2284,7 +2286,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
   function closeCatchModalIfOutside(e){if(e.target===document.getElementById('catch-modal-overlay'))closeCatchModal();}
 
   function clearCatchModal(){
-    ['c-date','c-time','c-lat','c-lng','c-fish','c-len','c-weight','c-method','c-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    ['c-date','c-time','c-lat','c-lng','c-fish','c-len','c-weight','c-method','c-note','c-location-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     document.getElementById('catch-loc-text').textContent='預設為當前位置';
     document.getElementById('catch-photo-preview').style.display='none';
     document.getElementById('catch-photo-placeholder').style.display='flex';
@@ -2302,6 +2304,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     document.getElementById('c-time').value   = `${fhh}:${fmm}`;
     document.getElementById('c-lat').value    = rec.lat||'';
     document.getElementById('c-lng').value    = rec.lng||'';
+    document.getElementById('c-location-name').value = rec.locationName||'';
     document.getElementById('c-fish').value   = rec.fish||'';
     document.getElementById('c-len').value    = rec.len||'';
     document.getElementById('c-weight').value = rec.weight||'';
@@ -2458,6 +2461,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
       weight:document.getElementById('c-weight').value||'',
       method:document.getElementById('c-method').value||'',
       note:document.getElementById('c-note').value||'',
+      locationName:document.getElementById('c-location-name').value.trim()||'',
       lat:document.getElementById('c-lat').value||'',
       lng:document.getElementById('c-lng').value||'',
       temp:env.temp||'',wind:env.wind||'',windDir:env.windDir||'',wave:env.wave||'',
@@ -2625,7 +2629,8 @@ https://cfw2214.github.io/tw-fish-spot/`;
             fish     : fish,
             len      : col('長度(cm)'),
             weight   : col('重量(g)'),
-            method   : col('釣法/餌料'),
+            method       : col('釣法/餌料'),
+            locationName : col('釣獲地點名稱'),
             lat      : lat,
             lng      : lng,
             temp     : col('溫度(°C)'),
@@ -2668,7 +2673,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     const fishLine = [rec.fish, rec.len?rec.len+'cm':'', rec.weight?rec.weight+'g':''].filter(Boolean).join(' ');
     const spotName = findNearestSpotName(rec.lat, rec.lng);
-    const locationText = spotName || (rec.lat && rec.lng ? parseFloat(rec.lat).toFixed(4) + ', ' + parseFloat(rec.lng).toFixed(4) : '');
+    const locationText = rec.locationName || spotName || (rec.lat && rec.lng ? parseFloat(rec.lat).toFixed(4) + ', ' + parseFloat(rec.lng).toFixed(4) : '');
     const tideLine = [rec.tideStatus||'', rec.tideRange?'潮差'+rec.tideRange:''].filter(Boolean).join(' · ');
     const envLine  = [rec.waterTemp?'水溫'+rec.waterTemp+'°C':'', rec.wave?'浪高'+rec.wave+'m':'', rec.wind?'風力'+rec.wind+'級':'', rec.windDir?rec.windDir+'風':''].filter(Boolean).join(' · ');
     const lines = [
@@ -2719,7 +2724,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
         const d = new Date(rec.datetime);
         const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
         const spotName = findNearestSpotName(rec.lat, rec.lng);
-        const locationText = spotName || (rec.lat && rec.lng ? parseFloat(rec.lat).toFixed(4) + ', ' + parseFloat(rec.lng).toFixed(4) : '');
+        const locationText = rec.locationName || spotName || (rec.lat && rec.lng ? parseFloat(rec.lat).toFixed(4) + ', ' + parseFloat(rec.lng).toFixed(4) : '');
         const fishLine = rec.fish + (rec.len ? '  '+rec.len+'cm' : '') + (rec.weight ? '  '+rec.weight+'g' : '');
 
         // 地點+日期 放在潮汐上面
@@ -3392,12 +3397,12 @@ https://cfw2214.github.io/tw-fish-spot/`;
 
   function downloadCatchCSV(){
     if(!CATCH_RECORDS.length){showToast('沒有記錄可匯出',true);return;}
-    const headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','水溫(°C)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
+    const headers=['日期時間','魚種','長度(cm)','重量(g)','釣法/餌料','釣獲地點名稱','GPS緯度','GPS經度','溫度(°C)','風力(級)','風向','浪高(m)','氣壓(hPa)','水溫(°C)','濕度(%)','降雨(%)','潮汐狀態','中魚潮水高度(m)','當日最高(m)','當日最低(m)','當日潮差','備註'];
     const sorted=[...CATCH_RECORDS].sort((a,b)=>new Date(b.datetime)-new Date(a.datetime));
     const rows=sorted.map(r=>{
       const d=new Date(r.datetime);
       const dtStr=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
-      return[dtStr,r.fish,r.len||'',r.weight||'',r.method||'',r.lat||'',r.lng||'',r.temp||'',r.wind||'',r.windDir||'',r.wave||'',r.pressure||'',r.waterTemp||'',r.humid||'',r.rain||'',r.tideStatus||'',r.tideHeight||'',r.tideMax||'',r.tideMin||'',r.tideRange||'',r.note||''];
+      return[dtStr,r.fish,r.len||'',r.weight||'',r.method||'',r.locationName||'',r.lat||'',r.lng||'',r.temp||'',r.wind||'',r.windDir||'',r.wave||'',r.pressure||'',r.waterTemp||'',r.humid||'',r.rain||'',r.tideStatus||'',r.tideHeight||'',r.tideMax||'',r.tideMin||'',r.tideRange||'',r.note||''];
     });
     const csv='\uFEFF'+[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
     const today=getTWDateString();
