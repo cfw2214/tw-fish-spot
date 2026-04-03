@@ -3075,7 +3075,6 @@ https://cfw2214.github.io/tw-fish-spot/`;
     ul.innerHTML = CUSTOM_SPOTS.map(s=>`
       <li>
         <span class="csp-name" title="${s.name}">${s.name}</span>
-        <span class="csp-note" title="${s.note||''}">${s.note||''}</span>
         <button class="csp-del" onclick="event.stopPropagation();deleteCustomSpotById('${s.id}')" title="刪除">✕</button>
         <button class="btn-mini" style="font-size:.68rem;padding:3px 8px;flex-shrink:0;" onclick="openCustomSpotModal('${s.id}')">✏️</button>
       </li>`).join('');
