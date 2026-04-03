@@ -2494,7 +2494,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     _catchPickLat=lat;_catchPickLng=lng;
     setTimeout(()=>{
       if(!_catchPickMap){
-        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat,lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:false,streetViewControl:false,fullscreenControl:false,mapId:'catch_pick_map',gestureHandling:'greedy'});
+        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat,lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:true,mapTypeControlOptions:{style:google.maps.MapTypeControlStyle.HORIZONTAL_BAR,position:google.maps.ControlPosition.TOP_LEFT,mapTypeIds:['roadmap','satellite']},streetViewControl:false,fullscreenControl:false,mapId:'catch_pick_map',gestureHandling:'greedy'});
         const markerEl=document.createElement('div');
         markerEl.style.cssText='font-size:32px;line-height:1;transform:translateY(-50%);filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));';
         markerEl.textContent='📍';
@@ -3138,7 +3138,9 @@ https://cfw2214.github.io/tw-fish-spot/`;
     if(!_csmPickMap){
       _csmPickMap = new google.maps.Map(mapEl,{
         center:{lat,lng}, zoom:15, mapTypeId:'roadmap',
-        mapTypeControl:false, streetViewControl:false, fullscreenControl:false,
+        mapTypeControl:true,
+        mapTypeControlOptions:{style:google.maps.MapTypeControlStyle.HORIZONTAL_BAR,position:google.maps.ControlPosition.TOP_LEFT,mapTypeIds:['roadmap','satellite']},
+        streetViewControl:false, fullscreenControl:false,
         mapId:'custom_spot_pick_map', gestureHandling:'greedy'
       });
       const markerEl = document.createElement('div');
