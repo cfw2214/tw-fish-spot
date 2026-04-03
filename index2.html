@@ -1722,7 +1722,7 @@
         <div style="background:var(--bg);border-radius:8px;padding:8px 10px;font-size:.8rem;">
           <span style="color:${t.type==='高潮'?'var(--accent)':'var(--gold)'};">${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'}</span>
           <strong style="margin-left:6px;">${t.time}</strong>
-          <span style="color:var(--text2);margin-left:6px;">${t.height}cm</span>
+          <span style="color:var(--text2);margin-left:6px;">${t.height}m</span>
         </div>`).join('');
 
       // 顯示 modal
@@ -1832,7 +1832,7 @@
         ctx.font='bold 11px sans-serif';
         ctx.fillStyle=isHigh?'#00b4d8':'#f4a261';
         ctx.textAlign='center';
-        ctx.fillText(t.height+'cm', x, isHigh ? y-12 : y+18);
+        ctx.fillText(t.height+'m', x, isHigh ? y-12 : y+18);
 
         // 時間標籤（X 軸）
         ctx.font='10px sans-serif';
