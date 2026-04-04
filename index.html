@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.0</title>
+  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.3</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Google Maps -->
@@ -608,7 +608,7 @@
     </div>
   </div>
 
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.0
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.3
     <div style="font-size:.65rem;margin-top:2px;opacity:0.8">天氣數據皆來源自網路公開資料，僅供大致參考，精確數據請再自行查驗</div>
   </footer>
   <script>
@@ -618,6 +618,7 @@
     let FAVS=JSON.parse(localStorage.getItem('favSpots')||'[]');
     let recommendationPool=[];
     let recommendationPage=0;
+    let currentPoolMode='normal'; // 'normal' | 'custom'
     const RECOMMEND_PER_PAGE=9;
     let deferredPrompt=null;
 
@@ -1061,12 +1062,13 @@
       const viewTabs = document.getElementById('view-tabs');
       if(viewTabs) viewTabs.style.display = 'flex';
 
-      // 渲染小卡到列表面板，加入場動畫
+      // 渲染小卡到列表面板，加入場動畫（依 mode 選擇卡片樣式）
       const inner = document.getElementById('map-cards-inner');
       if(inner){
         inner.innerHTML = picks.map((r,i) => {
-          const card = recommendationCard(r, ranks[i] || `${i+1}`);
-          // 包一層 div 加動畫 delay
+          const card = currentPoolMode === 'custom'
+            ? customSpotCard(r, i)
+            : recommendationCard(r, ranks[i] || `${i+1}`);
           return `<div class="card-anim" style="animation-delay:${i*0.05}s">${card}</div>`;
         }).join('');
       }
@@ -1088,8 +1090,12 @@
         pager.style.display = 'none';
       }
 
-      // 地圖上加所有大頭針
-      updateMapMarkers(pool);
+      // 地圖上加所有大頭針（依 mode 選擇 marker 函式）
+      if(currentPoolMode === 'custom'){
+        updateMapMarkersCustom(pool);
+      } else {
+        updateMapMarkers(pool);
+      }
     }
     function changeRecommendationPage(dir){
       const perPage = window.innerWidth <= 768 ? recommendationPool.length : 6;
@@ -1155,6 +1161,7 @@
 
       recommendationPool = top3;
       recommendationPage = 0;
+      currentPoolMode = 'normal';
       const titleEl = document.getElementById('section-title-text');
       if(titleEl) titleEl.textContent = `今日附近推薦釣點`;
       renderRecommendationPage(top3);
@@ -1184,8 +1191,9 @@
         console.error('地理位置請求異常:', e);
       }
 
-      // 從 SPOTS 中找到收藏釣點的完整資料
-      const favoriteSpots = FAVS.map(fav => SPOTS.find(s => s.name === fav.name)).filter(s => s);
+      // 直接使用 FAVS 本身的資料，SPOTS 有更新版就用更新版，否則用收藏時儲存的資料
+      // 這樣可確保全部收藏釣點都能顯示，不會因 SPOTS 找不到而被 filter 掉
+      const favoriteSpots = FAVS.map(fav => SPOTS.find(s => s.name === fav.name) || fav);
 
       // 獲取天氣資料
       const results = await Promise.all(
@@ -1220,6 +1228,7 @@
 
       recommendationPool = filteredResults;
       recommendationPage = 0;
+      currentPoolMode = 'normal';
 
       if(!recommendationPool.length){
         setMapInner('<div class="loading-placeholder"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>收藏的釣點目前沒有符合條件的</div></div>');
@@ -1329,6 +1338,7 @@
 
       recommendationPool = filteredResults;
       recommendationPage=0;
+      currentPoolMode = 'normal';
       const titleEl = document.getElementById('section-title-text');
       if(titleEl) titleEl.textContent = `${date} 推薦釣點`;
       if(!recommendationPool.length){setMapInner('<div class="loading-placeholder"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>目前條件下沒有合適釣點</div></div>');return}
@@ -1558,6 +1568,13 @@
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
         if(tabList){tabList.style.background='var(--accent2)';tabList.style.color='#fff';}
+        // 恢復翻頁按鈕（如果超過一頁）
+        const pagerEl = document.getElementById('map-pager');
+        if(pagerEl && recommendationPool.length > 0){
+          const perPageNow = window.innerWidth <= 768 ? recommendationPool.length : 6;
+          const totalPagesNow = Math.ceil(recommendationPool.length / perPageNow);
+          pagerEl.style.display = totalPagesNow > 1 ? 'flex' : 'none';
+        }
 
       } else if(tab==='map'){
         // 地圖：隱藏小卡，隱藏面板，地圖正常
@@ -1566,12 +1583,18 @@
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
         if(tabMap){tabMap.style.background='var(--accent2)';tabMap.style.color='#fff';}
+        // 切到地圖 tab 時隱藏翻頁按鈕
+        const pagerEl = document.getElementById('map-pager');
+        if(pagerEl) pagerEl.style.display = 'none';
 
       } else if(tab==='catch'){
         // 釣獲地圖：沒有記錄就彈提示，有記錄才顯示地圖釣獲點
         hideCardsOverlay();
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
+        // 切到釣獲地圖 tab 時隱藏翻頁按鈕
+        const pagerElC = document.getElementById('map-pager');
+        if(pagerElC) pagerElC.style.display = 'none';
         if(tabCatch){tabCatch.style.background='var(--accent2)';tabCatch.style.color='#fff';tabCatch.dataset.active='1';}
         // 清除釣點圖釘，釣獲地圖獨立顯示
         _gmapMarkers.forEach(m=>m.map=null);
@@ -1602,6 +1625,9 @@
         hideCardsOverlay();
         if(googleMap) googleMap.classList.add('catch-mode');
         clearCatchMapMarkers();
+        // 切到釣獲面板時隱藏翻頁按鈕
+        const pagerElP = document.getElementById('map-pager');
+        if(pagerElP) pagerElP.style.display = 'none';
         // 恢復釣點圖釘（如果之前被釣獲地圖清除了）
         if(recommendationPool && recommendationPool.length){
           updateMapMarkers(recommendationPool);
@@ -3243,14 +3269,12 @@ https://cfw2214.github.io/tw-fish-spot/`;
       return;
     }
 
-    const viewTabs=document.getElementById('view-tabs');
-    if(viewTabs) viewTabs.style.display='flex';
-    const inner=document.getElementById('map-cards-inner');
-    if(inner){
-      inner.innerHTML=results.map((r,i)=>`<div class="card-anim" style="animation-delay:${i*0.05}s">${customSpotCard(r,i)}</div>`).join('');
-    }
-    showCardsOverlay();
-    updateMapMarkersCustom(results);
+    // 使用分頁機制（與最愛釣點一致）
+    currentPoolMode = 'custom';
+    recommendationPool = results;
+    recommendationPage = 0;
+
+    renderRecommendationPage(recommendationPool);
     document.getElementById('recommend-section')?.scrollIntoView({behavior:'smooth',block:'start'});
     showToast(`✅ 已顯示 ${CUSTOM_SPOTS.length} 個自定釣點`);
     const sb=document.getElementById('sidebar');
