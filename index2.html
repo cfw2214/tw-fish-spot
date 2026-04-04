@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.2</title>
+  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.3</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Google Maps -->
@@ -608,7 +608,7 @@
     </div>
   </div>
 
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.2
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.3
     <div style="font-size:.65rem;margin-top:2px;opacity:0.8">天氣數據皆來源自網路公開資料，僅供大致參考，精確數據請再自行查驗</div>
   </footer>
   <script>
@@ -1047,7 +1047,6 @@
       const perPage = window.innerWidth <= 768 ? pool.length : 6;
       const total = pool.length;
       const totalPages = Math.ceil(total / perPage);
-      console.log('[renderPage] innerWidth=', window.innerWidth, 'total=', total, 'perPage=', perPage, 'totalPages=', totalPages, 'mode=', currentPoolMode);
       const picks = pool.slice(recommendationPage * perPage, (recommendationPage + 1) * perPage);
       const ranks = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣'];
 
@@ -1192,8 +1191,9 @@
         console.error('地理位置請求異常:', e);
       }
 
-      // 從 SPOTS 中找到收藏釣點的完整資料
-      const favoriteSpots = FAVS.map(fav => SPOTS.find(s => s.name === fav.name)).filter(s => s);
+      // 直接使用 FAVS 本身的資料，SPOTS 有更新版就用更新版，否則用收藏時儲存的資料
+      // 這樣可確保全部收藏釣點都能顯示，不會因 SPOTS 找不到而被 filter 掉
+      const favoriteSpots = FAVS.map(fav => SPOTS.find(s => s.name === fav.name) || fav);
 
       // 獲取天氣資料
       const results = await Promise.all(
