@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V0.9.6</title>
+  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.2</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Google Maps -->
@@ -325,8 +325,8 @@
 #share-modal-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.65);align-items:flex-end;justify-content:center;padding-bottom:0;}
 #share-modal-overlay.active{display:flex;}
 @media(min-width:600px){#share-modal-overlay{align-items:center;}}
-#share-modal-box{background:linear-gradient(160deg,#0d2850,#0a1f42);border:1px solid rgba(0,180,216,.35);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 -8px 40px rgba(0,0,0,.6);animation:slideUp .25s ease;}
-@media(min-width:600px){#share-modal-box{border-radius:20px;padding:28px 24px;}}
+#share-modal-box{background:linear-gradient(160deg,#0d2850,#0a1f42);border:1px solid rgba(0,180,216,.35);border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 -8px 40px rgba(0,0,0,.6);animation:slideUp .25s ease;}
+@media(min-width:600px){#share-modal-box{border-radius:20px;padding:28px 24px;max-height:90vh;}}
 @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
 #share-modal-box .sm-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:6px;text-align:center;}
 #share-modal-box .sm-fish{font-size:1.3rem;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px;}
@@ -608,7 +608,7 @@
     </div>
   </div>
 
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V0.9.6
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.2
     <div style="font-size:.65rem;margin-top:2px;opacity:0.8">天氣數據皆來源自網路公開資料，僅供大致參考，精確數據請再自行查驗</div>
   </footer>
   <script>
@@ -618,6 +618,7 @@
     let FAVS=JSON.parse(localStorage.getItem('favSpots')||'[]');
     let recommendationPool=[];
     let recommendationPage=0;
+    let currentPoolMode='normal'; // 'normal' | 'custom'
     const RECOMMEND_PER_PAGE=9;
     let deferredPrompt=null;
 
@@ -1061,12 +1062,13 @@
       const viewTabs = document.getElementById('view-tabs');
       if(viewTabs) viewTabs.style.display = 'flex';
 
-      // 渲染小卡到列表面板，加入場動畫
+      // 渲染小卡到列表面板，加入場動畫（依 mode 選擇卡片樣式）
       const inner = document.getElementById('map-cards-inner');
       if(inner){
         inner.innerHTML = picks.map((r,i) => {
-          const card = recommendationCard(r, ranks[i] || `${i+1}`);
-          // 包一層 div 加動畫 delay
+          const card = currentPoolMode === 'custom'
+            ? customSpotCard(r, i)
+            : recommendationCard(r, ranks[i] || `${i+1}`);
           return `<div class="card-anim" style="animation-delay:${i*0.05}s">${card}</div>`;
         }).join('');
       }
@@ -1088,8 +1090,12 @@
         pager.style.display = 'none';
       }
 
-      // 地圖上加所有大頭針
-      updateMapMarkers(pool);
+      // 地圖上加所有大頭針（依 mode 選擇 marker 函式）
+      if(currentPoolMode === 'custom'){
+        updateMapMarkersCustom(pool);
+      } else {
+        updateMapMarkers(pool);
+      }
     }
     function changeRecommendationPage(dir){
       const perPage = window.innerWidth <= 768 ? recommendationPool.length : 6;
@@ -1155,6 +1161,7 @@
 
       recommendationPool = top3;
       recommendationPage = 0;
+      currentPoolMode = 'normal';
       const titleEl = document.getElementById('section-title-text');
       if(titleEl) titleEl.textContent = `今日附近推薦釣點`;
       renderRecommendationPage(top3);
@@ -1220,6 +1227,7 @@
 
       recommendationPool = filteredResults;
       recommendationPage = 0;
+      currentPoolMode = 'normal';
 
       if(!recommendationPool.length){
         setMapInner('<div class="loading-placeholder"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>收藏的釣點目前沒有符合條件的</div></div>');
@@ -1329,6 +1337,7 @@
 
       recommendationPool = filteredResults;
       recommendationPage=0;
+      currentPoolMode = 'normal';
       const titleEl = document.getElementById('section-title-text');
       if(titleEl) titleEl.textContent = `${date} 推薦釣點`;
       if(!recommendationPool.length){setMapInner('<div class="loading-placeholder"><div style="font-size:2rem;margin-bottom:8px">🙁</div><div>目前條件下沒有合適釣點</div></div>');return}
@@ -1558,6 +1567,13 @@
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
         if(tabList){tabList.style.background='var(--accent2)';tabList.style.color='#fff';}
+        // 恢復翻頁按鈕（如果超過一頁）
+        const pagerEl = document.getElementById('map-pager');
+        if(pagerEl && recommendationPool.length > 0){
+          const perPageNow = window.innerWidth <= 768 ? recommendationPool.length : 6;
+          const totalPagesNow = Math.ceil(recommendationPool.length / perPageNow);
+          pagerEl.style.display = totalPagesNow > 1 ? 'flex' : 'none';
+        }
 
       } else if(tab==='map'){
         // 地圖：隱藏小卡，隱藏面板，地圖正常
@@ -1566,12 +1582,18 @@
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
         if(tabMap){tabMap.style.background='var(--accent2)';tabMap.style.color='#fff';}
+        // 切到地圖 tab 時隱藏翻頁按鈕
+        const pagerEl = document.getElementById('map-pager');
+        if(pagerEl) pagerEl.style.display = 'none';
 
       } else if(tab==='catch'){
         // 釣獲地圖：沒有記錄就彈提示，有記錄才顯示地圖釣獲點
         hideCardsOverlay();
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
+        // 切到釣獲地圖 tab 時隱藏翻頁按鈕
+        const pagerElC = document.getElementById('map-pager');
+        if(pagerElC) pagerElC.style.display = 'none';
         if(tabCatch){tabCatch.style.background='var(--accent2)';tabCatch.style.color='#fff';tabCatch.dataset.active='1';}
         // 清除釣點圖釘，釣獲地圖獨立顯示
         _gmapMarkers.forEach(m=>m.map=null);
@@ -1602,6 +1624,9 @@
         hideCardsOverlay();
         if(googleMap) googleMap.classList.add('catch-mode');
         clearCatchMapMarkers();
+        // 切到釣獲面板時隱藏翻頁按鈕
+        const pagerElP = document.getElementById('map-pager');
+        if(pagerElP) pagerElP.style.display = 'none';
         // 恢復釣點圖釘（如果之前被釣獲地圖清除了）
         if(recommendationPool && recommendationPool.length){
           updateMapMarkers(recommendationPool);
@@ -2494,7 +2519,7 @@ https://cfw2214.github.io/tw-fish-spot/`;
     _catchPickLat=lat;_catchPickLng=lng;
     setTimeout(()=>{
       if(!_catchPickMap){
-        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat,lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:false,streetViewControl:false,fullscreenControl:false,mapId:'catch_pick_map',gestureHandling:'greedy'});
+        _catchPickMap=new google.maps.Map(document.getElementById('catch-pick-map'),{center:{lat,lng},zoom:15,mapTypeId:'roadmap',mapTypeControl:true,mapTypeControlOptions:{style:google.maps.MapTypeControlStyle.HORIZONTAL_BAR,position:google.maps.ControlPosition.TOP_LEFT,mapTypeIds:['roadmap','satellite']},streetViewControl:false,fullscreenControl:false,mapId:'catch_pick_map',gestureHandling:'greedy'});
         const markerEl=document.createElement('div');
         markerEl.style.cssText='font-size:32px;line-height:1;transform:translateY(-50%);filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));';
         markerEl.textContent='📍';
@@ -2543,12 +2568,15 @@ https://cfw2214.github.io/tw-fish-spot/`;
     const d=new Date(rec.datetime);
     const dateStr=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     const photoHtml=rec.photo?`<img class="ci-photo" src="${rec.photo}" alt="">`:'' ;
+    const nearestSpot=findNearestSpotName(rec.lat,rec.lng);
+    const locText=rec.locationName||nearestSpot||(rec.lat&&rec.lng?parseFloat(rec.lat).toFixed(4)+', '+parseFloat(rec.lng).toFixed(4):'');
+    const locHtml=locText?`<div class="ci-row" style="color:rgba(255,255,255,.75);font-size:.73rem;margin-bottom:4px;">📍 ${locText}</div>`:'';
     const infoRows=[
       (rec.tideStatus||rec.tideRange)?`<div class="ci-row">🌊 ${[rec.tideStatus,rec.tideRange?'潮差'+rec.tideRange:''].filter(Boolean).join(' · ')}</div>`:'',
       (rec.temp||rec.pressure||rec.waterTemp)?`<div class="ci-row">🌡 ${[rec.temp?'氣溫'+rec.temp+'°C':'',rec.pressure?rec.pressure+'hPa':'',rec.waterTemp?'水溫'+rec.waterTemp+'°C':''].filter(Boolean).join(' · ')}</div>`:'',
       (rec.len||rec.weight)?`<div class="ci-row">📏 ${[rec.len?rec.len+'cm':'',rec.weight?rec.weight+'g':''].filter(Boolean).join(' · ')}</div>`:'',
     ].join('');
-    const content=`<div class="catch-infocard" style="cursor:pointer;" onclick="openCatchFromMap('${rec.id}')"><button class="ci-close" onclick="event.stopPropagation();window._gmapIW&&window._gmapIW.close()">✕</button><div class="ci-fish" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">${rec.fish}<button class="catch-share-btn" style="font-size:.68rem;padding:2px 8px;" onclick="event.stopPropagation();openShareModal('${rec.id}')">LINE 分享</button></div>${photoHtml}<div class="ci-row" style="color:rgba(255,255,255,.5);font-size:.7rem;">📅 ${dateStr}</div>${infoRows}<div style="font-size:.68rem;color:rgba(0,180,216,.7);margin-top:6px;text-align:center;">點擊查看完整記錄 →</div></div>`;
+    const content=`<div class="catch-infocard" style="cursor:pointer;" onclick="openCatchFromMap('${rec.id}')"><button class="ci-close" onclick="event.stopPropagation();window._gmapIW&&window._gmapIW.close()">✕</button><div class="ci-fish" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">${rec.fish}<button class="catch-share-btn" style="font-size:.68rem;padding:2px 8px;" onclick="event.stopPropagation();openShareModal('${rec.id}')">LINE 分享</button></div>${photoHtml}${locHtml}<div class="ci-row" style="color:rgba(255,255,255,.5);font-size:.7rem;">📅 ${dateStr}</div>${infoRows}<div style="font-size:.68rem;color:rgba(0,180,216,.7);margin-top:6px;text-align:center;">點擊查看完整記錄 →</div></div>`;
     _gmapInfoWindow.setContent(content);
     _gmapInfoWindow.open(_gmap,marker);
     window._gmapIW=_gmapInfoWindow;
@@ -3072,7 +3100,6 @@ https://cfw2214.github.io/tw-fish-spot/`;
     ul.innerHTML = CUSTOM_SPOTS.map(s=>`
       <li>
         <span class="csp-name" title="${s.name}">${s.name}</span>
-        <span class="csp-note" title="${s.note||''}">${s.note||''}</span>
         <button class="csp-del" onclick="event.stopPropagation();deleteCustomSpotById('${s.id}')" title="刪除">✕</button>
         <button class="btn-mini" style="font-size:.68rem;padding:3px 8px;flex-shrink:0;" onclick="openCustomSpotModal('${s.id}')">✏️</button>
       </li>`).join('');
@@ -3136,7 +3163,9 @@ https://cfw2214.github.io/tw-fish-spot/`;
     if(!_csmPickMap){
       _csmPickMap = new google.maps.Map(mapEl,{
         center:{lat,lng}, zoom:15, mapTypeId:'roadmap',
-        mapTypeControl:false, streetViewControl:false, fullscreenControl:false,
+        mapTypeControl:true,
+        mapTypeControlOptions:{style:google.maps.MapTypeControlStyle.HORIZONTAL_BAR,position:google.maps.ControlPosition.TOP_LEFT,mapTypeIds:['roadmap','satellite']},
+        streetViewControl:false, fullscreenControl:false,
         mapId:'custom_spot_pick_map', gestureHandling:'greedy'
       });
       const markerEl = document.createElement('div');
@@ -3239,14 +3268,12 @@ https://cfw2214.github.io/tw-fish-spot/`;
       return;
     }
 
-    const viewTabs=document.getElementById('view-tabs');
-    if(viewTabs) viewTabs.style.display='flex';
-    const inner=document.getElementById('map-cards-inner');
-    if(inner){
-      inner.innerHTML=results.map((r,i)=>`<div class="card-anim" style="animation-delay:${i*0.05}s">${customSpotCard(r,i)}</div>`).join('');
-    }
-    showCardsOverlay();
-    updateMapMarkersCustom(results);
+    // 使用分頁機制（與最愛釣點一致）
+    currentPoolMode = 'custom';
+    recommendationPool = results;
+    recommendationPage = 0;
+
+    renderRecommendationPage(recommendationPool);
     document.getElementById('recommend-section')?.scrollIntoView({behavior:'smooth',block:'start'});
     showToast(`✅ 已顯示 ${CUSTOM_SPOTS.length} 個自定釣點`);
     const sb=document.getElementById('sidebar');
