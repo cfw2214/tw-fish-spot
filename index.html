@@ -342,8 +342,8 @@
 /* ── 釣點列表展開收合 ── */
 #fav-list, #custom-spot-list { transition: none; }
 /* ── 單一釣點天氣浮層 ── */
-#spot-detail-overlay{position:absolute;top:8px;left:8px;z-index:60;width:calc(33.333% - 12px);pointer-events:none;}
-#spot-detail-overlay.hidden{display:none;}
+#spot-detail-overlay{position:absolute;top:8px;left:8px;z-index:60;width:calc(33.333% - 12px);pointer-events:none;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .3s;}
+#spot-detail-overlay.hidden{transform:translateX(-110%);opacity:0;pointer-events:none;}
 #spot-detail-card{pointer-events:auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.35);}
 #spot-detail-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));}
 .sdc-close-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.25);border:none;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:.7rem;line-height:1;z-index:2;}
@@ -1580,6 +1580,7 @@
 
       if(tab==='list'){
         // 釣點列表：顯示小卡浮層，隱藏面板，地圖正常
+        closeSpotDetailOverlay();
         clearCatchMapMarkers();
         showCardsOverlay();
         hideCatchPanel();
@@ -1606,6 +1607,7 @@
 
       } else if(tab==='catch'){
         // 釣獲地圖：沒有記錄就彈提示，有記錄才顯示地圖釣獲點
+        closeSpotDetailOverlay();
         hideCardsOverlay();
         hideCatchPanel();
         if(googleMap) googleMap.classList.remove('catch-mode');
@@ -1639,6 +1641,7 @@
 
       } else if(tab==='catchPanel'){
         // 漁獲面板（由 sidebar 按鈕或釣獲地圖 toggle 觸發）
+        closeSpotDetailOverlay();
         hideCardsOverlay();
         if(googleMap) googleMap.classList.add('catch-mode');
         clearCatchMapMarkers();
@@ -1743,7 +1746,8 @@
 
     // 最愛釣點點擊 → 地圖 tab + 天氣小卡
     window.showFavSpotDetail = async function(spotName){
-      // 1. 切換到地圖 tab，關閉小卡浮層
+      // 1. 切換到地圖 tab，關閉小卡浮層，收合篩選
+      toggleFilterBox(true);
       switchTab('map');
       // 2. 顯示浮層 loading
       const ov = document.getElementById('spot-detail-overlay');
@@ -1787,6 +1791,7 @@
 
     // 自定釣點點擊 → 地圖 tab + 天氣小卡
     window.showCustomSpotDetail = async function(id){
+      toggleFilterBox(true);
       switchTab('map');
       const ov = document.getElementById('spot-detail-overlay');
       const card = document.getElementById('spot-detail-card');
