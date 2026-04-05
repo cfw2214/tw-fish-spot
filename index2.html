@@ -342,12 +342,14 @@
 /* ── 釣點列表展開收合 ── */
 #fav-list, #custom-spot-list { transition: none; }
 /* ── 單一釣點天氣浮層 ── */
-#spot-detail-overlay{position:absolute;top:0;left:0;right:0;z-index:60;padding:10px;pointer-events:none;}
+#spot-detail-overlay{position:absolute;top:8px;left:8px;z-index:60;width:calc(33.333% - 12px);pointer-events:none;}
 #spot-detail-overlay.hidden{display:none;}
 #spot-detail-card{pointer-events:auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.35);}
 #spot-detail-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));}
 .sdc-close-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.25);border:none;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:.7rem;line-height:1;z-index:2;}
 .sdc-loading{text-align:center;padding:16px 0;color:var(--text2);font-size:.85rem;}
+@media(max-width:900px){#spot-detail-overlay{width:calc(50% - 12px);}}
+@media(max-width:600px){#spot-detail-overlay{width:calc(100% - 16px);}}
 #fav-list li:hover{background:rgba(0,180,216,.07);}
 #custom-spot-list li:hover{background:rgba(46,196,182,.07);}
 /* ── 自定釣點 sidebar 按鈕 ── */
