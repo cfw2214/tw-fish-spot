@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.3</title>
+  <title>🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.5</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Google Maps -->
@@ -341,6 +341,17 @@
 #share-modal-box .sm-btn-ok:hover{opacity:.8;}
 /* ── 釣點列表展開收合 ── */
 #fav-list, #custom-spot-list { transition: none; }
+/* ── 單一釣點天氣浮層 ── */
+#spot-detail-overlay{position:absolute;top:8px;left:8px;z-index:60;width:calc(33.333% - 12px);pointer-events:none;}
+#spot-detail-overlay.hidden{display:none;}
+#spot-detail-card{pointer-events:auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.35);}
+#spot-detail-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));}
+.sdc-close-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.25);border:none;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:.7rem;line-height:1;z-index:2;}
+.sdc-loading{text-align:center;padding:16px 0;color:var(--text2);font-size:.85rem;}
+@media(max-width:900px){#spot-detail-overlay{width:calc(50% - 12px);}}
+@media(max-width:600px){#spot-detail-overlay{width:calc(100% - 16px);}}
+#fav-list li:hover{background:rgba(0,180,216,.07);}
+#custom-spot-list li:hover{background:rgba(46,196,182,.07);}
 /* ── 自定釣點 sidebar 按鈕 ── */
 
 #btn-add-custom-spot{display:block;width:100%;text-align:center;padding:8px;margin-top:6px;background:rgba(0,180,216,.10);border:1px dashed rgba(0,180,216,.4);color:var(--accent);font-size:.8rem;border-radius:8px;cursor:pointer;transition:background .2s;}
@@ -571,6 +582,12 @@
                 <div class="loading-placeholder"><div class="spinner"></div><div>分析今日海況中...</div></div>
               </div>
             </div>
+            <!-- 單一釣點天氣詳情浮層 -->
+            <div id="spot-detail-overlay" class="hidden">
+              <div id="spot-detail-card">
+                <div class="sdc-loading"><div class="spinner" style="margin:0 auto 8px;"></div>查詢天氣中...</div>
+              </div>
+            </div>
           </div>
           <!-- 翻頁 -->
           <div id="map-pager">
@@ -608,7 +625,7 @@
     </div>
   </div>
 
-  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.3
+  <footer style="text-align:center;padding:18px 20px;margin-top:20px;border-top:1px solid var(--border);color:var(--text2);font-size:.75rem;background:var(--bg2)">🎣 北台灣海釣點神器by我是黑叔｜版本 V1.0.5
     <div style="font-size:.65rem;margin-top:2px;opacity:0.8">天氣數據皆來源自網路公開資料，僅供大致參考，精確數據請再自行查驗</div>
   </footer>
   <script>
@@ -1347,7 +1364,7 @@
     }
     function toggleFav(name,btn){const idx=FAVS.findIndex(f=>f.name===name);if(idx>=0){FAVS.splice(idx,1);if(btn){btn.textContent='☆ 收藏';btn.classList.remove('active')}showToast('已移除最愛')}else{if(FAVS.length>=12){showToast('❌ 最多收藏 12 個',true);return}const sp=SPOTS.find(s=>s.name===name);if(sp)FAVS.push(sp);if(btn){btn.textContent='⭐ 已收藏';btn.classList.add('active')}showToast('已加入最愛 ⭐')}localStorage.setItem('favSpots',JSON.stringify(FAVS));renderFavList()}
     function removeFav(name){FAVS=FAVS.filter(f=>f.name!==name);localStorage.setItem('favSpots',JSON.stringify(FAVS));renderFavList()}
-    function renderFavList(){const ul=document.getElementById('fav-list');if(!ul)return;if(!FAVS.length){ul.innerHTML='<li class="fav-empty">尚未收藏任何釣點</li>';return}ul.innerHTML=FAVS.map(s=>`<li><span style="flex:1">${s.name}</span><span class="fav-area">${s.area}</span><button class="fav-del" onclick="removeFav('${s.name}')">✕</button></li>`).join('');if(typeof autoOpenFavList==='function')autoOpenFavList();}
+    function renderFavList(){const ul=document.getElementById('fav-list');if(!ul)return;if(!FAVS.length){ul.innerHTML='<li class="fav-empty">尚未收藏任何釣點</li>';return}ul.innerHTML=FAVS.map(s=>`<li style="cursor:pointer;" title="點擊查看地圖與天氣" onclick="showFavSpotDetail('${s.name.replace(/'/g,"\\'")}')"><span style="flex:1">${s.name}</span><span class="fav-area">${s.area}</span><button class="fav-del" onclick="event.stopPropagation();removeFav('${s.name}')">✕</button></li>`).join('');if(typeof autoOpenFavList==='function')autoOpenFavList();}
     function openMapByFavorites(){
       if(FAVS.length===0){
         showToast('❌ 尚未收藏任何釣點',true);
@@ -1715,6 +1732,151 @@
     window.showOnMap = function(spotName){
       const r = recommendationPool.find(x=>x.spot.name===spotName);
       if(r) showSpotOnMap(r);
+    }
+
+    // ── 單一釣點天氣詳情浮層 ──
+    function closeSpotDetailOverlay(){
+      const ov = document.getElementById('spot-detail-overlay');
+      if(ov) ov.classList.add('hidden');
+    }
+    window.closeSpotDetailOverlay = closeSpotDetailOverlay;
+
+    // 最愛釣點點擊 → 地圖 tab + 天氣小卡
+    window.showFavSpotDetail = async function(spotName){
+      // 1. 切換到地圖 tab，關閉小卡浮層
+      switchTab('map');
+      // 2. 顯示浮層 loading
+      const ov = document.getElementById('spot-detail-overlay');
+      const card = document.getElementById('spot-detail-card');
+      if(!ov||!card) return;
+      card.innerHTML = '<div class="sdc-loading"><div class="spinner" style="margin:0 auto 10px;"></div>查詢天氣中...</div>';
+      ov.classList.remove('hidden');
+      // 3. 取得釣點資料
+      const spot = SPOTS.find(s=>s.name===spotName) || FAVS.find(f=>f.name===spotName);
+      if(!spot){ card.innerHTML='<div class="sdc-loading">找不到釣點資料</div>'; return; }
+      // 4. 定位地圖 + 放 marker
+      if(_gmap){
+        setTimeout(()=>{
+          google.maps.event.trigger(_gmap,'resize');
+          _gmap.panTo({lat:spot.lat,lng:spot.lng});
+          _gmap.setZoom(15);
+          // 清除舊 marker，放單一釣點標記
+          _gmapMarkers.forEach(m=>m.map=null);
+          _gmapMarkers=[];
+          try{
+            const {AdvancedMarkerElement}=google.maps.marker;
+            const dot=document.createElement('div');
+            const color=markerColor(spot.type||'');
+            dot.style.cssText=`width:24px;height:24px;border-radius:50%;background:${color};border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5);`;
+            const mk=new AdvancedMarkerElement({position:{lat:spot.lat,lng:spot.lng},map:_gmap,title:spot.name,content:dot});
+            _gmapMarkers.push(mk);
+          }catch(e){}
+        },420);
+      }
+      // 5. 查詢天氣
+      const today = getTWDateString();
+      const twNow = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));
+      const hour = twNow.getHours();
+      try{
+        const r = await getWeather(spot, today, hour, Math.min(hour+4,23));
+        renderSpotDetailCard(card, r, '⭐', 'var(--gold)');
+      }catch(e){
+        card.innerHTML='<div class="sdc-loading">天氣查詢失敗，請稍後再試</div>';
+      }
+    };
+
+    // 自定釣點點擊 → 地圖 tab + 天氣小卡
+    window.showCustomSpotDetail = async function(id){
+      switchTab('map');
+      const ov = document.getElementById('spot-detail-overlay');
+      const card = document.getElementById('spot-detail-card');
+      if(!ov||!card) return;
+      card.innerHTML = '<div class="sdc-loading"><div class="spinner" style="margin:0 auto 10px;"></div>查詢天氣中...</div>';
+      ov.classList.remove('hidden');
+      const cs = CUSTOM_SPOTS.find(s=>s.id===id);
+      if(!cs){ card.innerHTML='<div class="sdc-loading">找不到自定釣點資料</div>'; return; }
+      // 地圖定位 + 放 marker
+      if(_gmap){
+        setTimeout(()=>{
+          google.maps.event.trigger(_gmap,'resize');
+          _gmap.panTo({lat:cs.lat,lng:cs.lng});
+          _gmap.setZoom(15);
+          _gmapMarkers.forEach(m=>m.map=null);
+          _gmapMarkers=[];
+          try{
+            const {AdvancedMarkerElement}=google.maps.marker;
+            const dot=document.createElement('div');
+            dot.style.cssText='width:24px;height:24px;border-radius:50%;background:#2ec4b6;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5);';
+            const mk=new AdvancedMarkerElement({position:{lat:cs.lat,lng:cs.lng},map:_gmap,title:cs.name,content:dot});
+            _gmapMarkers.push(mk);
+          }catch(e){}
+        },420);
+      }
+      // 建立 fake spot 物件供 getWeather 使用
+      const fakeSpot = {
+        name: cs.name, lat: cs.lat, lng: cs.lng,
+        area: cs.note||'自定釣點', type: '自定', note: cs.note||'',
+        max_wave_height: 99, bad_wind_directions:[], good_wind_directions:[]
+      };
+      const today = getTWDateString();
+      const twNow = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Taipei'}));
+      const hour = twNow.getHours();
+      try{
+        const r = await getWeather(fakeSpot, today, hour, Math.min(hour+4,23));
+        renderSpotDetailCard(card, r, '📍', '#2ec4b6', true);
+      }catch(e){
+        card.innerHTML='<div class="sdc-loading">天氣查詢失敗，請稍後再試</div>';
+      }
+    };
+
+    // 渲染天氣小卡內容
+    function renderSpotDetailCard(card, r, icon, iconColor, isCustom){
+      const barColor = r.score>=4?'var(--green)':r.score>=3?'var(--gold)':'var(--red)';
+      const beaufort = msToBeaufort(r.ws);
+      const windColor = beaufort>=7?'var(--red)':beaufort>=4?'var(--gold)':'var(--text)';
+      const windDirColor = 'var(--text)';
+      const waveColor = r.wave>2?'var(--red)':r.wave>1?'var(--gold)':'var(--green)';
+      const rainColor = r.rain>60?'var(--red)':r.rain>30?'var(--gold)':'var(--text)';
+      const navUrl = `https://maps.google.com/?q=${r.spot.lat},${r.spot.lng}`;
+
+      // 潮汐（同 recommendationCard 格式）
+      const tidesJson = encodeURIComponent(JSON.stringify(r.tides||[]));
+      const cardDate = r.date||getTWDateString();
+      const spotNameEnc = encodeURIComponent(r.spot.name);
+      const tideHtml = (r.tides||[]).slice(0,4).map(t=>`
+        <div>
+          <span style="color:${t.type==='高潮'?'var(--accent)':'var(--gold)'};">${t.type==='高潮'?'滿頂⬆️':'潮底⬇️'}</span>
+          <strong>${t.time}</strong>
+          <span style="color:var(--text2);">${t.height}m</span>
+        </div>`).join('');
+
+      // badge
+      const typeBadge = isCustom
+        ? `<span class="badge" style="background:rgba(46,196,182,.2);color:#2ec4b6;border:1px solid rgba(46,196,182,.4);">📍 自定釣點</span>`
+        : (r.spot.type ? `<span class="badge badge-${r.spot.type}">🎣 ${r.spot.type}</span>` : '');
+      const areaBadge = r.spot.area ? `<span class="badge badge-area">${r.spot.area}</span>` : '';
+      const suitLabel = getSuitabilityLabel ? getSuitabilityLabel(r.score) : '';
+      const tempBadgeClass = r.tempMax>=30?'badge-hot':r.tempMin<=15?'badge-cold':'badge-mild';
+
+      const statsHtml =
+        `<div class="rec-stat"><span style="color:var(--text2)">風力：</span><strong style="color:${windColor} !important">${beaufort}級</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">風向：</span><strong style="color:${windDirColor} !important">${r.wd}</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">降雨率：</span><strong style="color:${rainColor} !important">${r.rain}%</strong></div>` +
+        `<div class="rec-stat"><span style="color:var(--text2)">浪高🌊 </span><strong style="color:${waveColor} !important">${r.wave}m</strong></div>` +
+        (r.waterTemp ? `<div class="rec-stat"><span style="color:var(--text2)">水溫：</span><strong>${r.waterTemp}°C</strong></div>` : '') +
+        (r.tideType ? `<div class="rec-stat"><span style="color:var(--text2)">潮差：</span><strong>${r.tideType.replace('潮差：','')}</strong></div>` : '');
+
+      const noteHtml = r.spot.note ? `<div class="rec-note">📝 ${r.spot.note}</div>` : '';
+
+      card.innerHTML =
+        `<button class="sdc-close-btn" onclick="closeSpotDetailOverlay()">✕</button>` +
+        `<div class="rec-name" style="padding-right:24px;">${icon} ${r.spot.name}</div>` +
+        `<div class="rec-meta">${areaBadge}${typeBadge}${suitLabel}<span class="badge ${tempBadgeClass}">🌡️ ${r.tempMin}°-${r.tempMax}°C</span></div>` +
+        `<div class="score-bar"><div class="score-bar-fill" style="width:${r.score*20}%;background:${barColor}"></div></div>` +
+        `<div class="rec-stats">${statsHtml}</div>` +
+        `<div class="tide-mini" onclick="openTideModal('${spotNameEnc}','${tidesJson}','${cardDate}')" style="cursor:pointer;position:relative;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=''">${tideHtml}<span style="position:absolute;bottom:5px;right:7px;font-size:1.1rem;opacity:.7;">🔍</span></div>` +
+        noteHtml +
+        `<div class="rec-footer"><button class="btn-mini" onclick="window.open('${navUrl}','_blank')" style="margin-right:6px;">🗺️ 導航</button></div>`;
     }
     function initPage(){
       const today=getTWDateString();
@@ -3099,10 +3261,10 @@ https://cfw2214.github.io/tw-fish-spot/`;
       return;
     }
     ul.innerHTML = CUSTOM_SPOTS.map(s=>`
-      <li>
+      <li style="cursor:pointer;" title="點擊查看地圖與天氣" onclick="showCustomSpotDetail('${s.id}')">
         <span class="csp-name" title="${s.name}">${s.name}</span>
         <button class="csp-del" onclick="event.stopPropagation();deleteCustomSpotById('${s.id}')" title="刪除">✕</button>
-        <button class="btn-mini" style="font-size:.68rem;padding:3px 8px;flex-shrink:0;" onclick="openCustomSpotModal('${s.id}')">✏️</button>
+        <button class="btn-mini" style="font-size:.68rem;padding:3px 8px;flex-shrink:0;" onclick="event.stopPropagation();openCustomSpotModal('${s.id}')">✏️</button>
       </li>`).join('');
     if(typeof autoOpenCustomList==='function') autoOpenCustomList();
   }
