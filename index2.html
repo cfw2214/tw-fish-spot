@@ -1754,12 +1754,23 @@
       // 3. 取得釣點資料
       const spot = SPOTS.find(s=>s.name===spotName) || FAVS.find(f=>f.name===spotName);
       if(!spot){ card.innerHTML='<div class="sdc-loading">找不到釣點資料</div>'; return; }
-      // 4. 定位地圖
+      // 4. 定位地圖 + 放 marker
       if(_gmap){
         setTimeout(()=>{
           google.maps.event.trigger(_gmap,'resize');
           _gmap.panTo({lat:spot.lat,lng:spot.lng});
           _gmap.setZoom(15);
+          // 清除舊 marker，放單一釣點標記
+          _gmapMarkers.forEach(m=>m.map=null);
+          _gmapMarkers=[];
+          try{
+            const {AdvancedMarkerElement}=google.maps.marker;
+            const dot=document.createElement('div');
+            const color=markerColor(spot.type||'');
+            dot.style.cssText=`width:24px;height:24px;border-radius:50%;background:${color};border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5);`;
+            const mk=new AdvancedMarkerElement({position:{lat:spot.lat,lng:spot.lng},map:_gmap,title:spot.name,content:dot});
+            _gmapMarkers.push(mk);
+          }catch(e){}
         },420);
       }
       // 5. 查詢天氣
@@ -1784,12 +1795,21 @@
       ov.classList.remove('hidden');
       const cs = CUSTOM_SPOTS.find(s=>s.id===id);
       if(!cs){ card.innerHTML='<div class="sdc-loading">找不到自定釣點資料</div>'; return; }
-      // 地圖定位
+      // 地圖定位 + 放 marker
       if(_gmap){
         setTimeout(()=>{
           google.maps.event.trigger(_gmap,'resize');
           _gmap.panTo({lat:cs.lat,lng:cs.lng});
           _gmap.setZoom(15);
+          _gmapMarkers.forEach(m=>m.map=null);
+          _gmapMarkers=[];
+          try{
+            const {AdvancedMarkerElement}=google.maps.marker;
+            const dot=document.createElement('div');
+            dot.style.cssText='width:24px;height:24px;border-radius:50%;background:#2ec4b6;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5);';
+            const mk=new AdvancedMarkerElement({position:{lat:cs.lat,lng:cs.lng},map:_gmap,title:cs.name,content:dot});
+            _gmapMarkers.push(mk);
+          }catch(e){}
         },420);
       }
       // 建立 fake spot 物件供 getWeather 使用
